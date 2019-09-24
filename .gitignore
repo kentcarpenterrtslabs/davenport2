@@ -1,0 +1,17 @@
+/.localHistory
+**/.localHistory
+*.sfuo
+TestCache.xml
+TestsResultsCache.xml
+**/.cache
+**.
+debug.log
+resource*
+*.sfsln
+*.sfproj
+settings.sfprojsettings
+*.rmprops
+*.credprops
+package.xml.bac
+Logs/**
+*.bak

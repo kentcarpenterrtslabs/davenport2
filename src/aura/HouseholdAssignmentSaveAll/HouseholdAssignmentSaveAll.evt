@@ -1,0 +1,7 @@
+<!--
+ - Created by Eric Stansbury on 6/3/2019.
+ -->
+
+<aura:event type="APPLICATION" description="HouseholdAssignmentSaveAll">
+
+</aura:event>

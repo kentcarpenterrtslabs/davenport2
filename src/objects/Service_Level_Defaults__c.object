@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Days_before_notification__c</fullName>
+        <externalId>false</externalId>
+        <label>Days before notification</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Num_Days_Ahead_On_Target__c</fullName>
+        <externalId>false</externalId>
+        <label>Num Days Ahead On Target</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Num_Days_Ahead_Overdue__c</fullName>
+        <externalId>false</externalId>
+        <label>Num Days Ahead Overdue</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_A_In_Person_Meetings_Year__c</fullName>
+        <externalId>false</externalId>
+        <label>Tier A - In-Person Meetings/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_A_Portfolio_Review_Year__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Default number of Portfolio Review/Year for a Tier A client</inlineHelpText>
+        <label>Tier A - Portfolio Review/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_A_Relationship_Calls_Year__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Default number of Relationship Calls/Year for a Tier A client</inlineHelpText>
+        <label>Tier A - Relationship Calls/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_B_In_Person_Meetings_Year__c</fullName>
+        <externalId>false</externalId>
+        <label>Tier B - In-Person Meetings/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_B_Portfolio_Review_Year__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Default number of Portfolio Review/Year for a Tier B client</inlineHelpText>
+        <label>Tier B - Portfolio Review/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_B_Relationship_Calls_Year__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Default number of Relationship Calls/Year for a Tier A client</inlineHelpText>
+        <label>Tier B - Relationship Calls/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_C_In_Person_Meetings_Year__c</fullName>
+        <externalId>false</externalId>
+        <label>Tier C - In-Person Meetings/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_C_Portfolio_Review_Year__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Default number of Portfolio Review/Year for a Tier C client</inlineHelpText>
+        <label>Tier C - Portfolio Review/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_C_Relationship_Calls_Year__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Default number of Relationship Calls/Year for a Tier C client</inlineHelpText>
+        <label>Tier C - Relationship Calls/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_D_In_Person_Meetings_Year__c</fullName>
+        <externalId>false</externalId>
+        <label>Tier D - In-Person Meetings/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_D_Portfolio_Review_Year__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Default number of Portfolio Review/Year for a Tier D client</inlineHelpText>
+        <label>Tier D - Portfolio Review/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_D_Relationship_Calls_Year__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Default number of Relationship Calls/Year for a Tier D client</inlineHelpText>
+        <label>Tier D - Relationship Calls/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_E_In_Person_Meetings_Year__c</fullName>
+        <externalId>false</externalId>
+        <label>Tier E - In-Person Meetings/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_E_Portfolio_Review_Year__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Default number of Portfolio Review/Year for a Tier E client</inlineHelpText>
+        <label>Tier E - Portfolio Review/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Tier_E_Relationship_Calls_Year__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Default number of Relationship Calls/Year for a Tier E client</inlineHelpText>
+        <label>Tier E - Relationship Calls/Year</label>
+        <precision>6</precision>
+        <required>true</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Service Level Defaults</label>
+    <visibility>Public</visibility>
+</CustomObject>

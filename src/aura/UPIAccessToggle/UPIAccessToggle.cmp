@@ -1,0 +1,39 @@
+<!--
+ - Created by Eric Stansbury on 7/18/2019.
+ -->
+
+<aura:component description="UPIAccessToggle" implements="flexipage:availableForAllPageTypes" controller="UPIAccessToggleController">
+    <aura:attribute name="options" type="List" default="[
+        {'label': 'Enabled', 'value': 'true'},
+        {'label': 'Disabled (only see my reps)', 'value': 'false'}
+    ]"/>
+    <aura:attribute name="value" type="String" default="true"/>
+    <aura:attribute name="loading" type="boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <div class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="header-title-container slds-has-flexi-truncate">
+                <h2><span class="slds-text-heading_small">Universal Access</span></h2>
+            </header>
+        </div>
+        <div class="slds-card__body slds-card__body_inner">
+            <div class="slds-grid">
+                <div class="slds-col slds-size--1-of-3">
+                    <lightning:radioGroup
+                            aura:id="radioButtonGroup"
+                            name="radioButtonGroup"
+                            options="{! v.options }"
+                            value="{! v.value }" />
+                </div>
+                <div class="slds-col slds-p-top--small">
+                    <lightning:button variant="brand" label="Submit" title="Submit" onclick="{! c.handleSubmit }" />
+                </div>
+            </div>
+        </div>
+
+        <aura:if isTrue="{!v.loading}">
+            <lightning:spinner alternativeText="Loading" size="small" />
+        </aura:if>
+    </div>
+</aura:component>

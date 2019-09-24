@@ -1,0 +1,66 @@
+<apex:page controller="FMAReviewPDFController" renderAs="PDF">
+    <apex:stylesheet value="{!$Resource.FMAReviewPDFCss}" html-media="print"/>
+    
+    <apex:repeat value="{!HouseholdReviews}" var="review">
+        <div class="{! IF( 
+                    ('Not Applicable' == review.topics[0].answer ) && 
+                    ('Not Applicable' == review.topics[1].answer ) && 
+                    ('Not Applicable' == review.topics[2].answer ) &&
+                    ('Not Applicable' == review.topics[3].answer ) && 
+                    ('Not Applicable' == review.topics[4].answer ) &&
+                    ('Not Applicable' == review.topics[5].answer ) && 
+                    ('Not Applicable' == review.topics[6].answer ), 
+                    'na', 'review')}">
+            
+            <div class="header-left">
+                <span class="{! IF(isDraft, ' ', 'hide') }">DRAFT</span>
+                <span class="{! IF(!isDraft, ' ', 'hide') }">FINAL</span>
+            </div>
+            <div class="header-right">
+                <img class="logo" src="{!$Resource.DavenportLogo}" alt="Davenport Logo" height="75px" />
+            </div>
+            
+            <div class="accountInfo" style="margin-bottom:24px;">
+                <div><span>Account Name:</span> {! review.name }</div>
+                <div><span>Account Type:</span></div>
+                <div><span>Investment Executive:</span></div>
+                <div><span>Rep #:</span> {!review.repName}</div>
+            </div>
+            
+            <section class="household">
+                
+                <apex:repeat value="{!review.topics}" var="topic">
+                    
+                    <div class="{! IF( 'Not Applicable' != topic.answer , 'topic', 'hide')}" style="margin-bottom:24px;">
+                        <div class="questions">
+                            <p>
+                                {!topic.name}
+                            </p>
+                            <p class="{! IF( null != topic.comment, ' ', 'hide')}">Comments:</p>
+                            <p class="{! IF( null != topic.comment, 'comments', 'hide')}">
+                                {!topic.comment}
+                            </p>
+                        </div>
+                        <div class="answers">
+                            {!topic.answer}
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                    
+                </apex:repeat>
+                
+                
+                <div class="footer-left">Davenport &amp; Company LLC | Internal Use Only</div>
+                <div class="footer-right">
+                    <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                        <apex:param value="{! TODAY() }" /> 
+                    </apex:outputText> 
+                    <span id="pageNum"/>
+                </div>
+                
+            </section>
+            
+        </div>
+    </apex:repeat>
+    
+</apex:page>

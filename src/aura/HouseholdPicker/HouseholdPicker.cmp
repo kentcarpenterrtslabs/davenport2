@@ -1,0 +1,104 @@
+<!--
+ - Created by Eric Stansbury on 4/29/2019.
+ -->
+
+<aura:component description="HouseholdPicker" controller="HouseholdAssignmentQueueController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="showModal" type="boolean" default="false" />
+    <aura:attribute name="selectedHousehold" type="Account" />
+    <aura:attribute name="searchParams" type="Account" default="{'sobjectType':'Account'}"/>
+    <aura:attribute name="searched" type="boolean" default="false" />
+    <aura:attribute name="searchableFields" type="List" default="[]" />
+    <aura:attribute name="resultFields" type="List" default="[]" />
+    <aura:attribute name="results" type="List" description="Search result values in lists for display in table"/>
+    <aura:attribute name="resultRecords" type="List" description="Search results as SObjects"/>
+    <aura:attribute name="callback" type="Aura.Action" />
+
+    <!-- household selection form element -->
+    <div class="slds-form-element">
+        <label class="slds-form-element__label" for="combobox-id-5">Household</label>
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container slds-has-selection">
+                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none">
+                        <span class="slds-icon_container slds-icon-standard-account slds-combobox__input-entity-icon" title="Account">
+                            <lightning:icon iconName="standard:household" />
+                        </span>
+                        <input class="slds-input slds-combobox__input slds-combobox__input-value" id="combobox-id-5" aria-controls="listbox-id-5" autocomplete="off" role="textbox" type="text"
+                               placeholder="Select an Option" readonly="readonly" value="{!v.selectedHousehold.Name}" onclick="{!c.toggleModal}"/>
+                        <aura:if isTrue="{!v.selectedHousehold != null}">
+                            <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" title="Remove selected option" onclick="{!c.clearHousehold}">
+                                <lightning:icon iconName="utility:close" size="xx-small"/>
+                            </button>
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- household selection modal -->
+    <aura:if isTrue="{!v.showModal}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.toggleModal}">
+                        <lightning:icon iconName="utility:close" size="medium" />
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Search for a Household</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <!-- search form -->
+                    <lightning:recordEditForm aura:id="householdpicker-editform" objectApiName="Account">
+                        <aura:iteration items="{!v.searchableFields}" var="field">
+                            <lightning:inputField fieldName="{!field.fieldPath}" aura:id="searchableField" name="{!field.fieldPath}"/>
+                        </aura:iteration>
+                    </lightning:recordEditForm>
+                    <button class="slds-button slds-button_neutral slds-float--right" onclick="{!c.search}">Search</button>
+
+                    <!-- results pane -->
+                    <aura:if isTrue="{!and(v.searched, v.results.length == 0)}"><div class="slds-align--absolute-center">No results were found for the selected search parameters.</div></aura:if>
+                    <aura:if isTrue="{!and(v.searched, v.results.length > 0)}">
+                        <table class="slds-table slds-table_cell-buffer slds-p-around--medium">
+                            <thead>
+                            <tr class="slds-line-height_reset">
+                                <aura:iteration items="{!v.resultFields}" var="field">
+                                    <th scope="col">
+                                        <div class="slds-truncate" title="{!field.label}">{!field.label}</div>
+                                    </th>
+                                </aura:iteration>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <aura:iteration items="{!v.results}" var="result" indexVar="i">
+                                <tr class="slds-hint-parent">
+                                    <aura:iteration items="{!result.values}" var="value">
+                                        <td>
+                                            <div class="slds-truncate" title="{!value}">{!value}</div>
+                                        </td>
+                                    </aura:iteration>
+                                    <td>
+                                        <lightning:button class="slds-button slds-button_brand slds-float--right" value="{!i}" onclick="{!c.select}">Select</lightning:button>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                            </tbody>
+                        </table>
+                    </aura:if>
+                </div>
+                <!--
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" onclick="{!c.toggleModal}">Cancel</button>
+                        <button class="slds-button slds-button_brand">Save</button>
+                    </footer>
+                -->
+
+
+
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" onclick="{!c.toggleModal}"></div>
+    </aura:if>
+</aura:component>

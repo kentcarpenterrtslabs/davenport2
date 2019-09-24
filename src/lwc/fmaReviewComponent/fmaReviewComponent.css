@@ -1,0 +1,60 @@
+.select-rep{
+    background-color: #e8e8e8;
+    margin-top: 10px;
+    margin-bottom: 10px
+}
+
+.rep-box{
+    margin-bottom: 5px
+}
+.rep-box-bg{
+    margin: 0px 0px 10px 0px;
+    
+
+}
+.border-bottom{
+    border-bottom: 1px
+}
+.hidden{
+    display: none;
+}
+
+.cardTitle{
+    font-size: 20px;
+    padding: 15px;
+    font-weight: bold;
+}
+
+.title-heading{
+    font-size: 18px;
+
+}
+.tall{
+    height: 50px;
+    margin-left: 20px;
+}
+.review-heading{
+    font-size: 15px
+
+}
+
+.comments{
+    border-top: 2px;
+    padding:  5px
+    
+}
+.all-padding{
+    padding: 15px;
+    
+}
+.break{
+    height: 5px;
+    background-color: #284734 
+}
+
+.float-left{
+    float: left
+}
+.right-padding{
+    margin-right: 10px;
+}

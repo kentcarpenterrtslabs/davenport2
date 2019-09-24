@@ -1,0 +1,84 @@
+<!--
+ - Created by Eric Stansbury on 5/6/2019.
+ -->
+
+<aura:component description="HouseholdAssignmentRow" controller="HouseholdAssignmentQueueController">
+    <aura:handler name="init" value="{!this}" action="{!c.initRows}"/>
+    <aura:handler name="change" value="{!v.household}" action="{!c.initRows}" />
+    <aura:handler event="c:HouseholdAssignmentSaveAll" action="{!c.assign}" />
+    <aura:attribute type="FinServ__FinancialAccount__c" name="financialAccount" />
+    <aura:attribute type="Account" name="household" />
+    <aura:attribute type="List" name="comparisonRows" />
+    <aura:attribute type="boolean" name="hidden" default="false" />
+
+    <aura:if isTrue="{!!v.hidden}">
+        <lightning:accordionSection label="{!v.financialAccount.Name}" name="{!v.financialAccount.Id}">
+            <aura:set attribute="actions">
+                <a class="slds-button slds-button_neutral" href="{!'/' + v.financialAccount.Id}">View Record</a>
+            </aura:set>
+            <lightning:layout>
+                <lightning:layoutItem size="12" class="slds-align-content-center">
+                    <lightning:layout >
+                        <lightning:layoutItem size="3"></lightning:layoutItem>
+                        <lightning:layoutItem size="3" padding="around-small">
+                            <c:HouseholdPicker selectedHousehold="{!v.household}"/>
+                        </lightning:layoutItem>
+                        <lightning:layoutItem size="3" padding="around-small">
+                            <lightning:layout>
+                                <lightning:layoutItem size="6">
+                                    <lightning:button class="slds-theme_neutral slds-size_1-of-1 slds-m-top_large"
+                                                      iconPosition="left"
+                                                      variant="neutral"
+                                                      type="button"
+                                                      label="Assign Household"
+                                                      iconName="utility:check"
+                                                      onclick="{!c.assign}"/>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem size="6">
+                                    <c:NewHousehold newHousehold="{!v.household}"/>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <lightning:layout class="slds-p-around--medium">
+                <lightning:layoutItem size="6" class="slds-card" padding="around-small">
+                    <div class="slds-card__header slds-grid">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">
+                                Financial Account Fields
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="slds-card__body slds-card__body_inner">
+                        <dl class="slds-wrap slds-list_horizontal">
+                            <aura:iteration items="{!v.comparisonRows}" var="row">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="{!row.label}" style="{!row.color ? 'background-color: ' + row.color : ''}">{!row.label}:</dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!row.financialAccountValue}" style="{!row.color ? 'background-color: ' + row.color : ''}">{!row.financialAccountValue}</dd>
+                            </aura:iteration>
+                        </dl>
+                    </div>
+                </lightning:layoutItem>
+                <span/>
+                <lightning:layoutItem size="6" class="slds-card" padding="around-small">
+                    <div class="slds-card__header slds-grid">
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title">
+                                Household Fields
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="slds-card__body slds-card__body_inner">
+                        <dl class="slds-wrap slds-list_horizontal">
+                            <aura:iteration items="{!v.comparisonRows}" var="row">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="{!row.label}" style="{!row.color ? 'background-color: ' + row.color : ''}">{!row.label}:</dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!row.householdValue}" style="{!row.color ? 'background-color: ' + row.color : ''}">{!row.householdValue}</dd>
+                            </aura:iteration>
+                        </dl>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:accordionSection>
+    </aura:if>
+</aura:component>

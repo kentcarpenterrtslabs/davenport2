@@ -1,0 +1,211 @@
+<template>
+    <template if:false={finalReview}>
+
+    
+    <article class="slds-card">  
+        <template if:true={selectedHouseholdsForFinal}>
+            <lightning-card variant="Narrow" title="Select Rep for FMA Review" icon-name="standard:account">
+                    <lightning-button
+                        variant="Brand"
+                        name="continue"
+                        label="Continue"
+                        onclick={handleClick}
+                        class="slds-m-left_x-small"
+                        slot="actions"></lightning-button>
+                </lightning-card>
+        </template>
+        <template if:false={selectedHouseholdsForFinal}>
+            <lightning-card variant="Narrow" title="Select Rep for FMA Review" icon-name="standard:account">
+                <lightning-button
+                    variant="Brand"
+                    name="continue"
+                    label="Continue"
+                    disabled
+                    class="slds-m-left_x-small"
+                    slot="actions"></lightning-button>
+            </lightning-card>
+        </template>
+            <!-- <lightning-card variant="Narrow" title="Select Rep for FMA Review" icon-name="standard:account">
+                <lightning-button
+                    variant="Brand"
+                    name="continue"
+                    label="Continue"
+                    onclick={handleClick}
+                    class="slds-m-left_x-small"
+                    slot="actions"></lightning-button>
+            </lightning-card> -->
+  
+           
+        
+            
+     <!-- Select a rep card    -->
+        <div class="select-rep">
+            <lightning-layout>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-combobox
+                        name="repSelector"
+                        label="Rep"
+                        placeholder="Select a Rep"
+                        value={selectedRep}
+                        options={reps}
+                        onchange={handleChange}></lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input 
+                        type="date" 
+                        name="startDateRange"
+                        value={startDateRange} 
+                        label="Review Period Start"
+                        onchange={handleChange}></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item size="4" padding="around-small">
+                    <lightning-input
+                        type="date"
+                        name="endDateRange"
+                        label="Review Period End"
+                        value={endDateRange}
+                        onchange={handleChange}></lightning-input>
+                </lightning-layout-item>  
+            </lightning-layout> 
+        </div>
+        <template if:true={fmaData}>
+            <div>
+                <lightning-datatable
+                    key-field="id"
+                    data={fmaData}
+                    columns={columns}
+                    onsort={onSort}
+                    is-loading={tableLoadingState}
+                    onrowselection={onRowSelection}></lightning-datatable>
+            </div>
+        </template>
+        <template if:false={fmaData}>
+            <template if:false={selectedRep}>
+                <template if:false={finalReview}>
+                    <div class="tall"> 
+                      <h1>Select a Rep</h1>
+                    </div>
+                </template>
+            </template>
+            <template if:true={selectedRep}>
+                <template if:true={noHouseholds}>
+                    <p> This Rep has no Assigned Household Accounts</p>
+                </template>
+            </template>
+        </template>
+        <template if:true={selectedRep}>
+                <template if:true={noHouseholds}>
+                    <p> This Rep has no Assigned Household Accounts</p>
+                </template>
+        </template>
+    </article>
+    <template if:true={domRepNumber}>
+        <div class="slds-card all-padding">
+            Rep Numbers: {domRepNumber}
+        </div>
+    
+    </template>
+
+
+    </template>
+    <template if:true={finalReview}>
+        <template if:true={finalReviewFormatData}>
+        <div class="slds-card">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__body">
+                    <h2 class="cardTitle">
+                        {selectedRepName}: {formatedStart} - {formatedEnd}
+                    </h2>
+                </div>
+                <div class="slds-no-flex right-padding">
+                    <lightning-button label="Back" name="back" onclick={handleClick}   slot="actions" class="slds-m-left_x-small"></lightning-button>
+                    <lightning-button label="Render Draft" name="draft" onclick={handleClick}  slot="actions"></lightning-button>
+                    <lightning-button label="Render Final" name="final" onclick={handleClick}  slot="actions"></lightning-button>
+                </div>
+            </header>
+        </div>
+        <div class="slds-card rep-box all-padding">
+            <lightning-accordion allow-multiple-sections-open
+                onsectiontoggle={handleSectionToggle}
+                active-section-name={activeSections}>
+                <template for:each={finalReviewFormatData} for:item="house">
+                    <lightning-accordion-section name={house.name} label={house.name} key={index}>
+                        <template for:each={house.forms} for:item="form">
+                            <div key={index} class={form.display}>
+                                <div class="border-bottom">
+                                    <div class="slds-box rep-box-bg">
+                                        <div class="c-container">
+                                            <lightning-layout horizontal-align="spread">
+                                                <lightning-layout-item padding="around-small">
+                                                    
+                                                        <h1><strong>{form.topic}</strong></h1>
+                                                   
+                                                </lightning-layout-item>
+                                                <lightning-layout-item padding="around-small">
+                                                  
+                                                        <h4>{form.button}</h4>
+                                                    
+                                                </lightning-layout-item>
+                                            </lightning-layout>
+                                            <lightning-layout horizontal-align="spread" >
+                                                <lightning-layout-item padding="around-small" size="12">
+                                                    <div style="overflow-y: scroll; height:50px;margin:0px" class={form.displayComments}>
+                                                        <template for:each={form.comments} for:item="comment">
+                                                            <p key={index}>{comment}</p>
+                                                        </template>
+                                                    </div>
+                                                </lightning-layout-item>
+                                               
+                                            </lightning-layout>
+                                        <!-- <h6 class="slds-card__header-title"> {form.topic}</h6> -->
+                                        </div>
+                                    </div>
+
+                                    
+
+
+
+
+
+                                    <!-- <lightning-card title={form.topic} >
+                                        <lightning-button label={form.button} variant='brand' slot="actions"></lightning-button>
+                                        <div style="overflow-y: scroll; height:75px;margin:20px" class={form.displayComments}>  
+                                            <template for:each={form.comments} for:item="comment">
+                                                <p key={index}>{comment}</p>
+                                            </template>
+                                        </div>
+                                    </lightning-card> -->
+                                </div>
+                            </div>
+
+                        </template>
+                    </lightning-accordion-section>
+                    </template>
+
+              
+            </lightning-accordion>
+        </div>
+        </template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- <div>
+            <lightning-button-group>
+                <lightning-button label="Back" name="back" onclick={handleClick}  class="slds-m-left_x-small"></lightning-button>
+                <lightning-button label="Render Draft" onclick={handleClick}></lightning-button>
+                <lightning-button label="Render Final" onclick={handleClick}></lightning-button>
+            </lightning-button-group>
+        </div> -->
+                
+    </template>
+</template>

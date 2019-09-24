@@ -1,0 +1,236 @@
+<template>
+
+    <!-- <lightning-tabset variant="scoped"> -->
+        <!-- Outter Tabset -->
+        <!-- First Outter Tabset - Activity -->
+        <!-- <lightning-tab label="Activity"> -->
+            <!-- Start of Activity Tab -->
+            <lightning-tabset variant="scoped">
+                 <!-- Start of Log a Call tab -->
+                <lightning-tab label="Log a Call">
+                    <div>
+                    <div class="input-spacing">
+                        <!-- <lightning-combobox
+                            name="Subject"
+                            label="Subject"
+                            value={subjectValue}
+                            placeholder=""
+                            options={subject}
+                            onchange={handleChange} ></lightning-combobox> -->
+                        <lightning-input name="Subject" label="Subject" value={subjectValue} onchange={handleChange} ></lightning-input>
+                    </div>
+                    
+                    <div class="input-spacing">
+                        <lightning-input type="toggle" label="Include Comments in FMA Review" name="includeToggle" message-toggle-active="Include" message-toggle-inactive="Do Not Include" onchange={handleChange} ></lightning-input>
+                    </div>
+                    <div class="input-spacing">
+                        <lightning-textarea name="comments" label="Comments" value={callCommentsValue} onchange={handleChange} ></lightning-textarea>
+                    </div>
+                   <div class="input-spacing">
+                        <lightning-input name="relatedTo" label="Related To"  value={name} disabled></lightning-input>
+                   </div>
+                    <div class="input-spacing">
+                        <lightning-combobox
+                            name="User"
+                            label="Assign To"
+                            value={userId}
+                            placeholder=""
+                            options={user}
+                            onchange={handleChange} ></lightning-combobox>
+    
+                    </div>
+                    <template if:true={finacctdata}>
+                        <div class="input-spacing">
+                            <lightning-checkbox-group name="FinAccountCheckbox"
+                              label="Choose Finanical Accounts"
+                              options={finAccounts}
+                              value={finAcctValue}
+                              onchange={handleChange}></lightning-checkbox-group>
+                        </div> 
+                    </template>
+                    <div class="input-spacing">
+                        <lightning-combobox
+                            name="Status"
+                            label="Status"
+                            value={statusValue}
+                            placeholder=""
+                            options={status}
+                            onchange={handleChange} ></lightning-combobox>
+                    </div>
+                    <div class="input-spacing">
+                            <lightning-combobox
+                                name="Type"
+                                label="Type"
+                                value={typeValue}
+                                placeholder=""
+                                options={type}
+                                onchange={handleChange} ></lightning-combobox>
+                        </div>
+
+                    <div class="input-spacing">
+                        <lightning-input type="date" name="Date" label="Due Date" value={dateValue} onchange={handleChange}  ></lightning-input>
+                    </div>
+
+                    <!-- <div >
+                    
+                        <lightning-button-menu alternative-text="Show menu" class="combobox-button-menu">
+                            <lightning-menu-item value="MenuItemOne" label="Menu Item One"></lightning-menu-item>
+                            <lightning-menu-item value="MenuItemTwo" label="Menu Item Two"></lightning-menu-item>
+                            <lightning-menu-item value="MenuItemThree" label="Menu Item Three"></lightning-menu-item>
+                            <lightning-menu-item value="MenuItemFour" label="Menu Item Four"></lightning-menu-item>
+                        </lightning-button-menu>
+
+                        <lightning-input name="relatedTo" label="Related To"  value={name} class=" input-width combobox-textbox" ></lightning-input>
+
+                        
+                    </div> -->
+                    
+
+
+
+<!-- 
+                    <template if:true={FMA}> -->
+                        <lightning-accordion 
+                            class="FMA-Review-accordian"
+                            allow-multiple-sections-open
+                            active-section-name={activeSections}>
+                            <lightning-accordion-section name="FMAReview" label="FMA Review Form">
+                                <lightning-card  variant="Narrow"  title="FMA Review Topics" icon-name="standard:contact">
+                                    <!-- <lightning-button-icon  icon-name="utility:down" variant="border-filled" alternative-text="Show More" slot="actions"></lightning-button-icon> -->
+                                        <div class="fma-form-spacing">
+                                        <!-- FMA Review Item One -->
+                                        <div class="input-spacing">
+                                            <p><strong> Personal Client Info </strong></p>
+                                            <div class="input-spacing">
+                                                <lightning-button-group>
+                                                    <lightning-button label="Not Applicable" onclick={handleBGroup1Click} variant={naVariant1}></lightning-button>
+                                                    <lightning-button label="Reviewed, No Change" onclick={handleBGroup1Click} variant={rvVariant1}></lightning-button>
+                                                    <lightning-button label="Review Changes as Follows" onclick={handleBGroup1Click} variant={chVariant1} ></lightning-button>
+                                                </lightning-button-group>
+                                            </div>
+                                            <div  class={display1}>
+                                                <lightning-textarea name="clientInfo" value={clientValue} onchange={handleChange}></lightning-textarea>
+                                            </div>
+                                        </div>
+                                        <!-- FMA Review Item Two -->
+                                        <div class="input-spacing">
+                                            <p><strong> Investment Objective and Risk Tolerance </strong> </p>
+                                            <div class="input-spacing">
+                                                <lightning-button-group>
+                                                    <lightning-button   label="Not Applicable" onclick={handleBGroup2Click} variant={naVariant2}></lightning-button>
+                                                    <lightning-button label="Reviewed, No Change" onclick={handleBGroup2Click} variant={rvVariant2}></lightning-button>
+                                                    <lightning-button label="Review Changes as Follows" onclick={handleBGroup2Click} variant={chVariant2} ></lightning-button>
+                                                </lightning-button-group>
+                                            </div>
+                                            <div class={display2}>
+                                                <lightning-textarea name="investInfo" value={investValue} onchange={handleChange} focus="true"></lightning-textarea>
+                                            </div>
+                                        </div>
+                                         <!-- FMA Review Item Three -->
+                                         <div class="input-spacing">
+                                            <p><strong> Time Horizon and Liquidity Needs </strong>  </p>
+                                            <div class="input-spacing">
+                                                <lightning-button-group>
+                                                    <lightning-button  label="Not Applicable" onclick={handleBGroup3Click} variant={naVariant3}></lightning-button>
+                                                    <lightning-button label="Reviewed, No Change" onclick={handleBGroup3Click} variant={rvVariant3}></lightning-button>
+                                                    <lightning-button label="Review Changes as Follows" onclick={handleBGroup3Click} variant={chVariant3} ></lightning-button>
+                                                </lightning-button-group>
+                                            </div>
+                                            <div class={display3}>
+                                                <lightning-textarea name="timeInfo" value={timeValue} onchange={handleChange}></lightning-textarea>
+                                            </div>
+                                        </div>
+                                         <!-- FMA Review Item Four -->
+                                         <div class="input-spacing">
+                                            <p><strong> Investment and Performance </strong>  </p>
+                                            <div class="input-spacing">
+                                                <lightning-button-group>
+                                                    <lightning-button  label="Not Applicable" onclick={handleBGroup2Click} variant={naVariant4}></lightning-button>
+                                                    <lightning-button label="Reviewed, No Change" onclick={handleBGroup4Click} variant={rvVariant4}></lightning-button>
+                                                    <lightning-button label="Review Changes as Follows" onclick={handleBGroup4Click} variant={chVariant4} ></lightning-button>
+                                                </lightning-button-group>
+                                            </div>
+                                            <div class={display4}>
+                                                <lightning-textarea name="inPerfInfo" value={inPerfValue} onchange={handleChange}></lightning-textarea>
+                                            </div>
+                                            </div>
+                                         <!-- FMA Review Item Five -->
+                                         <div class="input-spacing">
+                                            <p><strong> Concentrated Positions </strong>  </p>
+                                            <div class="input-spacing">
+                                                <lightning-button-group>
+                                                    <lightning-button  label="Not Applicable" onclick={handleBGroup5Click} variant={naVariant5}></lightning-button>
+                                                    <lightning-button label="Reviewed, No Change" onclick={handleBGroup5Click} variant={rvVariant5}></lightning-button>
+                                                    <lightning-button label="Review Changes as Follows" onclick={handleBGroup5Click} variant={chVariant5} ></lightning-button>
+                                                </lightning-button-group>
+                                            </div>
+                                            <div class={display5}>
+                                                <lightning-textarea name="conInfo" value={conValue} onchange={handleChange}></lightning-textarea>
+                                            </div>
+                                        </div>
+                                         <!-- FMA Review Item Six -->
+                                        <div class="input-spacing">
+                                            <p><strong> High Cash Balance </strong></p>
+                                            <div class="input-spacing">
+                                                <lightning-button-group>
+                                                    <lightning-button label="Not Applicable" onclick={handleBGroup6Click} variant={naVariant6}></lightning-button>
+                                                    <lightning-button label="Reviewed, No Change" onclick={handleBGroup6Click} variant={rvVariant6}></lightning-button>
+                                                    <lightning-button label="Review Changes as Follows" onclick={handleBGroup6Click} variant={chVariant6} ></lightning-button>
+                                                </lightning-button-group>
+                                            </div>
+                                            <div class={display6}>
+                                                <lightning-textarea name="highInfo" value={highValue} onchange={handleChange}></lightning-textarea>
+                                            </div>
+                                        </div>
+                                         <!-- FMA Review Item Seven -->
+                                        <div class="input-spacing">
+                                            <p><strong>Trading/Low Trading</strong></p>
+                                            <div class="input-spacing">
+                                                <lightning-button-group>
+                                                    <lightning-button label="Not Applicable" onclick={handleBGroup7Click} variant={naVariant7}></lightning-button>
+                                                    <lightning-button label="Reviewed, No Change" onclick={handleBGroup7Click} variant={rvVariant7}></lightning-button>
+                                                    <lightning-button label="Review Changes as Follows" onclick={handleBGroup7Click} variant={chVariant7} ></lightning-button>
+                                                </lightning-button-group>
+                                            </div>
+                                            <div class={display7}>
+                                                <lightning-textarea name="unSolInfo" value={unSolValue} onchange={handleChange}></lightning-textarea>
+                                            </div>
+                                        </div>
+                                        </div>
+                                       
+                                    </lightning-card>
+                            </lightning-accordion-section>
+                        </lightning-accordion>
+                    <!-- </template> -->
+
+
+
+
+                    <div>
+                        <lightning-button variant="brand" label="Save" title="Brand action" onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>    
+
+                    </div>
+
+
+
+
+
+                </lightning-tab>
+                <!-- <lightning-tab label="Task">
+                            Two Content !
+                </lightning-tab>
+                <lightning-tab label="Events">
+                            Three Content !
+                </lightning-tab> -->
+        </lightning-tabset>
+        <!-- </lightning-tab> -->
+        <!-- <lightning-tab label="Chatter"> --> 
+
+
+        <!-- </lightning-tab> -->
+     
+
+
+    <!-- </lightning-tabset> -->
+</template>

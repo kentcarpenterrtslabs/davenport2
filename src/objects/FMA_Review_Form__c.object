@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>FMA Review Forms</relationshipLabel>
+        <relationshipName>FMA_Review_Forms</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Call_Notes__c</fullName>
+        <externalId>false</externalId>
+        <label>Call Notes</label>
+        <length>32000</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Concentrated_Positions_Comments__c</fullName>
+        <externalId>false</externalId>
+        <label>Concentrated Positions Comments</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Concentrated_Positions_pl__c</fullName>
+        <externalId>false</externalId>
+        <label>Concentrated Positions</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Not Applicable</fullName>
+                    <default>true</default>
+                    <label>Not Applicable</label>
+                </value>
+                <value>
+                    <fullName>Reviewed, No Change</fullName>
+                    <default>false</default>
+                    <label>Reviewed, No Change</label>
+                </value>
+                <value>
+                    <fullName>Review Changes as Follows</fullName>
+                    <default>false</default>
+                    <label>Review Changes as Follows</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Create_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(NOT(ISBLANK(Legacy_CreatedDate__c)),Legacy_CreatedDate__c,CreatedDate)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Create Date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Current_Review__c</fullName>
+        <externalId>false</externalId>
+        <formula>if( DATEVALUE( CreatedDate ) &gt; Rep__r.FMA_Review_Date__c, &quot;Current&quot;, &quot;Former&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Current Review</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>High_Cash_Balance_Comments__c</fullName>
+        <externalId>false</externalId>
+        <label>High Cash Balance Comments</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>High_Cash_Balance_pl__c</fullName>
+        <externalId>false</externalId>
+        <label>High Cash Balance</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Not Applicable</fullName>
+                    <default>true</default>
+                    <label>Not Applicable</label>
+                </value>
+                <value>
+                    <fullName>Reviewed, No Change</fullName>
+                    <default>false</default>
+                    <label>Reviewed, No Change</label>
+                </value>
+                <value>
+                    <fullName>Review Changes as Follows</fullName>
+                    <default>false</default>
+                    <label>Review Changes as Follows</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Household_Account_Numbers__c</fullName>
+        <externalId>false</externalId>
+        <formula>Account__r.Account_Numbers__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Household Account Numbers</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Household_Rep_Numbers__c</fullName>
+        <externalId>false</externalId>
+        <formula>Account__r.Rep_Numbers__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Household Rep Numbers</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Houseshold_Plans__c</fullName>
+        <externalId>false</externalId>
+        <formula>Account__r.Plans__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Houseshold Plans</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Investment_Objective_and_Risk_comments__c</fullName>
+        <externalId>false</externalId>
+        <label>Investment Objective and Risk Comments</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Investment_Objective_and_Risk_pl__c</fullName>
+        <externalId>false</externalId>
+        <label>Investment Objective and Risk Tolerance</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Not Applicable</fullName>
+                    <default>true</default>
+                    <label>Not Applicable</label>
+                </value>
+                <value>
+                    <fullName>Reviewed, No Change</fullName>
+                    <default>false</default>
+                    <label>Reviewed, No Change</label>
+                </value>
+                <value>
+                    <fullName>Review Changes as Follows</fullName>
+                    <default>false</default>
+                    <label>Review Changes as Follows</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Investment_and_Performance_Comments__c</fullName>
+        <externalId>false</externalId>
+        <label>Investment and Performance Comments</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Investment_and_Performance_pl__c</fullName>
+        <externalId>false</externalId>
+        <label>Investment and Performance</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Not Applicable</fullName>
+                    <default>true</default>
+                    <label>Not Applicable</label>
+                </value>
+                <value>
+                    <fullName>Reviewed, No Change</fullName>
+                    <default>false</default>
+                    <label>Reviewed, No Change</label>
+                </value>
+                <value>
+                    <fullName>Review Changes as Follows</fullName>
+                    <default>false</default>
+                    <label>Review Changes as Follows</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Legacy_CreatedDate__c</fullName>
+        <externalId>false</externalId>
+        <label>Legacy Created Date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Personal_Client_Info_co__c</fullName>
+        <externalId>false</externalId>
+        <label>Personal Client Info Comments</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Personal_Client_Info_pl__c</fullName>
+        <externalId>false</externalId>
+        <label>Personal Client Info</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Not Applicable</fullName>
+                    <default>true</default>
+                    <label>Not Applicable</label>
+                </value>
+                <value>
+                    <fullName>Reviewed, No Change</fullName>
+                    <default>false</default>
+                    <label>Reviewed, No Change</label>
+                </value>
+                <value>
+                    <fullName>Review Changes as Follows</fullName>
+                    <default>false</default>
+                    <label>Review Changes as Follows</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Rep__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Rep</label>
+        <referenceTo>Rep__c</referenceTo>
+        <relationshipLabel>FMA Review Forms</relationshipLabel>
+        <relationshipName>FMA_Review_Forms</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Subject__c</fullName>
+        <externalId>false</externalId>
+        <label>Subject</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Time_Horizon_and_Liquidity_Needs_Comment__c</fullName>
+        <externalId>false</externalId>
+        <label>Time Horizon and Liquidity Needs Comment</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Time_Horizon_pl__c</fullName>
+        <externalId>false</externalId>
+        <label>Time Horizon and Liquidity Needs</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Not Applicable</fullName>
+                    <default>true</default>
+                    <label>Not Applicable</label>
+                </value>
+                <value>
+                    <fullName>Reviewed, No Change</fullName>
+                    <default>false</default>
+                    <label>Reviewed, No Change</label>
+                </value>
+                <value>
+                    <fullName>Review Changes as Follows</fullName>
+                    <default>false</default>
+                    <label>Review Changes as Follows</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Trading_Low_Trading_Comments__c</fullName>
+        <externalId>false</externalId>
+        <label>Trading/Low Trading Comments</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Trading_Low_Trading_pl__c</fullName>
+        <externalId>false</externalId>
+        <label>Trading/Low Trading</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Not Applicable</fullName>
+                    <default>true</default>
+                    <label>Not Applicable</label>
+                </value>
+                <value>
+                    <fullName>Reviewed, No Change</fullName>
+                    <default>false</default>
+                    <label>Reviewed, No Change</label>
+                </value>
+                <value>
+                    <fullName>Review Changes as Follows</fullName>
+                    <default>false</default>
+                    <label>Review Changes as Follows</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <label>FMA Review Form</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>FMA_Form-{0000}</displayFormat>
+        <label>FMA Review Form Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>FMA Review Forms</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

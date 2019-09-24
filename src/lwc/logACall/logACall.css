@@ -1,0 +1,35 @@
+.hidden{
+    display: none;
+}
+
+.display{
+    display: block;
+}
+
+.fma-form-spacing{
+    margin: 20px;
+}
+
+.input-spacing{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.combobox-button-menu {
+    top: 28px;
+    float: right;
+    z-index:99;
+}
+
+.combobox-textbox {
+    position: relative;
+    top: -5px;
+}
+
+.input-width {
+/* width:280px;  */
+}
+
+.text-area-height textarea {
+    height:200px;
+}
