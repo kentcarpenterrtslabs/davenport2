@@ -1,0 +1,111 @@
+SELECT
+	CreatedById,
+	CreatedDate,
+	DeveloperName,
+	DoesIncludeBosses,
+	DoesSendEmailToMembers,
+	Email,
+	Id,
+	LastModifiedById,
+	LastModifiedDate,
+	Name,
+	OwnerId,
+	RelatedId,
+	SystemModstamp,
+	Type,
+	( SELECT
+		GroupId,
+		Id,
+		SystemModstamp,
+		UserOrGroupId
+	FROM GroupMembers )
+FROM Group
+WHERE Type='Regular'
+
+SELECT
+	Branch__c,
+	CreatedById,
+	CreatedDate,
+	Department__c,
+	Employee__c,
+	FMA_Review_Date__c,
+	Id,
+	IsDeleted,
+	LastModifiedById,
+	LastModifiedDate,
+	LastReferencedDate,
+	LastViewedDate,
+	Legacy_Created_By__c,
+	Legacy_Created_Date__c,
+	Legacy_Employee_ID__c,
+	Legacy_ID__c,
+	Legacy_Owner_ID__c,
+	Name,
+	OwnerId,
+	Region__c,
+	Rep_Number__c,
+	Rep_Statement_Name__c,
+	SystemModstamp
+FROM Rep__c
+
+SELECT
+	CreatedById,
+	CreatedDate,
+	Davenport_Username__c,
+	Id,
+	IsDeleted,
+	LastModifiedById,
+	LastModifiedDate,
+	LastReferencedDate,
+	LastViewedDate,
+	Name,
+	OwnerId,
+	Rep_Number__c,
+	Rep_Security_Key__c,
+	SystemModstamp,
+	Type__c
+FROM Rep_Security__c
+
+SELECT
+	CreatedById,
+	CreatedDate,
+	DeveloperName,
+	DoesIncludeBosses,
+	DoesSendEmailToMembers,
+	Email,
+	Id,
+	LastModifiedById,
+	LastModifiedDate,
+	Name,
+	OwnerId,
+	RelatedId,
+	SystemModstamp,
+	Type
+FROM Group
+WHERE Type='Regular'
+
+SELECT
+	Group.Name,
+	Id,
+	SystemModstamp,
+	UserOrGroupId
+FROM GroupMember
+
+SELECT
+	Id,
+	Username,
+	LastName,
+	Email,
+	Alias,
+	Davenport_Username__c,
+	ProfileId
+FROM User
+WHERE Username IN (
+'pashworth@investdavenport.com.fsc.rtskent',
+'gaskew@investdavenport.com.fsc.rtskent',
+'japple@investdavenport.com.fsc.rtskent')
+
+SELECT
+	Id,
+	Group.Type
+FROM GroupMember

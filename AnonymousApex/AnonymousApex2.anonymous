@@ -1,0 +1,251 @@
+
+
+        Id profileId = [Select Id from Profile where Name = 'Standard User' limit 1][0].Id;
+
+		User testUserOne = [
+			SELECT
+				Username,
+				LastName,
+				Email,
+				Alias,
+				Davenport_Username__c,
+				ProfileId
+			FROM User
+			WHERE Username = 'pashworth@investdavenport.com.fsc.rtskent'
+		];
+		User testUserTwo = [
+			SELECT
+				Username,
+				LastName,
+				Email,
+				Alias,
+				Davenport_Username__c,
+				ProfileId
+			FROM User
+			WHERE Username = 'gaskew@investdavenport.com.fsc.rtskent'
+		];
+		User testUserThree = [
+			SELECT
+				Username,
+				LastName,
+				Email,
+				Alias,
+				Davenport_Username__c,
+				ProfileId
+			FROM User
+			WHERE Username = 'japple@investdavenport.com.fsc.rtskent'
+		];
+
+		System.debug(JSON.serializePretty(testUserOne));
+		System.debug(JSON.serializePretty(testUserTwo));
+		System.debug(JSON.serializePretty(testUserThree));
+
+
+		User testUserAssistee = [
+			SELECT
+				Username,
+				LastName,
+				Email,
+				Alias,
+				Davenport_Username__c,
+				ProfileId
+			FROM User
+			WHERE Username = 'pashworth@investdavenport.com.fsc.rtskent'
+		];
+		User testUserAssistant = [
+			SELECT
+				Username,
+				LastName,
+				Email,
+				Alias,
+				Davenport_Username__c,
+				ProfileId
+			FROM User
+			WHERE Username = 'tbarrett@investdavenport.com.fsc.rtskent'
+		];
+
+		System.debug(JSON.serializePretty(testUserAssistee));
+		System.debug(JSON.serializePretty(testUserAssistant));
+
+		Assistant_Assignment__c assignmentOne = new Assistant_Assignment__c(
+			Assistant__c = testUserAssistant.Id,
+			Assistee__c = testUserAssistee.Id
+		);
+		insert assignmentOne;
+
+        Rep__c repOne = new Rep__c(Rep_Number__c = 'REP1');
+        Rep__c repTwo = new Rep__c(Rep_Number__c = 'REP2');
+        Rep__c repThree = new Rep__c(Rep_Number__c = 'REP3');
+        List<Rep__c> reps = new List<Rep__c>{
+                repOne, repTwo, repThree
+        };
+		insert reps;
+
+        // rep 1 owned by user 1, rep 2 owned by user 2, rep 3 owned by user 3
+        Rep_Security__c repSecurityOne = new Rep_Security__c(Rep_Number__c = repOne.Rep_Number__c, Davenport_Username__c = testUserOne.Davenport_Username__c, Type__c = 'Rep');
+        Rep_Security__c repSecurityTwo = new Rep_Security__c(Rep_Number__c = repTwo.Rep_Number__c, Davenport_Username__c = testUserTwo.Davenport_Username__c, Type__c = 'Rep');
+        Rep_Security__c repSecurityThree = new Rep_Security__c(Rep_Number__c = repThree.Rep_Number__c, Davenport_Username__c = testUserThree.Davenport_Username__c, Type__c = 'Rep');
+		List<Rep_Security__c> repSecurities = new List<Rep_Security__c> { repSecurityOne, repSecurityTwo, repSecurityThree };
+		insert repSecurities;
+        
+		// 1     2
+		// |     |
+		// +--3--+
+		
+		Rep_Split__c repSplitOneGrantedToThree = new Rep_Split__c(Grant_Access_To_Rep__c = repThree.Id, Split_Rep__c = repOne.Id); // rep split repOne to grant access to repThree
+		Rep_Split__c repSplitTwoGrantedToThree = new Rep_Split__c(Grant_Access_To_Rep__c = repThree.Id, Split_Rep__c = repTwo.Id); // rep split repTwo to grant access to repThree
+        List<Rep_Split__c> repSplits = new List<Rep_Split__c>{ repSplitOneGrantedToThree, repSplitTwoGrantedToThree };
+		insert repSplits;
+
+
+    String HOUSEHOLD_RECORDTYPE_NAME = 'IndustriesHousehold';
+    String INDIVIDUAL_RECORDTYPE_NAME = 'Contact Client/Prospect';
+
+		Account owner = new Account(
+				LastName = 'Test Person Account',
+				RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get(INDIVIDUAL_RECORDTYPE_NAME).getRecordTypeId(),
+				//ParentId = household.Id,
+				FinServ__IndividualType__c = 'Individual'
+		);
+		Account owner2 = new Account(
+				LastName = 'Test Person Account2',
+				RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get(INDIVIDUAL_RECORDTYPE_NAME).getRecordTypeId(),
+				//ParentId = household2.Id,
+				FinServ__IndividualType__c = 'Individual'
+		);
+		//Account owner3 = new Account(
+				//LastName = 'Test Person Account3',
+				//RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get(INDIVIDUAL_RECORDTYPE_NAME).getRecordTypeId(),
+				////ParentId = household3.Id,
+				//FinServ__IndividualType__c = 'Individual'
+		//);
+		List<Account> accounts = new List<Account>{ owner, owner2 };
+		insert accounts;
+
+        Account household1 = new Account(
+            Name = 'Test Household',
+            Placeholder_Household__c = false,
+            FMA_Account__c = true,
+            RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get(HOUSEHOLD_RECORDTYPE_NAME).getRecordTypeId(),
+            FinServ__IndividualType__c = 'Group'
+            //RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get(INDIVIDUAL_RECORDTYPE_NAME).getRecordTypeId(),
+            //FinServ__IndividualType__c = 'Individual'
+        );
+        Account household2 = new Account(
+            Name = 'Test Household2',
+            Placeholder_Household__c = false,
+            FMA_Account__c = true,
+            RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get(HOUSEHOLD_RECORDTYPE_NAME).getRecordTypeId(),
+            FinServ__IndividualType__c = 'Group'
+            //RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get(INDIVIDUAL_RECORDTYPE_NAME).getRecordTypeId(),
+            //FinServ__IndividualType__c = 'Individual'
+        );
+		List<Account> households = new List<Account> { household1, household2 };
+		insert households;
+
+		FinServ__FinancialAccount__c testFinAcctOne = new FinServ__FinancialAccount__c(
+            Name = 'Financial Account One (REP1)',
+            FinServ__Household__c = household1.Id,
+            FinServ__PrimaryOwner__c = owner.Id,
+            FinServ__JointOwner__C = null,
+            FinServ__FinancialAccountSource__c = 'Manually Entered',
+            Cost_Basis__c = 123.45,
+            FinServ__Description__c = 'This is a description of my financial account.',
+            Rep__c = repOne.Id,
+            FinServ__Ownership__c = 'Individual',
+            RecordTypeId = Schema.SObjectType.FinServ__FinancialAccount__c.getRecordTypeInfosByDeveloperName().get('InvestmentAccount').getRecordTypeId()
+		);
+        FinServ__FinancialAccount__c testFinAcctTwo = new FinServ__FinancialAccount__c(
+            Name = 'Financial Account Two (REP2)',
+            FinServ__Household__c = household2.Id,
+            FinServ__PrimaryOwner__c = owner2.Id,
+            FinServ__JointOwner__C = null,
+            FinServ__FinancialAccountSource__c = 'Manually Entered',
+            Cost_Basis__c = 123.45,
+            FinServ__Description__c = 'This is a description of my financial account.',
+            Rep__c = repTwo.Id,
+            FinServ__Ownership__c = 'Individual',
+            RecordTypeId = Schema.SObjectType.FinServ__FinancialAccount__c.getRecordTypeInfosByDeveloperName().get('InvestmentAccount').getRecordTypeId()
+        );
+
+        List<FinServ__FinancialAccount__c> finAccounts = new List<FinServ__FinancialAccount__c>{ testFinAcctOne, testFinAcctTwo };
+		insert finAccounts;
+
+		FinServ__FinancialHolding__c holding1 = new FinServ__FinancialHolding__c(
+			FinServ__FinancialAccount__c = testFinAcctOne,
+			Name = 'Financial Holding One',
+		);
+
+		FinServ__FinancialHolding__c holding2 = new FinServ__FinancialHolding__c(
+			FinServ__FinancialAccount__c = testFinAcctTwo,
+			Name = 'Financial Holding Two',
+		);
+        List<FinServ__FinancialHolding__c> finHoldings = new List<FinServ__FinancialHolding__c>{ holding1, holding2 };
+		insert finHoldings;
+
+		Test.stopTest();
+
+		List<FinServ__FinancialAccount__Share> shares = [
+			SELECT
+				Id,
+				Parent.Name,
+				RowCause,
+				UserOrGroup.Name,
+				UserOrGroupId
+			FROM FinServ__FinancialAccount__Share
+		];
+
+		List<Id> groupIds = new List<Id>();
+		for (FinServ__FinancialAccount__Share share :shares) {
+			groupIds.add(share.UserOrGroupId);
+		}
+
+		List<Group> groups = [
+			SELECT
+				Id,
+				Name
+			FROM Group
+			WHERE Id in :groupIds
+		];
+
+		List<GroupMember> groupMembers = [
+			SELECT
+				Id,
+				GroupId,
+				UserOrGroupId
+			FROM GroupMember
+			WHERE GroupId IN :groupIds
+		];
+
+		List<Id> userIds = new List<Id>();
+		for (GroupMember member : groupMembers) {
+			userIds.add(member.UserOrGroupId);
+		}
+
+		List<User> users = [
+			SELECT
+				Id,
+				Username
+			FROM User
+			WHERE Id IN :userIds
+		];
+
+
+
+
+		System.debug(JSON.serializePretty(new List<Rep__c> { repOne, repTwo, repThree }));
+		System.debug(JSON.serializePretty(shares));
+		System.debug(JSON.serializePretty(groups));
+		System.debug(JSON.serializePretty(users));
+		System.debug(JSON.serializePretty(groupMembers));
+
+		//Map<Id,FinServ__FinancialAccount__Share> mapUserOrGroupIdToShare = new Map<Id,FinServ__FinancialAccount__Share>();
+		//for (FinServ__FinancialAccount__Share share : shares) {
+			//mapUserOrGroupIdToShare.put(share.UserOrGroupId, share);
+		//}
+
+		// User 1 should have access to Financial Account 1
+
+		
+	}
+}

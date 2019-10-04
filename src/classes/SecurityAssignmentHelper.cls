@@ -22,7 +22,8 @@ public class SecurityAssignmentHelper {
     // returns a map of User Id -> users they are assisting
     public static Map<Id, Set<Id>> getUserAssisteeMap(Set<Id> userIds, Set<Id> excludeAssistantAssignmentIds){
         Map<Id, Set<Id>> userAssisteeMap = new Map<Id, Set<Id>>();
-        for (Assistant_Assignment__c assignment : [Select Id, Assistant__c, Assistee__c from Assistant_Assignment__c where Assistant__c in :userIds and Id not in :excludeAssistantAssignmentIds]){
+        //for (Assistant_Assignment__c assignment : [Select Id, Assistant__c, Assistee__c from Assistant_Assignment__c where Assistant__c in :userIds and Id not in :excludeAssistantAssignmentIds]){
+        for (Assistant_Assignment__c assignment : [Select Id, Assistant__c, Assistee__c from Assistant_Assignment__c where Assistee__c in :userIds and Id not in :excludeAssistantAssignmentIds]){
             if (userAssisteeMap.get(assignment.Assistant__c) == null){
                 userAssisteeMap.put(assignment.Assistant__c, new Set<Id>{ assignment.Assistee__c });
             }else{

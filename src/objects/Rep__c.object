@@ -96,6 +96,17 @@
         <type>Date</type>
     </fields>
     <fields>
+        <fullName>GroupId__c</fullName>
+        <description>The Id of the Group object created for this Rep</description>
+        <externalId>false</externalId>
+        <label>GroupId</label>
+        <length>18</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Legacy_Created_By__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
@@ -174,204 +185,6 @@
         <trackTrending>false</trackTrending>
         <type>Text</type>
         <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Split_1_Pct__c</fullName>
-        <externalId>false</externalId>
-        <label>Split 1 %</label>
-        <precision>8</precision>
-        <required>false</required>
-        <scale>3</scale>
-        <trackTrending>false</trackTrending>
-        <type>Percent</type>
-    </fields>
-    <fields>
-        <fullName>Split_1_Rep_Number__c</fullName>
-        <externalId>false</externalId>
-        <formula>Split_1_Rep__r.Rep_Number__c</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Split 1 Rep #</label>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Split_1_Rep__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <externalId>false</externalId>
-        <label>Split 1 Rep</label>
-        <referenceTo>Rep__c</referenceTo>
-        <relationshipLabel>Reps</relationshipLabel>
-        <relationshipName>Reps</relationshipName>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Lookup</type>
-    </fields>
-    <fields>
-        <fullName>Split_2_Pct__c</fullName>
-        <externalId>false</externalId>
-        <label>Split 2 %</label>
-        <precision>8</precision>
-        <required>false</required>
-        <scale>3</scale>
-        <trackTrending>false</trackTrending>
-        <type>Percent</type>
-    </fields>
-    <fields>
-        <fullName>Split_2_Rep_Number__c</fullName>
-        <externalId>false</externalId>
-        <formula>Split_2_Rep__r.Rep_Number__c</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Split 2 Rep #</label>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Split_2_Rep__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <externalId>false</externalId>
-        <label>Split 2 Rep</label>
-        <referenceTo>Rep__c</referenceTo>
-        <relationshipLabel>Reps (Split 2 Rep)</relationshipLabel>
-        <relationshipName>Reps1</relationshipName>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Lookup</type>
-    </fields>
-    <fields>
-        <fullName>Split_3_Pct__c</fullName>
-        <externalId>false</externalId>
-        <label>Split 3 %</label>
-        <precision>8</precision>
-        <required>false</required>
-        <scale>3</scale>
-        <trackTrending>false</trackTrending>
-        <type>Percent</type>
-    </fields>
-    <fields>
-        <fullName>Split_3_Rep_Number__c</fullName>
-        <externalId>false</externalId>
-        <formula>Split_3_Rep__r.Name</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Split 3 Rep #</label>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Split_3_Rep__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <externalId>false</externalId>
-        <label>Split 3 Rep</label>
-        <referenceTo>Rep__c</referenceTo>
-        <relationshipLabel>Reps (Split 3 Rep)</relationshipLabel>
-        <relationshipName>Reps2</relationshipName>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Lookup</type>
-    </fields>
-    <fields>
-        <fullName>Split_4_Pct__c</fullName>
-        <externalId>false</externalId>
-        <label>Split 4 %</label>
-        <precision>8</precision>
-        <required>false</required>
-        <scale>3</scale>
-        <trackTrending>false</trackTrending>
-        <type>Percent</type>
-    </fields>
-    <fields>
-        <fullName>Split_4_Rep_Number__c</fullName>
-        <externalId>false</externalId>
-        <formula>Split_4_Rep__r.Rep_Number__c</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Split 4 Rep #</label>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Split_4_Rep__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <externalId>false</externalId>
-        <label>Split 4 Rep</label>
-        <referenceTo>Rep__c</referenceTo>
-        <relationshipLabel>Rep #&apos;s (Split 4 Rep)</relationshipLabel>
-        <relationshipName>Rep_s3</relationshipName>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Lookup</type>
-    </fields>
-    <fields>
-        <fullName>Split_5_Pct__c</fullName>
-        <externalId>false</externalId>
-        <label>Split 5 %</label>
-        <precision>8</precision>
-        <required>false</required>
-        <scale>3</scale>
-        <trackTrending>false</trackTrending>
-        <type>Percent</type>
-    </fields>
-    <fields>
-        <fullName>Split_5_Rep_Number__c</fullName>
-        <externalId>false</externalId>
-        <formula>Split_5_Rep__r.Rep_Number__c</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Split 5 Rep #</label>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Split_5_Rep__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <externalId>false</externalId>
-        <label>Split 5 Rep</label>
-        <referenceTo>Rep__c</referenceTo>
-        <relationshipLabel>Rep #&apos;s (Split 5 Rep)</relationshipLabel>
-        <relationshipName>Rep_s4</relationshipName>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Lookup</type>
-    </fields>
-    <fields>
-        <fullName>Split_6_Pct__c</fullName>
-        <externalId>false</externalId>
-        <label>Split 6 %</label>
-        <precision>8</precision>
-        <required>false</required>
-        <scale>3</scale>
-        <trackTrending>false</trackTrending>
-        <type>Percent</type>
-    </fields>
-    <fields>
-        <fullName>Split_6_Rep_Number__c</fullName>
-        <externalId>false</externalId>
-        <formula>Split_6_Rep__r.Rep_Number__c</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-        <label>Split 6 Rep #</label>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
-        <fullName>Split_6_Rep__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <externalId>false</externalId>
-        <label>Split 6 Rep</label>
-        <referenceTo>Rep__c</referenceTo>
-        <relationshipLabel>Rep #&apos;s (Split 6 Rep)</relationshipLabel>
-        <relationshipName>Rep_s5</relationshipName>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Lookup</type>
     </fields>
     <label>Rep</label>
     <listViews>

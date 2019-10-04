@@ -3,8 +3,8 @@
  */
 
 public class MoneyGuideProRequestController {
-    static String redirectToUrl = 'https://qa.moneyguidepro.com/davenport/';
-    static String endpointUrl = 'https://qa.moneyguidepro.com/davenport/';
+    static String redirectToUrl = 'https://qa.moneyguidepro.com/davenport/ssosamlnoref.aspx?IntegrationId=170';
+    static String endpointUrl = 'https://qa.moneyguidepro.com/davenport/ssosamlnoref.aspx?IntegrationId=170';
 
     @AuraEnabled public static void updateUser(String householdId, String userId){
         String selectedUserId = (userId == null? UserInfo.getUserId() : userId);

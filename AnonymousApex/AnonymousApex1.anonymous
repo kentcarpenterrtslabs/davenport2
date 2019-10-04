@@ -1,0 +1,170 @@
+		List<Group> groupsToDelete = [
+			SELECT
+				Id
+			FROM Group
+			WHERE Group.Type = 'Regular'
+		];
+		delete groupsToDelete;
+
+		List<Rep__c> repsToDelete = [
+			SELECT
+				Id
+			FROM Rep__c
+		];
+		delete repsToDelete;
+
+		
+		List<Rep_Split__c> repSplitsToDelete = [
+			SELECT
+				Id
+			FROM Rep_Split__c
+		];
+		delete repSplitsToDelete;
+		
+		List<Rep_Security__c> repSecToDelete = [
+			SELECT
+				Id
+			FROM Rep_Security__c
+		];
+		delete repSecToDelete;
+		
+		
+		
+		Group group999 = new Group(
+		Name = 'test group 999',
+		Type = 'Regular');
+insert group999;
+
+User testUserOne = [
+	SELECT
+		Username,
+		LastName,
+		Email,
+		Alias,
+		Davenport_Username__c,
+		ProfileId
+	FROM User
+	WHERE Username = 'pashworth@investdavenport.com.fsc.rtskent'
+];
+
+GroupMember groupMember111 = new GroupMember(
+	GroupId = group999.Id,
+	UserOrGroupId = testUserOne.Id
+);
+insert groupMember111;
+
+
+
+
+Group group1 = [
+	SELECT
+		Id
+	FROM Group
+	WHERE Name = 'test group 999'
+];
+
+GroupMember groupMember1 = [
+	SELECT
+		Id
+	FROM GroupMember
+	WHERE GroupId = :group1.Id
+];
+
+
+
+
+String HOUSEHOLD_RECORDTYPE_NAME = 'IndustriesHousehold';
+String INDIVIDUAL_RECORDTYPE_NAME = 'Contact Client/Prospect';
+
+Account owner = new Account(
+	LastName = 'Test Person Account',
+	RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get(INDIVIDUAL_RECORDTYPE_NAME).getRecordTypeId(),
+	//ParentId = household.Id,
+	FinServ__IndividualType__c = 'Individual'
+);
+insert owner;
+
+Account household1 = new Account(
+    Name = 'Test Household',
+    Placeholder_Household__c = false,
+    FMA_Account__c = true,
+    RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get(HOUSEHOLD_RECORDTYPE_NAME).getRecordTypeId(),
+    FinServ__IndividualType__c = 'Group'
+    //RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get(INDIVIDUAL_RECORDTYPE_NAME).getRecordTypeId(),
+    //FinServ__IndividualType__c = 'Individual'
+);
+insert household1;
+
+FinServ__FinancialAccount__c testFinAcctOne = new FinServ__FinancialAccount__c(
+    Name = 'Financial Account One 999',
+    FinServ__Household__c = household1.Id,
+    FinServ__PrimaryOwner__c = owner.Id,
+    FinServ__JointOwner__C = null,
+    FinServ__FinancialAccountSource__c = 'Manually Entered',
+    Cost_Basis__c = 123.45,
+    FinServ__Description__c = 'This is a description of my financial account.',
+    FinServ__Ownership__c = 'Individual',
+    RecordTypeId = Schema.SObjectType.FinServ__FinancialAccount__c.getRecordTypeInfosByDeveloperName().get('InvestmentAccount').getRecordTypeId()
+);
+insert testFinAcctOne;
+
+FinServ__FinancialAccount__Share finAcctShare1 = new FinServ__FinancialAccount__Share(
+    ParentId = testFinAcctOne.Id,
+    UserOrGroupId = group1.Id,
+    AccessLevel = 'Edit',
+    RowCause = 'Manual'
+);
+insert finAcctShare1;
+
+AccountShare acctShare1 = new AccountShare(
+    RowCause = 'Manual',
+    AccountAccessLevel = 'Edit',
+    OpportunityAccessLevel = 'Edit',
+    AccountId = household1.Id,
+    UserOrGroupId = group1.Id
+);
+insert acctShare1;
+
+System.debug(JSON.serializePretty(group1));
+System.debug(JSON.serializePretty(groupMember1));
+System.debug(JSON.serializePretty(testFinAcctOne));
+System.debug(JSON.serializePretty(finAcctShare1));
+System.debug(JSON.serializePretty(acctShare1));
+
+
+
+
+Group group1delete = [
+	SELECT
+		Id
+	FROM Group
+	WHERE Name = 'test group 999'
+];
+
+delete group1delete;
+
+List<GroupMember> groupMemberActual = [
+	SELECT
+		Id
+	FROM GroupMember
+	WHERE GroupId = :group1delete.Id
+];
+
+List<FinServ__FinancialAccount__Share> finAcctShareActual = [
+	SELECT
+		Id
+	FROM FinServ__FinancialAccount__Share
+	WHERE UserOrGroupId = :group1delete.Id
+];
+
+List<AccountShare> acctShareActual = [
+	SELECT
+		Id
+	FROM AccountShare
+	WHERE UserOrGroupId = :group1delete.Id
+];
+
+System.debug(JSON.serializePretty(groupMemberActual.size()));
+System.debug(JSON.serializePretty(finAcctShareActual.size()));
+System.debug(JSON.serializePretty(acctShareActual.size()));
+

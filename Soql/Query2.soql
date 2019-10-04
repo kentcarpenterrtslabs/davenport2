@@ -1,0 +1,32 @@
+SELECT
+	Id,
+	Username,
+	( SELECT
+		Assistant__c,
+		Assistee__c,
+		CreatedById,
+		CreatedDate,
+		Id,
+		IsDeleted,
+		LastModifiedById,
+		LastModifiedDate,
+		Name,
+		OwnerId,
+		SystemModstamp
+	FROM Assistees__r ),
+	( SELECT
+		Assistant__c,
+		Assistee__c,
+		CreatedById,
+		CreatedDate,
+		Id,
+		IsDeleted,
+		LastModifiedById,
+		LastModifiedDate,
+		Name,
+		OwnerId,
+		SystemModstamp
+	FROM Assistantants__r )
+FROM User
+WHERE Username = 'bbarksdale@investdavenport.com.fsc.rtskent'
+OR Username = 'tbarrett@investdavenport.com.fsc.rtskent'

@@ -61,7 +61,7 @@
         <inlineHelpText>This is the user who is the assistant of the user designated by the &quot;Assistee&quot; ifeld.</inlineHelpText>
         <label>Assistant</label>
         <referenceTo>User</referenceTo>
-        <relationshipName>Assistant_Assignment</relationshipName>
+        <relationshipName>Assistees</relationshipName>
         <required>false</required>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
@@ -72,7 +72,7 @@
         <externalId>false</externalId>
         <label>Assistee</label>
         <referenceTo>User</referenceTo>
-        <relationshipName>Assistant_Assignment1</relationshipName>
+        <relationshipName>Assistants</relationshipName>
         <required>false</required>
         <trackTrending>false</trackTrending>
         <type>Lookup</type>

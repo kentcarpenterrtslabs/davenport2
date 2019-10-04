@@ -28,7 +28,7 @@
             if (state == 'SUCCESS'){
                 var eUrl= $A.get("e.force:navigateToURL");
                 eUrl.setParams({
-                  "url": 'https://www.google.com/'
+                  "url": 'https://qa.moneyguidepro.com/davenport/ssosamlnoref.aspx?IntegrationId=170'
                 });
                 eUrl.fire();
             }else{
