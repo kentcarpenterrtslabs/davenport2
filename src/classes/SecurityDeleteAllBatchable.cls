@@ -11,6 +11,16 @@ global  class SecurityDeleteAllBatchable implements Database.Batchable<SObject> 
     }
 
     global void execute(Database.BatchableContext BC, List<Group> scope) {
+		// get group members that reference these groups as the member (UserOrGroupId) of because they must be deleted first
+
+		List<GroupMember> groupMembers = [
+			SELECT
+				Id
+			FROM GroupMember
+			WHERE UserOrGroupId IN :scope
+		];
+
+		delete groupMembers;
         delete scope;
     }
 
@@ -29,8 +39,8 @@ global  class SecurityDeleteAllBatchable implements Database.Batchable<SObject> 
                 // usually just means NO_MASS_MAIL_PERMISSION -- email failing shouldn't prevent next step from executing
                 System.debug(e);
             }
-        }
 
-		Database.executeBatch(new SecurityResetFirmWideAccessBatchable());
+			Database.executeBatch(new SecurityResetFirmWideAccessBatchable());
+        }
     }
 }

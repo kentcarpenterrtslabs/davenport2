@@ -1,17 +1,6 @@
 SELECT
-	CreatedById,
-	CreatedDate,
-	DeveloperName,
-	DoesIncludeBosses,
-	DoesSendEmailToMembers,
-	Email,
 	Id,
-	LastModifiedById,
-	LastModifiedDate,
 	Name,
-	OwnerId,
-	RelatedId,
-	SystemModstamp,
 	Type,
 	( SELECT
 		GroupId,

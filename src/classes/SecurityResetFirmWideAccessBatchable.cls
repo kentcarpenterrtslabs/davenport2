@@ -33,8 +33,8 @@ global class SecurityResetFirmWideAccessBatchable implements Database.Batchable<
                 // usually just means NO_MASS_MAIL_PERMISSION -- email failing shouldn't prevent Pt2 from executing
                 System.debug(e);
             }
-        }
 
-		Database.executeBatch(new SecurityGroupsBatchable());
+			Database.executeBatch(new SecurityGroupsBatchable());
+        }
 	}
 }
