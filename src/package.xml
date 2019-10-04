@@ -66,6 +66,7 @@
         <members>Rep_SecurityTriggerHandlerTest</members>
         <members>Rep_SplitTriggerHandler</members>
         <members>Rep_SplitTriggerHandlerTest</members>
+        <members>RollupByLookupConfigSchedulable</members>
         <members>SObjectDeleteBatchable</members>
         <members>SObjectDeleteQueueable</members>
         <members>SObjectInsertQueueable</members>
@@ -75,13 +76,21 @@
         <members>SecurityAssignmentHelper</members>
         <members>SecurityAssignmentHelperTest</members>
         <members>SecurityAssignmentTestFactory</members>
+        <members>SecurityDeleteAllBatchable</members>
+        <members>SecurityFinancialAccountBatchable</members>
+        <members>SecurityGroupsBatchable</members>
         <members>SecurityInitializationAcctSplitBatchable</members>
         <members>SecurityInitializationFinAcctBatchable</members>
         <members>SecurityInitializationScript</members>
         <members>SecurityInitializationScriptTest</members>
         <members>SecurityInitializationStepTwo</members>
+        <members>SecurityRepSecurityBatchable</members>
+        <members>SecurityRepSplitsBatchable</members>
+        <members>SecurityResetFirmWideAccessBatchable</members>
         <members>TaskPickLists</members>
         <members>TestCreateTask</members>
+        <members>TestNightlyRunStatusTrigger</members>
+        <members>TestRollupByLookupConfigSchedulable</members>
         <members>UPIAccessToggleController</members>
         <members>UPIAccessToggleControllerTest</members>
         <members>VfpageUrlGenerator</members>
