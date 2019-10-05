@@ -10,6 +10,7 @@ global class SecurityFinancialAccountBatchable implements Database.Batchable<SOb
 		return Database.getQueryLocator([
 			SELECT
 				Id,
+				Name,
 				Rep__r.GroupId__c,
 				FinServ__Household__c,
 				(
