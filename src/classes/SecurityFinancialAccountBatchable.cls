@@ -95,23 +95,52 @@ global class SecurityFinancialAccountBatchable implements Database.Batchable<SOb
 			}
 		}
 		insert financialAccountShares;
-		
+
+		Set<String> existingHouseholdGroupIdPairs = getExistingHouseholdGroupIdPairs(mapHouseholdIdToGroupId);
+
 		List<AccountShare> accountShares = new List<AccountShare>();
 
 		for (Id householdId : mapHouseholdIdToGroupId.keySet()) {
 			for (String groupId : mapHouseholdIdToGroupId.get(householdId)) {
-				accountShares.add(new AccountShare(
-					RowCause = 'Manual',
-					AccountAccessLevel = 'Edit',
-					OpportunityAccessLevel = 'Edit',
-					AccountId = householdId,
-					UserOrGroupId = Id.valueOf(groupId)
-				));
+				// do not duplicate account shares
+				if (! existingHouseholdGroupIdPairs.contains(householdId + ',' + groupId)) {
+					accountShares.add(new AccountShare(
+						RowCause = 'Manual',
+						AccountAccessLevel = 'Edit',
+						OpportunityAccessLevel = 'Edit',
+						AccountId = householdId,
+						UserOrGroupId = Id.valueOf(groupId)
+					));
+				}
 			}
 		}
 		insert accountShares;
 	}
-	
+
+	public Set<String> getExistingHouseholdGroupIdPairs(Map<Id,Set<String>> mapHouseholdIdToGroupId) {
+
+	 	// Find existing account shares for the households and groups
+		Set<String> setHouseholdGroupIds = new Set<String>();
+		for (Id householdId : mapHouseholdIdToGroupId.keySet()) {
+			setHouseholdGroupIds.addAll(mapHouseholdIdToGroupId.get(householdId));
+		}
+
+		List<AccountShare> existingAccountShares = [
+			SELECT
+				AccountId,
+				UserOrGroupId
+			FROM AccountShare
+			WHERE AccountId IN :mapHouseholdIdToGroupId.keySet()
+			AND UserOrGroupId IN :setHouseholdGroupIds
+		];
+
+		Set<String> existingHouseholdGroupIdPairs = new Set<String>();
+		for (AccountShare share : existingAccountShares) {
+			existingHouseholdGroupIdPairs.add(share.AccountId + ',' + share.UserOrGroupId);
+		}
+		return existingHouseholdGroupIdPairs;
+	}
+		
 	global void finish(Database.BatchableContext context) {
         Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
         mail.setToAddresses(new String[] {UserInfo.getUserEmail()});
