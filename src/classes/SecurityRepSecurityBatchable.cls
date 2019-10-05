@@ -132,7 +132,7 @@ global class SecurityRepSecurityBatchable implements Database.Batchable<SObject>
         mail.setToAddresses(new String[] {UserInfo.getUserEmail()});
         mail.setSenderDisplayName('SecurityRepSecurityBatchable');
         mail.setSubject('SecurityRepSecurityBatchable Completed');
-        mail.setPlainTextBody('Job ID: ' + context.getJobId());
+        mail.setPlainTextBody('Job ID: ' + context.getJobId() + log);
         if (!Test.isRunningTest()){
             try {
                 Messaging.sendEmail(new Messaging.SingleEmailMessage[]{

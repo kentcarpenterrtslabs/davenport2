@@ -1,5 +1,11 @@
 global class SecurityFinancialAccountBatchable implements Database.Batchable<SObject> {
-	
+
+	global String log;
+
+	global SecurityFinancialAccountBatchable () {
+		log = '';
+	}
+		
 	global Database.QueryLocator start(Database.BatchableContext context) {
 		return Database.getQueryLocator([
 			SELECT
@@ -26,7 +32,6 @@ global class SecurityFinancialAccountBatchable implements Database.Batchable<SOb
    	global void execute(Database.BatchableContext context, List<FinServ__FinancialAccount__c> scope) {
 		Map<Id,Set<String>> mapFinAcctIdToGroupId = new Map<Id,Set<String>>();
 		Map<Id,Set<String>> mapHouseholdIdToGroupId = new Map<Id,Set<String>>();
-		//Map<Id,Set<String>> mapContactIdToGroupId = new Map<Id,Set<String>>();
 
 		// For each financial account and household, build a unique list of groups to share them with
 		for (FinServ__FinancialAccount__c financialAccount : scope) {
@@ -36,38 +41,43 @@ global class SecurityFinancialAccountBatchable implements Database.Batchable<SOb
 				mapFinAcctIdToGroupId.put(financialAccount.Id, new Set<String>());
 			}
 
-			// if the household does not have a group list, create it
-			if (!mapHouseholdIdToGroupId.containsKey(financialAccount.FinServ__Household__c)) {
-				mapHouseholdIdToGroupId.put(financialAccount.FinServ__Household__c, new Set<String>());
+			if (null != financialAccount.FinServ__Household__c) {
+				// if the household does not have a group list, create it
+				if (!mapHouseholdIdToGroupId.containsKey(financialAccount.FinServ__Household__c)) {
+					mapHouseholdIdToGroupId.put(financialAccount.FinServ__Household__c, new Set<String>());
+				}
 			}
 
 			// Get the group lists for the current financial account and household
 			Set<String> finAcctGroupIdSet = mapFinAcctIdToGroupId.get(financialAccount.Id);
-			Set<String> householdGroupIdSet = mapHouseholdIdToGroupId.get(financialAccount.FinServ__Household__c);
+			Set<String> householdGroupIdSet;
+			if (null != financialAccount.FinServ__Household__c) {
+				 householdGroupIdSet = mapHouseholdIdToGroupId.get(financialAccount.FinServ__Household__c);
+			} else {
+				log += '\n' + ' financial account ' + financialAccount.Name + ' ' + financialAccount.Id + ' does not have a household';
+			}
 			
 			// Add the group to the lists for the current financial account and household
 			finAcctGroupIdSet.add(financialAccount.Rep__r.GroupId__c);
-			householdGroupIdSet.add(financialAccount.Rep__r.GroupId__c);
+			if (null != householdGroupIdSet) {
+				householdGroupIdSet.add(financialAccount.Rep__r.GroupId__c);
+			}
 
 			// For each account split, add the group for that split to the lists for the current financial account and household
 			for (Account_Split__c accountSplit : financialAccount.Account_Split_IDs__r) {
 				finAcctGroupIdSet.add(accountSplit.Rep__r.GroupId__c);
-				householdGroupIdSet.add(accountSplit.Rep__r.GroupId__c);
+				if (null != householdGroupIdSet) {
+					householdGroupIdSet.add(accountSplit.Rep__r.GroupId__c);
+				}
 			}
 
-			// For each account role, add the group for that role to the lists for the household for that role
+			// For each account role, add the group for the financial account to a list for the related household for that role
 			for (FinServ__FinancialAccountRole__c accountRole : financialAccount.FinServ__FinancialAccountRoles__r) {
-				if (!mapHouseholdIdToGroupId.containsKey(accountRole.FinServ__RelatedAccount__c)) {
-					mapHouseholdIdToGroupId.put(accountRole.FinServ__RelatedAccount__c, new Set<String> { financialAccount.Rep__r.GroupId__c} );
+				if (null != accountRole.FinServ__RelatedAccount__c) {
+					if (!mapHouseholdIdToGroupId.containsKey(accountRole.FinServ__RelatedAccount__c)) {
+						mapHouseholdIdToGroupId.put(accountRole.FinServ__RelatedAccount__c, new Set<String> { financialAccount.Rep__r.GroupId__c} );
+					}
 				}
-
-				//// if the related contact does not have a group list, create it
-				//if (!mapContactIdToGroupId.containsKey(accountRole.FinServ__RelatedContact__c)) {
-					//mapContactIdToGroupId.put(accountRole.FinServ__RelatedContact__c, new Set<String>());
-				//}
-
-				//// Add the group for the current financial account to the list for the contact
-				//mapContactIdToGroupId.get(accountRole.FinServ__RelatedContact__c).add(financialAccount.Rep__r.GroupId__c);
 			}
 		}
 
@@ -99,20 +109,6 @@ global class SecurityFinancialAccountBatchable implements Database.Batchable<SOb
 			}
 		}
 		insert accountShares;
-		
-		List<ContactShare> contactShares = new List<ContactShare>();
-
-		//for (Id contactId : mapHouseholdIdToGroupId.keySet()) {
-			//for (String groupId : mapContactIdToGroupId.get(contactId)) {
-				//contactShares.add(new ContactShare(
-					//RowCause = 'Manual',
-					//ContactAccessLevel = 'Edit',
-					//ContactId = contactId,
-					//UserOrGroupId = Id.valueOf(groupId)
-				//));
-			//}
-		//}
-		//insert contactShares;
 	}
 	
 	global void finish(Database.BatchableContext context) {
@@ -120,7 +116,7 @@ global class SecurityFinancialAccountBatchable implements Database.Batchable<SOb
         mail.setToAddresses(new String[] {UserInfo.getUserEmail()});
         mail.setSenderDisplayName('SecurityFinancialAccountBatchable');
         mail.setSubject('SecurityFinancialAccountBatchable Completed');
-        mail.setPlainTextBody('Job ID: ' + context.getJobId());
+        mail.setPlainTextBody('Job ID: ' + context.getJobId() + log);
         if (!Test.isRunningTest()){
             try {
                 Messaging.sendEmail(new Messaging.SingleEmailMessage[]{

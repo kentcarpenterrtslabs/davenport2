@@ -2,6 +2,7 @@ SELECT
 	Id,
 	Name,
 	Type,
+	CreatedDate,
 	( SELECT
 		GroupId,
 		Id,
