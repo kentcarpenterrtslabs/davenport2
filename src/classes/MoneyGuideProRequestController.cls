@@ -1,17 +1,22 @@
-/**
- * Created by Eric Stansbury on 4/25/2019.
- */
-
 public class MoneyGuideProRequestController {
-    static String redirectToUrl = 'https://qa.moneyguidepro.com/davenport/ssosamlnoref.aspx?IntegrationId=170';
+    //static String redirectToUrl = 'https://qa.moneyguidepro.com/davenport/ssosamlnoref.aspx?IntegrationId=170';
     static String endpointUrl = 'https://qa.moneyguidepro.com/davenport/ssosamlnoref.aspx?IntegrationId=170';
 
     @AuraEnabled public static void updateUser(String householdId, String userId){
-        String selectedUserId = (userId == null? UserInfo.getUserId() : userId);
+		Id myUserId = UserInfo.getUserId();
 
-        User me = [Select Id, SAML_HHID__c from User where Id = :UserInfo.getUserId()];
-        me.SAML_UserId__c = selectedUserId;
+        User me = [
+			SELECT
+				Id,
+				SAML_UserId__c,
+				SAML_HHID__c
+			FROM User
+			WHERE Id = :myUserId
+		];
+
+        me.SAML_UserId__c = (userId == null ? myUserId : userId);
         me.SAML_HHID__c = householdId;
+
         update me;
     }
 
@@ -28,37 +33,81 @@ public class MoneyGuideProRequestController {
         return response.toString();
     }
 
-    @AuraEnabled public static Map<String,String> getPicklistOptions(Id householdId){
-        Id myUserId = UserInfo.getUserId();
+    @AuraEnabled public static List<User> getPicklistOptions(Id householdId){
+		String userTypePrefix = Schema.SObjectType.User.getKeyPrefix();
+        String groupTypePrefix = Schema.SObjectType.Group.getKeyPrefix();
 
-        // get the Rep of Record
-        Account household = [Select Id, Rep__c, Name from Account where Id = :householdId];
-        if (household.Rep__c == null){
-            return new Map<String,String>();
-        }
+		//System.debug('userTypePrefix = ' + userTypePrefix);
+		//System.debug('groupTypePrefix = ' + groupTypePrefix);
 
-        // get any sccount splits for the financial accounts of this household
-        List<Account_Split__c> splits = [Select Id, Rep__c from Account_Split__c where Financial_Account__r.FinServ__Household__c = :household.Id];
-        Set<Id> repIds = new Set<Id>{ householdId };
+		// get user and group Ids from the account shares for this household
+		List<AccountShare> accountShares = [
+			SELECT
+				UserOrGroupId
+			FROM AccountShare
+			WHERE AccountId = :householdId
+		];
+		//System.debug('accountShares = ' + JSON.serializePretty(accountShares));
 
-        for (Account_split__c split : splits){
-            repIds.add(split.Rep__c);
-        }
-        // get all users with access to those reps, who also have MGP credentials on their User record
-        List<User> users = [
-                Select Id, FirstName, LastName from User
-                 where Id in (Select User__c from Rep_Assignment__c where Rep__c in :repIds and Type__c = 'Rep')
-                   and MGP_User_ID__c != null];
+		// split out the users and groups
+		Set<Id> groupIds = new Set<Id>();
+		Set<Id> userIds = new Set<Id>();
 
-        // return a map of Username -> User ID for the picklist
-        Map<String,String> result = new Map<String,String>();
+		for (AccountShare acctShare : accountShares) {
+			String idAsString = String.valueOf(acctShare.UserOrGroupId);
+			if (idAsString.startsWith(groupTypePrefix)) {
+				groupIds.add(acctShare.UserOrGroupId);
+			} else {
+				userIds.add(acctShare.UserOrGroupId);
+			}
+		}
+		//System.debug('groupIds = ' + JSON.serializePretty(groupIds));
+		//System.debug('userIds = ' + JSON.serializePretty(userIds));
 
-        for (User user : users){
-            String label = (user.Id == myUserId)? 'Myself' : (user.FirstName + user.LastName);
-            result.put(label, user.MGP_User_Id__c);
-        }
-        return result;
-    }
+
+		// traverse the tree of sub groups
+		Set<Id> parentGroups = groupIds;
+
+		while (parentGroups.size() > 0) {
+
+			List<GroupMember> subGroups = [
+				SELECT
+					UserOrGroupId
+				FROM GroupMember
+				WHERE GroupId IN :parentGroups
+			];
+
+			parentGroups = new Set<Id>();
+
+			for (GroupMember grpMember : subGroups) {
+				String idAsString = String.valueOf(grpMember.UserOrGroupId);
+				if (idAsString.startsWith(groupTypePrefix)) {
+					groupIds.add(grpMember.UserOrGroupId);
+					parentGroups.add(grpMember.UserOrGroupId);
+				} else {
+					userIds.add(grpMember.UserOrGroupId);
+				}
+			}
+		}				
+		//System.debug('groupIds = ' + JSON.serializePretty(groupIds));
+		//System.debug('userIds = ' + JSON.serializePretty(userIds));
+
+		// get users with MGP credentials in the groups
+		List<User> users = [
+			SELECT
+				Id,
+				FirstName,
+				LastName,
+				MGP_User_Id__c
+			FROM User
+			WHERE Id IN :userIds
+			AND MGP_User_Id__c != null
+		];
+
+		//System.debug(JSON.serializePretty(users));
+		return users;
+   }
+
 
     @AuraEnabled public static String buildRequestBody(Id householdId){
         Account household = [select Id,

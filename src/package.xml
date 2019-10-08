@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>Account_SplitTriggerHandler</members>
-        <members>Account_SplitTriggerHandlerTest</members>
         <members>ActivityController</members>
         <members>ActivityControllerTest</members>
-        <members>Assistant_AssignmentTriggerHandler</members>
-        <members>Assistant_AssignmentTriggerHandlerTest</members>
         <members>EventToFMABatchable</members>
         <members>EventToFMABatchableTest</members>
         <members>FMADashboardController</members>
@@ -18,8 +14,6 @@
         <members>FinancialAccountRollupsFixBatchable</members>
         <members>FinancialAccountRollupsFixBatchableTest</members>
         <members>FinancialAccountRollupsFixPt2Batchable</members>
-        <members>FinancialAccountTriggerHandler</members>
-        <members>FinancialAccountTriggerHandlerTest</members>
         <members>FinancialSummaryController</members>
         <members>FormDataController</members>
         <members>FormDataControllerTest</members>
@@ -52,38 +46,16 @@
         <members>RTS_RelinkWealthcareOwner</members>
         <members>RepAssignmentController</members>
         <members>RepAssignmentControllerTest</members>
-        <members>RepAssignmentRefreshBatchable</members>
-        <members>RepAssignmentRefreshBatchableTest</members>
         <members>RepNumHouseholdSearchController</members>
         <members>RepNumHouseholdSearchControllerTest</members>
-        <members>RepSecurityInitializationScript</members>
-        <members>RepSecurityInitializationScriptTest</members>
-        <members>RepTriggerHandler</members>
-        <members>RepTriggerHandlerTest</members>
-        <members>Rep_AssignmentTriggerHandler</members>
-        <members>Rep_AssignmentTriggerHandlerTest</members>
-        <members>Rep_SecurityTriggerHandler</members>
-        <members>Rep_SecurityTriggerHandlerTest</members>
-        <members>Rep_SplitTriggerHandler</members>
-        <members>Rep_SplitTriggerHandlerTest</members>
         <members>RollupByLookupConfigSchedulable</members>
-        <members>SObjectDeleteBatchable</members>
         <members>SObjectDeleteQueueable</members>
         <members>SObjectInsertQueueable</members>
         <members>SObjectUpdateQueueable</members>
-        <members>SecurityAssignmentConfig</members>
-        <members>SecurityAssignmentException</members>
-        <members>SecurityAssignmentHelper</members>
-        <members>SecurityAssignmentHelperTest</members>
         <members>SecurityAssignmentTestFactory</members>
         <members>SecurityDeleteAllBatchable</members>
         <members>SecurityFinancialAccountBatchable</members>
         <members>SecurityGroupsBatchable</members>
-        <members>SecurityInitializationAcctSplitBatchable</members>
-        <members>SecurityInitializationFinAcctBatchable</members>
-        <members>SecurityInitializationScript</members>
-        <members>SecurityInitializationScriptTest</members>
-        <members>SecurityInitializationStepTwo</members>
         <members>SecurityRepSecurityBatchable</members>
         <members>SecurityRepSplitsBatchable</members>
         <members>SecurityResetFirmWideAccessBatchable</members>
@@ -109,13 +81,6 @@
         <name>ApexPage</name>
     </types>
     <types>
-        <members>Account_SplitTrigger</members>
-        <members>Assistant_AssignmentTrigger</members>
-        <members>FinancialAccount_Trigger</members>
-        <members>RepTrigger</members>
-        <members>Rep_AssignmentTrigger</members>
-        <members>Rep_SecurityTrigger</members>
-        <members>Rep_SplitTrigger</members>
         <members>createPercentsTrigger</members>
         <name>ApexTrigger</name>
     </types>

@@ -1,0 +1,104 @@
+@isTest 
+private class TestSecurityDeleteAllBathable {
+
+	@isTest
+	private static void testName() {
+
+        Id profileId = [Select Id from Profile where Name = 'Standard User' limit 1][0].Id;
+
+        // insert user with davenport username
+        User user1 = new User(
+            Username = 'daventestuser1@test.com',
+            LastName = 'TestUser1',
+            Email = 'testuser1@test.com',
+            Alias = 'tus1',
+            Davenport_Username__c = 'testuser1',
+            ProfileId = profileId,
+            EmailEncodingKey = 'UTF-8',
+            LanguageLocaleKey = 'en_US',
+            LocaleSidKey = 'en_US',
+            TimeZoneSidKey = 'America/Los_Angeles');
+		insert user1;
+
+		Group group1 = new Group(
+			Name = 'group1',
+			Type = 'Regular');
+		insert group1;
+
+		GroupMember groupMember1 = new GroupMember(
+			GroupId = group1.Id,
+			UserOrGroupId = user1.Id);
+		insert groupMember1;
+
+		Account account1 = new Account(Name = 'test account one');
+		insert account1;
+
+		AccountShare accountShare1 = new AccountShare(
+			RowCause = 'Manual',
+			AccountAccessLevel = 'Edit',
+			OpportunityAccessLevel = 'Edit',
+			AccountId = account1.Id,
+			UserOrGroupId = group1.Id
+		);
+		insert accountShare1;
+
+		FinServ__FinancialAccount__c financialAccount1 = new FinServ__FinancialAccount__c(Name = 'financial account one');
+		insert financialAccount1;
+
+		FinServ__FinancialAccount__Share financialAcountSharere1 = new FinServ__FinancialAccount__Share(
+			AccessLevel = 'Edit',
+			ParentId = financialAccount1.Id,
+			RowCause = 'RTSSecurityAssignment__c',
+			UserOrGroupId = group1.Id);
+		insert financialAcountSharere1;
+
+		validateCounts(1);
+
+		Test.startTest();
+		Database.executeBatch(new SecurityDeleteAllBatchable());
+		Test.stopTest();
+		
+		validateCounts(0);
+	}
+
+	public static void validateCounts(Integer expected) {
+
+		List<Group> groups = [
+			SELECT
+				Id
+			FROM Group
+		];
+		System.assertEquals(expected, groups.size());
+
+		List<GroupMember> GroupMemberMembers = [
+			SELECT
+				Id
+			FROM GroupMember
+		];
+		System.assertEquals(expected, GroupMemberMembers.size());
+
+		List<Account> accounts = [
+			SELECT
+				Id
+			FROM Account
+		];
+		System.assertEquals(expected, accounts.size());
+
+		List<AccountShare> accountShares = [
+			SELECT
+				Id
+			FROM AccountShare
+			WHERE RowCause = 'Manual'
+		];
+		System.assertEquals(expected, accountShares.size());
+
+		List<FinServ__FinancialAccount__Share> financialAcountShareres = [
+			SELECT
+				Id
+			FROM FinServ__FinancialAccount__Share
+			WHERE RowCause = 'RTSSecurityAssignment__c'
+		];
+		System.assertEquals(expected, financialAcountShareres.size());
+	}
+
+}
