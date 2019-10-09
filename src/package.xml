@@ -63,7 +63,10 @@
         <members>TestPermssions</members>
         <members>TestRollupByLookupConfigSchedulable</members>
         <members>TestSecurityDeleteAllBathable</members>
+        <members>TestSecurityFinancialAccountBatchable</members>
         <members>TestSecurityGroupsBatchable</members>
+        <members>TestSecurityRepSecurityBatchable</members>
+        <members>TestSecurityRepSplitsBatchable</members>
         <members>TestSecurityResetFirmWideAccessBatchable</members>
         <members>UPIAccessToggleController</members>
         <members>UPIAccessToggleControllerTest</members>
