@@ -49,8 +49,6 @@
         <members>RepNumHouseholdSearchController</members>
         <members>RepNumHouseholdSearchControllerTest</members>
         <members>RollupByLookupConfigSchedulable</members>
-        <members>SObjectDeleteQueueable</members>
-        <members>SObjectInsertQueueable</members>
         <members>SObjectUpdateQueueable</members>
         <members>SecurityAssignmentTestFactory</members>
         <members>SecurityDeleteAllBatchable</members>
@@ -62,7 +60,11 @@
         <members>TaskPickLists</members>
         <members>TestCreateTask</members>
         <members>TestNightlyRunStatusTrigger</members>
+        <members>TestPermssions</members>
         <members>TestRollupByLookupConfigSchedulable</members>
+        <members>TestSecurityDeleteAllBathable</members>
+        <members>TestSecurityGroupsBatchable</members>
+        <members>TestSecurityResetFirmWideAccessBatchable</members>
         <members>UPIAccessToggleController</members>
         <members>UPIAccessToggleControllerTest</members>
         <members>VfpageUrlGenerator</members>
