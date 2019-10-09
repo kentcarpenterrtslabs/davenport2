@@ -86,6 +86,7 @@
         <name>ApexPage</name>
     </types>
     <types>
+        <members>NightlyRunStatusTrigger</members>
         <members>createPercentsTrigger</members>
         <name>ApexTrigger</name>
     </types>
