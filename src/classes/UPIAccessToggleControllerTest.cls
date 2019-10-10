@@ -4,48 +4,129 @@
 
 @isTest
 public class UPIAccessToggleControllerTest {
-    @isTest static void testIsFirmwideAccessEnabled(){
-        User testUser = [Select Id from User where Davenport_Username__c = :SecurityAssignmentTestFactory.davenportUsernameFour];
-        System.runAs(testUser){
-            System.assertEquals(true, UPIAccessToggleController.isFirmwideAccessEnabled(), 'This should default to \'true\'');
-        }
-    }
 
-    @isTest static void disableUPIAccessTest(){
-        User testUser = [Select Id from User where Davenport_Username__c = :SecurityAssignmentTestFactory.davenportUsernameFour][0];
+    @isTest
+	public static void testToggleUPIAccess(){
+		Rep__c rep1 = new Rep__c(
+			Rep_Number__c = 'TS01'
+		);
+		insert rep1;
 
-        integer membershipsCount = [Select count() from GroupMember where UserOrGroupId = :testUser.Id];
-        System.assertNotEquals(0, membershipsCount, 'The user should have group memberships from the test data (granted via UPI)');
+		Group groupRep1 = new Group(
+			Name = 'Rep-' + rep1.Rep_Number__c + '-' + rep1.Id
+		);
+		insert groupRep1;
+		rep1.GroupId__c = groupRep1.Id;
+		update rep1;
 
-        Test.startTest();
-        System.runAs(testUser){
-            UPIAccessToggleController.disableUPIAccess();
-        }
-        Test.stopTest();
+        Id profileId = [Select Id from Profile where Name = 'Standard User' limit 1][0].Id;
 
-        System.assertNotEquals(membershipsCount, [Select count() from GroupMember where UserOrGroupId = :testUser.Id], 'The user should have had group memberships removed');
-        System.assertEquals(false, [Select Firm_Wide_Access_Enabled__c from User where Id = :testUser.Id][0].Firm_Wide_Access_Enabled__c);
-    }
+		User user1 = new User(
+			Username = 'daventestuser1@test.com',
+			LastName = 'TestUser1',
+			Email = 'testuser1@test.com',
+			Alias = 'tus1',
+			Davenport_Username__c = 'testuser1',
+			Firm_Wide_Access_Enabled__c = false,
+			ProfileId = profileId,
+			EmailEncodingKey = 'UTF-8',
+			LanguageLocaleKey = 'en_US',
+			LocaleSidKey = 'en_US',
+			TimeZoneSidKey = 'America/Los_Angeles');
+		insert user1;
 
-    @isTest static void enableUPIAccessTest(){
-        User testUser = [Select Id from User where Davenport_Username__c = :SecurityAssignmentTestFactory.davenportUsernameFour][0];
+		User user2 = new User(
+			Username = 'daventestuser2@test.com',
+			LastName = 'TestUser2',
+			Email = 'testuser2@test.com',
+			Alias = 'tus2',
+			Davenport_Username__c = 'testuser2',
+			ProfileId = profileId,
+			EmailEncodingKey = 'UTF-8',
+			LanguageLocaleKey = 'en_US',
+			LocaleSidKey = 'en_US',
+			TimeZoneSidKey = 'America/Los_Angeles');
+		insert user2;
 
-        // delete existing shares from the test data
-        delete [Select Id from GroupMember where UserOrGroupId = :testUser.Id];
+		Rep_Security__c repSecurityUPI = new Rep_Security__c(
+			Rep_Number__c = rep1.Rep_Number__c,
+			Rep__c = rep1.Id,
+			Davenport_Username__c = user1.Davenport_Username__c,
+			Type__c = 'UPI');
+		insert repSecurityUPI;
 
-        Test.startTest();
-        System.runAs(testUser){
+		Group groupRepSecurityUPI = new Group(
+			Name = 'Rep-Sec' + repSecurityUPI.Rep_Number__c + '-' + repSecurityUPI.Id
+		);
+		insert groupRepSecurityUPI;
+		repSecurityUPI.GroupId__c = groupRepSecurityUPI.Id;
+		update repSecurityUPI;
+
+		Assistant_Assignment__c assistant = new Assistant_Assignment__c(
+			Assistee__c = user1.Id,
+			Assistant__c = user2.Id
+		);
+		insert assistant;
+
+		
+		List<GroupMember> groupMembersBeforeEnabled = [
+			SELECT
+				GroupId,
+				UserOrGroupId
+			FROM GroupMember
+			WHERE GroupId = :groupRep1.Id
+		];
+
+		System.assertEquals(0, groupMembersBeforeEnabled.size());
+
+
+		// test enable
+
+        System.runAs(user1){
             UPIAccessToggleController.enableUPIAccess();
         }
-        Test.stopTest();
 
-        System.assertNotEquals(0, [Select count() from GroupMember where UserOrGroupId = :testUser.Id], 'The user should have had group memberships added');
-        System.assertEquals(true, [Select Firm_Wide_Access_Enabled__c from User where Id = :testUser.Id][0].Firm_Wide_Access_Enabled__c);
-    }
+		List<GroupMember> groupMembersAfterEnabled = [
+			SELECT
+				GroupId,
+				UserOrGroupId
+			FROM GroupMember
+			WHERE GroupId = :groupRep1.Id
+		];
 
-    // todo: build test cases around Account Splits and Rep Splits
+		System.assertEquals(1, groupMembersAfterEnabled.size());
+		System.assertEquals(groupRepSecurityUPI.Id, groupMembersAfterEnabled[0].UserOrGroupId);
 
-    @testSetup static void setupData(){
-        SecurityAssignmentTestFactory.createData();
+		User user1AfterEnabled = [
+			SELECT
+				Firm_Wide_Access_Enabled__c
+			FROM User
+			WHERE Id = :user1.Id
+		];
+
+		System.assertEquals(true, user1AfterEnabled.Firm_Wide_Access_Enabled__c);
+
+		// test disable
+
+        System.runAs(user1){
+            UPIAccessToggleController.disableUPIAccess();
+        }
+
+		List<GroupMember> groupMembersAfterDisabled = [
+			SELECT
+				GroupId,
+				UserOrGroupId
+			FROM GroupMember
+			WHERE GroupId = :groupRep1.Id
+		];
+
+		User user1AfterDisabled = [
+			SELECT
+				Firm_Wide_Access_Enabled__c
+			FROM User
+			WHERE Id = :user1.Id
+		];
+
+		System.assertEquals(false, user1AfterDisabled.Firm_Wide_Access_Enabled__c);
     }
 }

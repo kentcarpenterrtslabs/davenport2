@@ -11,6 +11,7 @@
         <members>FMAReviewControllerTest</members>
         <members>FMAReviewPDFController</members>
         <members>FMAReviewPDFController_Test</members>
+        <members>FinancialAccountRollupBatchable</members>
         <members>FinancialAccountRollupsFixBatchable</members>
         <members>FinancialAccountRollupsFixBatchableTest</members>
         <members>FinancialAccountRollupsFixPt2Batchable</members>
@@ -45,7 +46,6 @@
         <members>RTS_RelinkRepOwner</members>
         <members>RTS_RelinkWealthcareOwner</members>
         <members>RepAssignmentController</members>
-        <members>RepAssignmentControllerTest</members>
         <members>RepNumHouseholdSearchController</members>
         <members>RepNumHouseholdSearchControllerTest</members>
         <members>RollupByLookupConfigSchedulable</members>
@@ -55,6 +55,7 @@
         <members>SecurityFinancialAccountBatchable</members>
         <members>SecurityGroupsBatchable</members>
         <members>SecurityRepSecurityBatchable</members>
+        <members>SecurityRepSecurityGroupsBatchable</members>
         <members>SecurityRepSplitsBatchable</members>
         <members>SecurityResetFirmWideAccessBatchable</members>
         <members>TaskPickLists</members>
@@ -66,6 +67,7 @@
         <members>TestSecurityFinancialAccountBatchable</members>
         <members>TestSecurityGroupsBatchable</members>
         <members>TestSecurityRepSecurityBatchable</members>
+        <members>TestSecurityRepSecurityGroupsBatchable</members>
         <members>TestSecurityRepSplitsBatchable</members>
         <members>TestSecurityResetFirmWideAccessBatchable</members>
         <members>UPIAccessToggleController</members>

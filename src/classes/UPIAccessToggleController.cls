@@ -1,6 +1,3 @@
-/**
- * Created by Eric Stansbury on 7/18/2019.
- */
 /*
     This is the controller for a Lightning component which allows a Branch Manager user to manually toggle their UPI assignments on and off
 
@@ -11,90 +8,80 @@
  */
 public without sharing class UPIAccessToggleController {
     @AuraEnabled public static boolean isFirmwideAccessEnabled(){
-        User myUser = [Select Firm_Wide_Access_Enabled__c from User where Id = :UserInfo.getUserId() limit 1];
+        User myUser = [
+			Select
+				Firm_Wide_Access_Enabled__c
+			FROM User
+			WHERE Id = :UserInfo.getUserId()
+			LIMIT 1
+		];
         return myUser.Firm_Wide_Access_Enabled__c;
     }
 
     @AuraEnabled public static void enableUPIAccess(){
-        Id userId = UserInfo.getUserId();
+		Id userId = UserInfo.getUserId();
 
-        List<Rep_Assignment__c> repAssignments = [Select Id, Rep__c, Type__c from Rep_Assignment__c where User__c = :userId];
-        Set<Id> repRepIds = new Set<Id>();
-        Set<Id> upiRepIds = new Set<Id>();
-        for (Rep_Assignment__c repAssignment : repAssignments){
-            if (repAssignment.Type__c == 'Rep'){
-                repRepIds.add(repAssignment.Rep__c);
-            }else if (repAssignment.Type__c == 'UPI'){
-                upiRepIds.add(repAssignment.Rep__c);
-                repAssignment.Active__c = true;
-            }
-        }
+		User currentUser = [
+			SELECT
+				Davenport_Username__c
+			FROM User
+			WHERE Id = :userId
+		];
 
-        Set<Id> grantAccessToIds = new Set<Id>();
-        List<String> groupNames = new List<String>();
-        for (Id upiRepId : upiRepIds){
-            // don't need to include ids from repRepIds because those didn't get removed by disableUPIAccess()
-            if (!repRepIds.contains(upiRepId)){
-                grantAccessToIds.add(upiRepId);
-                groupNames.add('Rep-' + upiRepId);
-            }
-        }
+		List<Rep_Security__c> upiRepSecurities = [
+			SELECT
+				Rep__r.GroupId__c,
+				GroupId__c
+			FROM Rep_Security__c
+			WHERE Type__c = 'UPI'
+			AND Davenport_Username__c = :currentUser.Davenport_Username__c
+		];
 
-        Set<Id> grantAccessToGroupIds = new Map<Id, Group>([Select Id from Group where Name in :groupNames]).keySet();
-        List<GroupMember> groupMembersToInsert = new List<GroupMember>();
-        for (Id grantAccessToGroupId : grantAccessToGroupIds){
-            groupMembersToInsert.add(
-                new GroupMember(
-                    GroupId = grantAccessToGroupId,
-                    UserOrGroupId = userId
-                )
-            );
-        }
+		List<GroupMember> groupMembers = new List<GroupMember>();
 
-        System.debug('UPIAccessToggleController() inserting ' + groupMembersToInsert.size() + ' group memberships');
-        insert groupMembersToInsert;
+		for (Rep_Security__c repSecurity : upiRepSecurities) {
+			groupMembers.add(new GroupMember(
+				GroupId = repSecurity.Rep__r.GroupId__c,
+				UserOrGroupId = repSecurity.GroupId__c));
+		}
 
-        User myUser = [Select Id, Firm_Wide_Access_Enabled__c from User where Id = :UserInfo.getUserId() limit 1];
-        myUser.Firm_Wide_Access_Enabled__c = true;
-        List<SObject> sObjectsToUpdate = new List<SObject>();
-        sObjectsToUpdate.addAll(repAssignments);
-        sObjectsToUpdate.add(myUser);
-        System.enqueueJob(new SObjectUpdateQueueable(sObjectsToUpdate));
+		insert groupMembers;
+		currentUser.Firm_Wide_Access_Enabled__c = true;
+		update currentUser;
     }
 
     @AuraEnabled public static void disableUPIAccess(){
-        Id userId = UserInfo.getUserId();
+		Id userId = UserInfo.getUserId();
 
-        List<Rep_Assignment__c> repAssignments = [Select Id, Rep__c, Type__c from Rep_Assignment__c where User__c = :userId];
-        Set<Id> repRepIds = new Set<Id>();
-        Set<Id> upiRepIds = new Set<Id>();
-        for (Rep_Assignment__c repAssignment : repAssignments){
-            if (repAssignment.Type__c == 'Rep'){
-                repRepIds.add(repAssignment.Rep__c);
-            }else if (repAssignment.Type__c == 'UPI'){
-                upiRepIds.add(repAssignment.Rep__c);
-                repAssignment.Active__c = false;
-            }
-        }
+		User currentUser = [
+			SELECT
+				Davenport_Username__c
+			FROM User
+			WHERE Id = :userId
+		];
 
-        Set<Id> removeAccessToIds = new Set<Id>();
-        List<String> groupNames = new List<String>();
-        for (Id upiRepId : upiRepIds){
-            if (!repRepIds.contains(upiRepId)){
-                removeAccessToIds.add(upiRepId);
-                groupNames.add('Rep-' + upiRepId);
-            }
-        }
+		List<Rep_Security__c> upiRepSecurities = [
+			SELECT
+				GroupId__c
+			FROM Rep_Security__c
+			WHERE Type__c = 'UPI'
+			AND Davenport_Username__c = :currentUser.Davenport_Username__c
+		];
 
-        List<GroupMember> groupMembersToDelete = [Select Id from GroupMember where Group.Name in :groupNames and UserOrGroupId = :userId];
-        System.debug('UPIAccessToggleController() deleting ' + groupMembersToDelete.size() + ' group memberships');
-        delete groupMembersToDelete;
+		List<Id> upiGroupIds = new List<Id>();
+		for (Rep_Security__c repSecurity : upiRepSecurities) {
+			upiGroupIds.add(repSecurity.GroupId__c);
+		}
 
-        User myUser = [Select Id, Firm_Wide_Access_Enabled__c from User where Id = :UserInfo.getUserId() limit 1];
-        myUser.Firm_Wide_Access_Enabled__c = false;
-        List<SObject> sObjectsToUpdate = new List<SObject>();
-        sObjectsToUpdate.addAll(repAssignments);
-        sObjectsToUpdate.add(myUser);
-        System.enqueueJob(new SObjectUpdateQueueable(sObjectsToUpdate));
+		List<GroupMember> groupMembers = [
+			SELECT
+				Id
+			FROM GroupMember
+			WHERE UserOrGroupId IN :upiGroupIds
+		];
+
+		delete groupMembers;
+		currentUser.Firm_Wide_Access_Enabled__c = false;
+		update currentUser;
     }
 }

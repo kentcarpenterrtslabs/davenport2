@@ -11,10 +11,10 @@ global class SecurityRepSecurityBatchable implements Database.Batchable<SObject>
 			SELECT
 				Id,
 				Rep_Number__c,
+				GroupId__c,
 				Davenport_Username__c,
 				Type__c
 			FROM Rep_Security__c
-			WHERE Type__c = 'Rep'
 		]);
 	}
 
@@ -24,7 +24,9 @@ global class SecurityRepSecurityBatchable implements Database.Batchable<SObject>
 		Set<String> davenportUsernames = new Set<String>();
 
 		for (Rep_Security__c repSecurity : scope) {
-			repNumbers.add(repSecurity.Rep_Number__c);
+			if ('Rep' == repSecurity.Type__c) {
+				repNumbers.add(repSecurity.Rep_Number__c);
+			}
 			davenportUsernames.add(repSecurity.Davenport_Username__c);
 		}
 
@@ -35,7 +37,14 @@ global class SecurityRepSecurityBatchable implements Database.Batchable<SObject>
 		List<GroupMember> groupMembers = new List<GroupMember>();
 
 		for (Rep_Security__c repSecurity : scope) {
-			Id groupId = mapRepNumberToGroupId.get(repSecurity.Rep_Number__c);
+			Id groupId;
+
+			if ('Rep' == repSecurity.Type__c) {
+				groupId = mapRepNumberToGroupId.get(repSecurity.Rep_Number__c);
+			} else {
+				groupId = Id.valueOf(repSecurity.GroupId__c);
+			}
+
 			User usr = mapDavenportUsernameToUser.get(repSecurity.Davenport_Username__c);
 
 			if (null != groupId && null != usr) {
@@ -126,7 +135,7 @@ global class SecurityRepSecurityBatchable implements Database.Batchable<SObject>
 		}
 		return mapDavenportUsernameToUser;
 	}
-	
+
 	global void finish(Database.BatchableContext context) {
         Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
         mail.setToAddresses(new String[] {UserInfo.getUserEmail()});

@@ -43,11 +43,25 @@ private class TestSecurityRepSecurityBatchable {
 			TimeZoneSidKey = 'America/Los_Angeles');
 		insert user2;
 
+
 		Rep_Security__c repSecurity = new Rep_Security__c(
 			Rep_Number__c = rep1.Rep_Number__c,
 			Davenport_Username__c = user1.Davenport_Username__c,
 			Type__c = 'Rep');
 		insert repSecurity;
+
+		Rep_Security__c repSecurityUPI = new Rep_Security__c(
+			Rep_Number__c = rep1.Rep_Number__c,
+			Davenport_Username__c = user1.Davenport_Username__c,
+			Type__c = 'UPI');
+		insert repSecurityUPI;
+
+		Group groupRepSecurityUPI = new Group(
+			Name = 'Rep-Sec' + repSecurityUPI.Rep_Number__c + '-' + repSecurityUPI.Id
+		);
+		insert groupRepSecurityUPI;
+		repSecurityUPI.GroupId__c = groupRepSecurityUPI.Id;
+		update repSecurityUPI;
 
 		Rep_Security__c repSecurityNoRep = new Rep_Security__c(
 			Rep_Number__c = 'DNE',
@@ -83,5 +97,25 @@ private class TestSecurityRepSecurityBatchable {
 		System.assert(
 			(groupMembers[0].UserOrGroupId == user1.Id && groupMembers[1].UserOrGroupId == user2.Id) ||
 			(groupMembers[1].UserOrGroupId == user1.Id && groupMembers[0].UserOrGroupId == user2.Id));
+
+		Rep_Security__c repSecurityAfter = [
+			SELECT
+				GroupId__c
+			FROM Rep_Security__c
+			WHERE Id = :repSecurity.Id
+		];
+		System.assert(null != repSecurityAfter);
+
+		List<GroupMember> upiGroupMembers = [
+			SELECT
+				GroupId,
+				UserOrGroupId
+			FROM GroupMember
+			WHERE GroupId = :groupRepSecurityUPI.Id
+		];
+		System.assertEquals(2, upiGroupMembers.size());
+		System.assert(
+			(upiGroupMembers[0].UserOrGroupId == user1.Id && upiGroupMembers[1].UserOrGroupId == user2.Id) ||
+			(upiGroupMembers[1].UserOrGroupId == user1.Id && upiGroupMembers[0].UserOrGroupId == user2.Id));
 	}
 }

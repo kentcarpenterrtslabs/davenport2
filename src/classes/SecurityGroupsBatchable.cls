@@ -45,6 +45,6 @@ global class SecurityGroupsBatchable implements Database.Batchable<SObject> {
             }
         }
 
-		Database.executeBatch(new SecurityRepSplitsBatchable());
+		Database.executeBatch(new SecurityRepSecurityGroupsBatchable());
 	}
 }
