@@ -68,15 +68,6 @@ private class TestSecurityRepSecurityGroupsBatchable {
 
 		Test.startTest();
 		SecurityRepSecurityGroupsBatchable batch = new SecurityRepSecurityGroupsBatchable();
-		//List<Rep_Security__c> repSecs = [
-			//SELECT
-				//Id,
-				//Rep_Number__c,
-				//Rep__c,
-				//Davenport_Username__c,
-				//Type__c
-			//FROM Rep_Security__c];
-		//batch.proc(repSecs);
 		Database.executeBatch(batch);
 		Test.stopTest();
 

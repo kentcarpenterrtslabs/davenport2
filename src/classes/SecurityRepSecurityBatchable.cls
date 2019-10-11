@@ -25,27 +25,37 @@ global class SecurityRepSecurityBatchable implements Database.Batchable<SObject>
 
 		Map<Id,User> mapUserIdToUser = getMapUserIdToUser(userIds);
 
-		// For each Rep Security, add the user and the user's asistant(s) as a group member for the group related to the Rep Number
-		List<GroupMember> groupMembers = new List<GroupMember>();
+		// For each Rep Security, add the user and the user's asistant(s) as a group member for the group on the rep security record
+		Map<Id,Set<Id>> mapGroupIdToUserIds = new Map<Id,Set<Id>>(); // prevent trying to add the same group/user combination more than once
 
 		for (Rep_Security__c repSecurity : scope) {
-			Id groupId = repSecurity.GroupId__c;
+			String groupIdStr = repSecurity.GroupId__c;
 			User usr = mapUserIdToUser.get(repSecurity.User__c);
 
-			if (null != groupId && null != usr) {
+			if (!String.isBlank(groupIdStr) && null != usr) {
+				Id groupId = Id.valueOf(groupIdStr);
 
-				groupMembers.add(new GroupMember(
-					GroupId = Id.valueOf(groupId),
-					UserOrGroupId = usr.Id
-				));
+				if (!mapGroupIdToUserIds.containsKey(groupId)) {
+					mapGroupIdToUserIds.put(groupId,new Set<Id>());
+				}
+
+				mapGroupIdToUserIds.get(groupId).add(usr.Id);
 
 				// for each assistant of this user, add the assisant user as a member of the group related to the Rep Number
 				for (Assistant_Assignment__c assistant : usr.Assistants__r) {
-					groupMembers.add(new GroupMember(
-						GroupId = Id.valueOf(groupId),
-						UserOrGroupId = assistant.Assistant__c
-					));
+					mapGroupIdToUserIds.get(groupId).add(assistant.Assistant__c);
 				}
+			}
+		}
+
+		List<GroupMember> groupMembers = new List<GroupMember>();
+
+		for (Id grpId : mapGroupIdToUserIds.keySet()) {
+			for (Id userId : mapGroupIdToUserIds.get(grpId)) {
+				groupMembers.add(new GroupMember(
+					GroupId = grpId,
+					UserOrGroupId = userId
+				));
 			}
 		}
 		insert groupMembers;

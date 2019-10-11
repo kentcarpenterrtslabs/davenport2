@@ -19,41 +19,36 @@ global class SecurityRepSecurityGroupsBatchable implements Database.Batchable<SO
 	}
 
    	global void execute(Database.BatchableContext context, List<Rep_Security__c> scope) {
-		proc(scope);
-	}
-
-	public void proc(List<Rep_Security__c> scope) {
-		Map<String,Rep_Security__c> mapGroupNameToRepSecurity = new Map<String,Rep_Security__c>();
+		//Map<String,Rep_Security__c> mapGroupNameToUPITypeRepSecurity = new Map<String,Rep_Security__c>();
+		Map<Id,Group> mapUPITypeRepSecurityToGroup = new Map<Id,Group>();
 		Map<String,List<Rep_Security__c>> mapRepNumberToRepSecurity = new Map<String,List<Rep_Security__c>>();
 		Map<String,List<Rep_Security__c>> mapDavenportUsernameToRepSecurity = new Map<String,List<Rep_Security__c>>();
 
 		List<Group> groups = new List<Group>();
 
 		for (Rep_Security__c repSecurity : scope) {
-			if (!mapRepNumberToRepSecurity.containsKey(repSecurity.Rep_Number__c)) {
-				mapRepNumberToRepSecurity.put(repSecurity.Rep_Number__c, new List<Rep_Security__c>());
-			}
 			if (!mapDavenportUsernameToRepSecurity.containsKey(repSecurity.Davenport_Username__c)) {
 				mapDavenportUsernameToRepSecurity.put(repSecurity.Davenport_Username__c, new List<Rep_Security__c>());
 			}
-
-			mapRepNumberToRepSecurity.get(repSecurity.Rep_Number__c).add(repSecurity);
 			mapDavenportUsernameToRepSecurity.get(repSecurity.Davenport_Username__c).add(repSecurity);
+
+			if (!mapRepNumberToRepSecurity.containsKey(repSecurity.Rep_Number__c)) {
+				mapRepNumberToRepSecurity.put(repSecurity.Rep_Number__c, new List<Rep_Security__c>());
+			}
+			mapRepNumberToRepSecurity.get(repSecurity.Rep_Number__c).add(repSecurity);
+
 
 			if ('UPI' == repSecurity.Type__c) {
 				String groupName = 'Rep-Sec' + repSecurity.Rep_Number__c + '-' + repSecurity.Id;
-				groups.add(new Group(
+				Group newGroup = new Group(
 					Name = groupName,
 					Type = 'Regular'
-				));
-				mapGroupNameToRepSecurity.put(groupName,repSecurity);
+				);
+				groups.add(newGroup);
+				mapUPITypeRepSecurityToGroup.put(repSecurity.Id,newGroup);
 			}
 		}
 		insert groups;
-
-		for (Group grp : groups) {
-			mapGroupNameToRepSecurity.get(grp.Name).GroupId__c = grp.Id;
-		}
 
 		List<Rep__c> reps = [
 			SELECT
@@ -65,13 +60,18 @@ global class SecurityRepSecurityGroupsBatchable implements Database.Batchable<SO
 
 		for (Rep__c rep : reps) {
 			for (Rep_Security__c rs : mapRepNumberToRepSecurity.get(rep.Rep_Number__c)) {
-				rs.Rep__c = rep.Id;
-				if ('Rep' == rs.Type__c) {
+				
+				rs.Rep__c = rep.Id; // for All Rep Security records, set the rep ID to the related Rep
+				
+				if ('Rep' == rs.Type__c) {  // for Rep Type Rep Security records, set group ID to the group created for the related Rep record
 					rs.GroupId__c = rep.GroupId__c;
+				} else { // for UPI Type Rep Security records, set group ID to the group created for the Rep Security record
+					rs.GroupId__c = mapUPITypeRepSecurityToGroup.get(rs.Id).Id;
 				}
 			}
 		}
 
+		// for all Rep Security records, set the user ID for the user related to the Danenport user name
 		List<User> users = [
 			SELECT
 				Id,
@@ -98,7 +98,6 @@ global class SecurityRepSecurityGroupsBatchable implements Database.Batchable<SO
 			}
 		}
 
-		List<Rep_Security__c> repSecuritiesToUpdate = new List<Rep_Security__c>();
 		update scope;
 	}
 	
