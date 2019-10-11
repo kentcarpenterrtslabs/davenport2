@@ -9,7 +9,7 @@ public class SecurityAssignmentTestFactory {
     public static String davenportUsernameThree = 'testuser3';
     public static String davenportUsernameFour = 'testuser4';
     public static String davenportUsernameFive = 'testuser5';
-    public final static String HOUSEHOLD_RECORDTYPE_NAME = 'IndustriesHousehold';
+    public final static String HOUSEHOLD_RECORDTYPE_NAME = 'IndustriesHousehold'; 
     public final static String INDIVIDUAL_RECORDTYPE_NAME = 'Contact Client/Prospect';
 
     public static void createData(){

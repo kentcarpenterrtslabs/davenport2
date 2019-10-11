@@ -50,6 +50,7 @@
         <members>RepNumHouseholdSearchControllerTest</members>
         <members>RollupByLookupConfigSchedulable</members>
         <members>SObjectUpdateQueueable</members>
+        <members>SecurityAssignmentConfig</members>
         <members>SecurityAssignmentTestFactory</members>
         <members>SecurityDeleteAllBatchable</members>
         <members>SecurityFinancialAccountBatchable</members>
