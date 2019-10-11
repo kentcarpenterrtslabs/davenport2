@@ -12,9 +12,12 @@ public class SecurityAssignmentTestFactory {
     public final static String HOUSEHOLD_RECORDTYPE_NAME = 'IndustriesHousehold'; 
     public final static String INDIVIDUAL_RECORDTYPE_NAME = 'Contact Client/Prospect';
 
+    /**
+    * @description 
+    */ 
     public static void createData(){
         User user = [select id from User where IsActive = true and Profile.Name = 'System Administrator' limit 1][0];
-        SecurityAssignmentConfig.enableTriggers(user.Id);
+        //SecurityAssignmentConfig.enableTriggers(user.Id);
         System.runAs(user) {
             Id profileId = [Select Id from Profile where Name = 'Standard User' limit 1][0].Id;
 
