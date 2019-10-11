@@ -1,11 +1,16 @@
 public with sharing class RepAssignmentController {
   @AuraEnabled(cacheable=true)
-  public static List<Rep_Assignment__c> getRepLabelData(){
+  public static List<Rep_Security__c> getRepLabelData(){
 
-    List<Rep_Assignment__c> repAssignmentData = new List<Rep_Assignment__c>(); 
+    List<Rep_Security__c> repAssignmentData = new List<Rep_Security__c>(); 
     
     repAssignmentData = [
-        SELECT Id,Rep__r.Rep_Number__c,User__r.Name, User__r.id FROM Rep_Assignment__c
+		SELECT
+			Rep__r.Id,
+			Rep__r.Rep_Number__c,
+			User__r.Id,
+			User__r.Name
+		FROM Rep_Security__c
     ];
     
     return repAssignmentData;

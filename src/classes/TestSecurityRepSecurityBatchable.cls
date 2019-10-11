@@ -46,12 +46,16 @@ private class TestSecurityRepSecurityBatchable {
 
 		Rep_Security__c repSecurity = new Rep_Security__c(
 			Rep_Number__c = rep1.Rep_Number__c,
+			GroupId__c = rep1.GroupId__c,
+			User__c = user1.Id,
 			Davenport_Username__c = user1.Davenport_Username__c,
 			Type__c = 'Rep');
 		insert repSecurity;
 
 		Rep_Security__c repSecurityUPI = new Rep_Security__c(
 			Rep_Number__c = rep1.Rep_Number__c,
+			GroupId__c = rep1.GroupId__c,
+			User__c = user1.Id,
 			Davenport_Username__c = user1.Davenport_Username__c,
 			Type__c = 'UPI');
 		insert repSecurityUPI;
@@ -65,12 +69,14 @@ private class TestSecurityRepSecurityBatchable {
 
 		Rep_Security__c repSecurityNoRep = new Rep_Security__c(
 			Rep_Number__c = 'DNE',
+			User__c = user1.Id,
 			Davenport_Username__c = user1.Davenport_Username__c,
 			Type__c = 'Rep');
 		insert repSecurityNoRep;
 
 		Rep_Security__c repSecurityNoUser = new Rep_Security__c(
 			Rep_Number__c = rep1.Rep_Number__c,
+			GroupId__c = rep1.GroupId__c,
 			Davenport_Username__c = 'no user',
 			Type__c = 'Rep');
 		insert repSecurityNoUser;
