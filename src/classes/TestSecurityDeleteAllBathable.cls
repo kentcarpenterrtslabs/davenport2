@@ -1,7 +1,7 @@
 @isTest 
 private class TestSecurityDeleteAllBathable {
 
-	private static final String TEST_GROUP_NAME = 'Rep-Group1';
+	private static final String TEST_GROUP_NAME = 'Test-Group1';
 
 	@isTest
 	private static void testDeleteAll() {
@@ -65,7 +65,7 @@ private class TestSecurityDeleteAllBathable {
 		validateCounts(1, user1);
 
 		Test.startTest();
-		Database.executeBatch(new SecurityDeleteAllBatchable());
+		Database.executeBatch(new SecurityDeleteAllBatchable('Test-'));
 		Test.stopTest();
 		
 		validateCounts(0, user1);

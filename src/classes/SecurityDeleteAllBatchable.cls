@@ -1,12 +1,23 @@
-global  class SecurityDeleteAllBatchable implements Database.Batchable<SObject> {
+global class SecurityDeleteAllBatchable implements Database.Batchable<SObject> {
+
+	global String prefix = 'Rep-';
+
+	global SecurityDeleteAllBatchable() {
+	}
+
+	global SecurityDeleteAllBatchable(String prefix) { // for testing so that it does not try to delete existing Groups
+		this.prefix = prefix;
+	}
 
     global Database.QueryLocator start(Database.BatchableContext BC) {
+		String prefixWithWildcard = prefix + '%';
+
 		return Database.getQueryLocator([
 			SELECT
 				Id
 			FROM Group
 			WHERE Group.Type = 'Regular'
-			AND Name like 'Rep-%'
+			AND Name like :prefixWithWildcard
 		]);
     }
 
