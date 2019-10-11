@@ -62,6 +62,7 @@
         <members>TestCreateTask</members>
         <members>TestNightlyRunStatusTrigger</members>
         <members>TestPermssions</members>
+        <members>TestRepAssignmentController</members>
         <members>TestRollupByLookupConfigSchedulable</members>
         <members>TestSecurityDeleteAllBathable</members>
         <members>TestSecurityFinancialAccountBatchable</members>
