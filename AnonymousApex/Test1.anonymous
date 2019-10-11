@@ -20,13 +20,13 @@ public class RTS_RepDataSetup {
         Id hh_id = accountRecordTypes.get('Household');
         Id client_id = accountRecordTypes.get('Contact Client/Prospect');
          // create Households.
-        Account hh01 = new Account (RecordTypeId=hh_id, Name='Household-01');
-        Account hh02 = new Account (RecordTypeId=hh_id, Name='Household-02');
+        Account hh01 = new Account (RecordTypeId=hh_id, Name='Household-01', Last_FMA_Form_Created__c = Date.today().addDays(-10));
+        Account hh02 = new Account (RecordTypeId=hh_id, Name='Household-02', Last_FMA_Form_Created__c = Date.today().addDays(-10));
         insert hh01;
         insert hh02;
-        Account hh03 = new Account (RecordTypeId=hh_id, Name='Household-03');
+        Account hh03 = new Account (RecordTypeId=hh_id, Name='Household-03', Last_FMA_Form_Created__c = Date.today().addDays(-10));
         insert hh03;
-        Account hh_no_fa = new Account (RecordTypeId=hh_id, Name='Household-no-fin-accts');
+        Account hh_no_fa = new Account (RecordTypeId=hh_id, Name='Household-no-fin-accts', Last_FMA_Form_Created__c = Date.today().addDays(-10));
         insert hh_no_fa;
        
         // create clients
@@ -102,6 +102,13 @@ public class RTS_RepDataSetup {
                                                                                   FinServ__Household__c = hh03.Id,
                                                                                   Rep__c = rep03.Id);//,
                                                                                   //Rep_Number__c = rep03.Id);
+
+		FMA_Review_Form__c fmaReviewForm = new FMA_Review_Form__c(
+			Account__c = hh01.Id,
+			Rep__c = rep01.Id
+		);
+		insert fmaReviewForm;
+
         insert fin030101;
         // Create Rep Security Records
         // Bailey Thornton - bthornton (RP01)
@@ -113,10 +120,14 @@ public class RTS_RepDataSetup {
         Rep_Security__c rs01 = new Rep_Security__c(Type__c='Rep',Davenport_Username__c='bthornton', Rep_Number__c='RP01');
         Rep_Security__c rs02 = new Rep_Security__c(Type__c='Rep',Davenport_Username__c='jwhelen',   Rep_Number__c='RP02');
         Rep_Security__c rs03 = new Rep_Security__c(Type__c='Rep',Davenport_Username__c='awagner',   Rep_Number__c='RP03');
+        Rep_Security__c rs04 = new Rep_Security__c(Type__c='Rep',Davenport_Username__c='jhillery', Rep_Number__c='RP01');
+        Rep_Security__c rs05 = new Rep_Security__c(Type__c='UPI',Davenport_Username__c='jhillery', Rep_Number__c='RP03');
+
         insert rs01;
         insert rs02;
         insert rs03;
-       
+        insert rs04;
+        insert rs05;
     }
    
    
@@ -124,29 +135,44 @@ public class RTS_RepDataSetup {
  
         List <AccountContactRelation> acr = new List<AccountContactRelation>();
         acr = [Select Id from AccountContactRelation limit 300];
-        for (AccountContactRelation a : acr) {
-            delete a;
-        }
+        //for (AccountContactRelation a : acr) {
+            //delete a;
+        //}
+		delete acr;
+
         List <Rep_Security__c> rs = new List<Rep_Security__c>();
         rs = [Select Id from Rep_Security__c limit 300];
-        for (Rep_Security__c a : rs) {
-            delete a;
-        }
+        //for (Rep_Security__c a : rs) {
+            //delete a;
+        //}
+		delete rs;
+
         List <FinServ__FinancialAccount__c> finList = new List<FinServ__FinancialAccount__c>();
         finList = [Select Id from FinServ__FinancialAccount__c limit 100];
-        for (FinServ__FinancialAccount__c f : finList) {
-            delete f;
-        }
+        //for (FinServ__FinancialAccount__c f : finList) {
+            //delete f;
+        //}
+		delete finList;
+
         List <Rep__c> r = new List<Rep__c>();
         r = [Select Id from Rep__c limit 300];
-        for (Rep__c a : r) {
-            delete a;
-        }
+        //for (Rep__c a : r) {
+            //delete a;
+        //}
+		delete r;
+
         List <Account> acts = new List<Account>();
         acts = [Select Id from Account limit 75];
-        for (Account a : acts) {
-            delete a;
-        }
+        //for (Account a : acts) {
+            //delete a;
+        //}
+		delete acts;
 
+		List<FMA_Review_Form__c> fmaReviewFormList = [
+			SELECT
+				Id
+			FROM FMA_Review_Form__c
+		];
+		delete fmaReviewFormList;
     }
 }
