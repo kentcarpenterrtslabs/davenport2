@@ -1,24 +1,13 @@
 global class SecurityDeleteAllBatchable implements Database.Batchable<SObject> {
+	
+	List<Group> groups;
 
-	global String prefix = 'Rep-';
-
-	global SecurityDeleteAllBatchable() {
+	global SecurityDeleteAllBatchable(List<Group> groups) {
+		this.groups = groups;
 	}
 
-	global SecurityDeleteAllBatchable(String prefix) { // for testing so that it does not try to delete existing Groups
-		this.prefix = prefix;
-	}
-
-    global Database.QueryLocator start(Database.BatchableContext BC) {
-		String prefixWithWildcard = prefix + '%';
-
-		return Database.getQueryLocator([
-			SELECT
-				Id
-			FROM Group
-			WHERE Group.Type = 'Regular'
-			AND Name like :prefixWithWildcard
-		]);
+    global List<Group> start(Database.BatchableContext BC) {
+		return groups;
     }
 
     global void execute(Database.BatchableContext BC, List<Group> scope) {

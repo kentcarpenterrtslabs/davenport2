@@ -65,7 +65,7 @@ private class TestSecurityDeleteAllBathable {
 		validateCounts(1, user1);
 
 		Test.startTest();
-		Database.executeBatch(new SecurityDeleteAllBatchable('Test-'));
+		System.enqueueJob(new SecurityDeleteAllLauncher('Test-'));
 		Test.stopTest();
 		
 		validateCounts(0, user1);

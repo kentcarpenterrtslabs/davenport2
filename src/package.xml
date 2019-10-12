@@ -53,6 +53,7 @@
         <members>SecurityAssignmentConfig</members>
         <members>SecurityAssignmentTestFactory</members>
         <members>SecurityDeleteAllBatchable</members>
+        <members>SecurityDeleteAllLauncher</members>
         <members>SecurityFinancialAccountBatchable</members>
         <members>SecurityGroupsBatchable</members>
         <members>SecurityRepSecurityBatchable</members>
