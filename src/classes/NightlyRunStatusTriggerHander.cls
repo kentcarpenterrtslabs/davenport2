@@ -22,14 +22,14 @@ public class NightlyRunStatusTriggerHander  {
         }
         if (doOnlySecurity == True) {
             if ( !Test.isRunningTest() ) {
-                Database.executeBatch(new SecurityDeleteAllBatchable());
+                Database.executeBatch(new SecurityDeleteAllLauncher());
             }
             return;
         }
         
         Database.executeBatch(new FinancialAccountRollupBatchable());
         if ( !Test.isRunningTest() ) {
-            Database.executeBatch(new SecurityDeleteAllBatchable());
+            Database.executeBatch(new SecurityDeleteAllLauncher());
         }
   }
 }
