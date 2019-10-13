@@ -22,14 +22,14 @@ public class NightlyRunStatusTriggerHander  {
         }
         if (doOnlySecurity == True) {
             if ( !Test.isRunningTest() ) {
-                System.enqueueJob(new SecurityDeleteAllLauncher());
+                System.enqueueJob(new SecurityResetFirmWideAccessBatchable());
             }
             return;
         }
         
         Database.executeBatch(new FinancialAccountRollupBatchable());
         if ( !Test.isRunningTest() ) {
-            System.enqueueJob(new SecurityDeleteAllLauncher());
+            System.enqueueJob(new SecurityResetFirmWideAccessBatchable());
         }
   }
 }

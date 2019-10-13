@@ -28,7 +28,7 @@ global class SecurityDeleteAllBatchable implements Database.Batchable<SObject> {
         Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
         mail.setToAddresses(new String[] {UserInfo.getUserEmail()});
         mail.setSenderDisplayName('SecurityDeleteAllBatchable');
-        mail.setSubject('SecurityDeleteAllBatchable Completed');
+        mail.setSubject('SecurityDeleteAllBatchable Completed, First Id = ' + groups[0].Id);
         mail.setPlainTextBody('Job ID: ' + bc.getJobId());
 
 		// make up for untestable code below so this will pass code coverage
@@ -67,7 +67,7 @@ global class SecurityDeleteAllBatchable implements Database.Batchable<SObject> {
                 System.debug(e);
             }
 
-			Database.executeBatch(new SecurityResetFirmWideAccessBatchable());
+			//Database.executeBatch(new SecurityResetFirmWideAccessBatchable());
         }
     }
 }
