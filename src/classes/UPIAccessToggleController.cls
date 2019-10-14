@@ -23,29 +23,33 @@ public without sharing class UPIAccessToggleController {
 
 		User currentUser = [
 			SELECT
-				Davenport_Username__c
+				Davenport_Username__c,
+				UPI_GroupId__c,
+				(
+					SELECT
+						Assistant__c
+					FROM Assistants__r
+				)
 			FROM User
 			WHERE Id = :userId
 		];
 
-		List<Rep_Security__c> upiRepSecurities = [
-			SELECT
-				Rep__r.GroupId__c,
-				GroupId__c
-			FROM Rep_Security__c
-			WHERE Type__c = 'UPI'
-			AND Davenport_Username__c = :currentUser.Davenport_Username__c
-		];
+		if (null != currentUser.UPI_GroupId__c) {
+			List<GroupMember> groupMembers = new List<GroupMember>();
 
-		List<GroupMember> groupMembers = new List<GroupMember>();
-
-		for (Rep_Security__c repSecurity : upiRepSecurities) {
 			groupMembers.add(new GroupMember(
-				GroupId = repSecurity.Rep__r.GroupId__c,
-				UserOrGroupId = repSecurity.GroupId__c));
+				GroupId = currentUser.UPI_GroupId__c,
+				UserOrGroupId = currentUser.Id));
+
+			for (Assistant_Assignment__c assistant : currentUser.Assistants__r) {
+				groupMembers.add(new GroupMember(
+					GroupId = currentUser.UPI_GroupId__c,
+					UserOrGroupId = assistant.Assistant__c
+				));
+			}
+			insert groupMembers;
 		}
 
-		insert groupMembers;
 		currentUser.Firm_Wide_Access_Enabled__c = true;
 		update currentUser;
     }
@@ -55,32 +59,22 @@ public without sharing class UPIAccessToggleController {
 
 		User currentUser = [
 			SELECT
-				Davenport_Username__c
+				UPI_GroupId__c
 			FROM User
 			WHERE Id = :userId
 		];
 
-		List<Rep_Security__c> upiRepSecurities = [
-			SELECT
-				GroupId__c
-			FROM Rep_Security__c
-			WHERE Type__c = 'UPI'
-			AND Davenport_Username__c = :currentUser.Davenport_Username__c
-		];
+		if (null != currentUser.UPI_GroupId__c) {
+			List<GroupMember> groupMembers = [
+				SELECT
+					Id
+				FROM GroupMember
+				WHERE GroupId = :currentUser.UPI_GroupId__c
+			];
 
-		List<Id> upiGroupIds = new List<Id>();
-		for (Rep_Security__c repSecurity : upiRepSecurities) {
-			upiGroupIds.add(repSecurity.GroupId__c);
+			delete groupMembers;
 		}
 
-		List<GroupMember> groupMembers = [
-			SELECT
-				Id
-			FROM GroupMember
-			WHERE UserOrGroupId IN :upiGroupIds
-		];
-
-		delete groupMembers;
 		currentUser.Firm_Wide_Access_Enabled__c = false;
 		update currentUser;
     }

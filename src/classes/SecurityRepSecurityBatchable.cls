@@ -7,8 +7,6 @@ global class SecurityRepSecurityBatchable implements Database.Batchable<SObject>
 			SELECT
 				Id,
 				Rep_Number__c,
-				GroupId__c,
-				User__c,
 				Davenport_Username__c,
 				Type__c
 			FROM Rep_Security__c
@@ -17,71 +15,72 @@ global class SecurityRepSecurityBatchable implements Database.Batchable<SObject>
 
    	global void execute(Database.BatchableContext context, List<Rep_Security__c> scope) {
 
-		Set<Id> userIds = new Set<Id>();
+		Set<String> davenportUserNames = new Set<String>();
+		Set<String> repTypeDavenportUserNames = new Set<String>();
+		Set<String> repNumbers = new Set<String>();
+			
 
 		for (Rep_Security__c repSecurity : scope) {
-			userIds.add(repSecurity.User__c);
+			if ('Rep' == repSecurity.Type__c) {
+				davenportUserNames.add(repSecurity.Davenport_Username__c);
+				repTypeDavenportUserNames.add(repSecurity.Davenport_Username__c);
+			}
+			repNumbers.add(repSecurity.Rep_Number__c);
 		}
 
-		Map<Id,User> mapUserIdToUser = getMapUserIdToUser(userIds);
+		// update the rep security records with references to the Rep records and users
 
-		// For each Rep Security, add the user and the user's asistant(s) as a group member for the group on the rep security record
-		Map<Id,Set<Id>> mapGroupIdToUserIds = new Map<Id,Set<Id>>(); // prevent trying to add the same group/user combination more than once
+		Map<String,User> mapDaveportUsernameToUser = getMapDaveportUsernameToUser(davenportUserNames);
+		Map<String,Rep__c> mapRepNumberToRep = getMapRepNumberToRep(repNumbers);
 
 		for (Rep_Security__c repSecurity : scope) {
-			String groupIdStr = repSecurity.GroupId__c;
-			User usr = mapUserIdToUser.get(repSecurity.User__c);
-
-			if (!String.isBlank(groupIdStr) && null != usr) {
-				Id groupId = Id.valueOf(groupIdStr);
-
-				if (!mapGroupIdToUserIds.containsKey(groupId)) {
-					mapGroupIdToUserIds.put(groupId,new Set<Id>());
-				}
-
-				mapGroupIdToUserIds.get(groupId).add(usr.Id);
-
-				// for each assistant of this user, add the assisant user as a member of the group related to the Rep Number
-				for (Assistant_Assignment__c assistant : usr.Assistants__r) {
-					mapGroupIdToUserIds.get(groupId).add(assistant.Assistant__c);
-				}
+			if (mapRepNumberToRep.containsKey(repSecurity.Rep_Number__c)) {
+				repSecurity.Rep__c = mapRepNumberToRep.get(repSecurity.Rep_Number__c).Id;
+			}
+			if (mapDaveportUsernameToUser.containsKey(repSecurity.Davenport_Username__c)) {
+				repSecurity.User__c = mapDaveportUsernameToUser.get(repSecurity.Davenport_Username__c).Id;
 			}
 		}
 
-		List<GroupMember> groupMembers = new List<GroupMember>();
-
-		for (Id grpId : mapGroupIdToUserIds.keySet()) {
-			for (Id userId : mapGroupIdToUserIds.get(grpId)) {
-				groupMembers.add(new GroupMember(
-					GroupId = grpId,
-					UserOrGroupId = userId
-				));
-			}
-		}
-		insert groupMembers;
+		update scope;
 	}
 
-	public Map<Id,User> getMapUserIdToUser(Set<Id> userIds) {
+	public Map<String,Rep__c> getMapRepNumberToRep(Set<String> repNumbers) {
+
+		List<Rep__c> reps = [
+			SELECT
+				Id,
+				Rep_Number__c
+			FROM Rep__c
+			WHERE Rep_Number__c IN :repNumbers
+		];
+
+		Map<String,Rep__c> mapRepNumberToRep = new Map<String,Rep__c>();
+		
+		for (Rep__c rep : reps) {
+			mapRepNumberToRep.put(rep.Rep_Number__c,rep);
+		}
+
+		return mapRepNumberToRep;
+	}
+
+	public Map<String,User> getMapDaveportUsernameToUser(Set<String> davenportUsernames) {
 
 		// Get the list of users that match the list of DavenportUserNames in the Rep Security records
 		List<User> users = [
 			SELECT
 				Id,
-				(
-					SELECT
-						Assistant__c
-					FROM Assistants__r
-				)
+				Davenport_Username__c
 			FROM User
-			WHERE Id IN :userIds
+			WHERE Davenport_Username__c IN :davenportUsernames
 		];
 		
-		Map<Id,User> mapUserIdToUser = new Map<Id,User>();
+		Map<String,User> mapDaveportUsernameToUser = new Map<String,User>();
 
 		for (User usr : Users) {
-			mapUserIdToUser.put(usr.Id,usr);
+			mapDaveportUsernameToUser.put(usr.Davenport_Username__c,usr);
 		}
-		return mapUserIdToUser;
+		return mapDaveportUsernameToUser;
 	}
 
 	global void finish(Database.BatchableContext context) {
@@ -100,7 +99,7 @@ global class SecurityRepSecurityBatchable implements Database.Batchable<SObject>
                 System.debug(e);
             }
 
-			Database.executeBatch(new SecurityFinancialAccountBatchable());		
+			Database.executeBatch(new SecurityRepSecurityGroupsBatchable());		
         }
 	}
 }

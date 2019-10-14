@@ -1,4 +1,4 @@
-global class SecurityFinancialAccountBatchable implements Database.Batchable<SObject> {
+global class SecurityFinancialAccountBatchable implements Database.Batchable<SObject>, Database.Stateful {
 
 	global String log;
 

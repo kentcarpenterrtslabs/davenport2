@@ -63,16 +63,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>GroupId__c</fullName>
-        <externalId>false</externalId>
-        <label>GroupId</label>
-        <length>18</length>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Rep_Number__c</fullName>
         <externalId>false</externalId>
         <label>Rep Number</label>
@@ -150,16 +140,6 @@
         <columns>CREATED_DATE</columns>
         <columns>LAST_UPDATE</columns>
         <filterScope>Everything</filterScope>
-        <filters>
-            <field>Davenport_Username__c</field>
-            <operation>equals</operation>
-            <value>jmcelhaney</value>
-        </filters>
-        <filters>
-            <field>Type__c</field>
-            <operation>equals</operation>
-            <value>Rep</value>
-        </filters>
         <label>All</label>
     </listViews>
     <nameField>

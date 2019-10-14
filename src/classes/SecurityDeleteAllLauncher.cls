@@ -21,11 +21,11 @@ public class SecurityDeleteAllLauncher implements Queueable {
 	}
 
     public void execute(QueueableContext context) {
-		List<Group> Groups;
+		List<Group> groups;
 		String prefixWithWildcard = prefix + '%';
 
 		if (null == lastGroupId) {
-			Groups = [
+			groups = [
 				SELECT
 					Id
 				FROM Group
@@ -35,7 +35,7 @@ public class SecurityDeleteAllLauncher implements Queueable {
 				LIMIT :batchSize
 			];
 		} else {
-			Groups = [
+			groups = [
 				SELECT
 					Id
 				FROM Group
@@ -92,7 +92,7 @@ public class SecurityDeleteAllLauncher implements Queueable {
 		i++;
 
 
-		if (Groups.size() > 0) {
+		if (groups.size() > 0) {
 			System.debug('in SecurityDeleteAllLauncher, Groups.size() = ' + Groups.size() + ', lastGroupId = ' + lastGroupId);
 			//ActivityRollupSettings__c activityRollupSettings = ActivityRollupSettings__c.getOrgDefaults();
 			//Integer GroupsPerBatch = Integer.valueOf(activityRollupSettings.Groups_Per_Batch__c);

@@ -56,11 +56,11 @@ public class UPIAccessToggleControllerTest {
 		insert repSecurityUPI;
 
 		Group groupRepSecurityUPI = new Group(
-			Name = 'Rep-Sec' + repSecurityUPI.Rep_Number__c + '-' + repSecurityUPI.Id
+			Name = 'Rep-UPI' + user1.Davenport_Username__c + '-' + user1.Id
 		);
 		insert groupRepSecurityUPI;
-		repSecurityUPI.GroupId__c = groupRepSecurityUPI.Id;
-		update repSecurityUPI;
+		user1.UPI_GroupId__c = groupRepSecurityUPI.Id;
+		update user1;
 
 		Assistant_Assignment__c assistant = new Assistant_Assignment__c(
 			Assistee__c = user1.Id,
@@ -78,7 +78,16 @@ public class UPIAccessToggleControllerTest {
 		];
 
 		System.assertEquals(0, groupMembersBeforeEnabled.size());
+		
+		List<GroupMember> upiGroupMembersBeforeEnabled = [
+			SELECT
+				GroupId,
+				UserOrGroupId
+			FROM GroupMember
+			WHERE GroupId = :groupRepSecurityUPI.Id
+		];
 
+		System.assertEquals(0, upiGroupMembersBeforeEnabled.size());
 
 		// test enable
 
@@ -94,8 +103,17 @@ public class UPIAccessToggleControllerTest {
 			WHERE GroupId = :groupRep1.Id
 		];
 
-		System.assertEquals(1, groupMembersAfterEnabled.size());
-		System.assertEquals(groupRepSecurityUPI.Id, groupMembersAfterEnabled[0].UserOrGroupId);
+		System.assertEquals(0, groupMembersAfterEnabled.size());
+
+		List<GroupMember> upiGroupMembersAfterEnabled = [
+			SELECT
+				GroupId,
+				UserOrGroupId
+			FROM GroupMember
+			WHERE GroupId = :groupRepSecurityUPI.Id
+		];
+
+		System.assertEquals(2, upiGroupMembersAfterEnabled.size());
 
 		User user1AfterEnabled = [
 			SELECT
@@ -112,6 +130,7 @@ public class UPIAccessToggleControllerTest {
             UPIAccessToggleController.disableUPIAccess();
         }
 
+
 		List<GroupMember> groupMembersAfterDisabled = [
 			SELECT
 				GroupId,
@@ -119,6 +138,18 @@ public class UPIAccessToggleControllerTest {
 			FROM GroupMember
 			WHERE GroupId = :groupRep1.Id
 		];
+
+		System.assertEquals(0, groupMembersAfterDisabled.size());
+
+		List<GroupMember> upiGroupMembersAfterDisabled = [
+			SELECT
+				GroupId,
+				UserOrGroupId
+			FROM GroupMember
+			WHERE GroupId = :groupRepSecurityUPI.Id
+		];
+
+		System.assertEquals(0, upiGroupMembersAfterDisabled.size());
 
 		User user1AfterDisabled = [
 			SELECT

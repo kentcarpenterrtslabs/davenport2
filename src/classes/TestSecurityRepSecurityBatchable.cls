@@ -46,7 +46,6 @@ private class TestSecurityRepSecurityBatchable {
 
 		Rep_Security__c repSecurity = new Rep_Security__c(
 			Rep_Number__c = rep1.Rep_Number__c,
-			GroupId__c = rep1.GroupId__c,
 			User__c = user1.Id,
 			Davenport_Username__c = user1.Davenport_Username__c,
 			Type__c = 'Rep');
@@ -54,18 +53,10 @@ private class TestSecurityRepSecurityBatchable {
 
 		Rep_Security__c repSecurityUPI = new Rep_Security__c(
 			Rep_Number__c = rep1.Rep_Number__c,
-			GroupId__c = rep1.GroupId__c,
-			User__c = user1.Id,
+			User__c = user2.Id,
 			Davenport_Username__c = user1.Davenport_Username__c,
 			Type__c = 'UPI');
 		insert repSecurityUPI;
-
-		Group groupRepSecurityUPI = new Group(
-			Name = 'Rep-Sec' + repSecurityUPI.Rep_Number__c + '-' + repSecurityUPI.Id
-		);
-		insert groupRepSecurityUPI;
-		repSecurityUPI.GroupId__c = groupRepSecurityUPI.Id;
-		update repSecurityUPI;
 
 		Rep_Security__c repSecurityNoRep = new Rep_Security__c(
 			Rep_Number__c = 'DNE',
@@ -76,52 +67,63 @@ private class TestSecurityRepSecurityBatchable {
 
 		Rep_Security__c repSecurityNoUser = new Rep_Security__c(
 			Rep_Number__c = rep1.Rep_Number__c,
-			GroupId__c = rep1.GroupId__c,
 			Davenport_Username__c = 'no user',
 			Type__c = 'Rep');
 		insert repSecurityNoUser;
-
-		Assistant_Assignment__c assistant = new Assistant_Assignment__c(
-			Assistee__c = user1.Id,
-			Assistant__c = user2.Id
-		);
-		insert assistant;
 
 		Test.startTest();
 		Database.executeBatch(new SecurityRepSecurityBatchable());
 		Test.stopTest();
 
-		List<GroupMember> groupMembers = [
-			SELECT
-				GroupId,
-				UserOrGroupId
-			FROM GroupMember
-			WHERE GroupId = :groupRep1.Id
-		];
-
-		System.assertEquals(2, groupMembers.size());
-		System.assert(
-			(groupMembers[0].UserOrGroupId == user1.Id && groupMembers[1].UserOrGroupId == user2.Id) ||
-			(groupMembers[1].UserOrGroupId == user1.Id && groupMembers[0].UserOrGroupId == user2.Id));
 
 		Rep_Security__c repSecurityAfter = [
 			SELECT
-				GroupId__c
+				Rep__c,
+				User__c
 			FROM Rep_Security__c
 			WHERE Id = :repSecurity.Id
 		];
-		System.assert(null != repSecurityAfter);
 
-		List<GroupMember> upiGroupMembers = [
+		System.assert(null != repSecurityAfter);
+		System.assertEquals(rep1.Id, repSecurityAfter.Rep__c);
+
+
+		Rep_Security__c repSecurityUPIAfter = [
 			SELECT
-				GroupId,
-				UserOrGroupId
-			FROM GroupMember
-			WHERE GroupId = :groupRepSecurityUPI.Id
+				Rep__c,
+				User__c
+			FROM Rep_Security__c
+			WHERE Id = :repSecurityUPI.Id
 		];
-		System.assertEquals(2, upiGroupMembers.size());
-		System.assert(
-			(upiGroupMembers[0].UserOrGroupId == user1.Id && upiGroupMembers[1].UserOrGroupId == user2.Id) ||
-			(upiGroupMembers[1].UserOrGroupId == user1.Id && upiGroupMembers[0].UserOrGroupId == user2.Id));
+
+		System.assert(null != repSecurityUPIAfter);
+		System.assertEquals(rep1.Id, repSecurityUPIAfter.Rep__c);
+		System.assertEquals(user1.Id, repSecurityUPIAfter.User__c);
+
+
+		Rep_Security__c repSecurityNoRepAfter = [
+			SELECT
+				Rep__c,
+				User__c
+			FROM Rep_Security__c
+			WHERE Id = :repSecurityNoRep.Id
+		];
+
+		System.assert(null != repSecurityNoRepAfter);
+		System.assertEquals(null, repSecurityNoRepAfter.Rep__c);
+		System.assertEquals(user1.Id, repSecurityNoRepAfter.User__c);
+
+
+		Rep_Security__c repSecurityNoUserAfter = [
+			SELECT
+				Rep__c,
+				User__c
+			FROM Rep_Security__c
+			WHERE Id = :repSecurityNoUser.Id
+		];
+
+		System.assert(null != repSecurityNoUserAfter);
+		System.assertEquals(rep1.Id, repSecurityNoUserAfter.Rep__c);
+		System.assertEquals(null, repSecurityNoUserAfter.User__c);
 	}
 }

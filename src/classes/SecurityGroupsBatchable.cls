@@ -43,8 +43,8 @@ global class SecurityGroupsBatchable implements Database.Batchable<SObject> {
                 // usually just means NO_MASS_MAIL_PERMISSION -- email failing shouldn't prevent next step from executing
                 System.debug(e);
             }
-        }
 
-		Database.executeBatch(new SecurityRepSecurityGroupsBatchable());
+			Database.executeBatch(new SecurityRepSplitsBatchable());
+        }
 	}
 }

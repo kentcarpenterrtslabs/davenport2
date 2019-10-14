@@ -9,13 +9,6 @@ private class TestRepAssignmentController {
 		);
 		insert rep1;
 
-		Group groupRep1 = new Group(
-			Name = 'Rep-' + rep1.Rep_Number__c + '-' + rep1.Id
-		);
-		insert groupRep1;
-		rep1.GroupId__c = groupRep1.Id;
-		update rep1;
-
         Id profileId = [Select Id from Profile where Name = 'Standard User' limit 1][0].Id;
 
 		User user1 = new User(
@@ -34,7 +27,6 @@ private class TestRepAssignmentController {
 		Rep_Security__c repSecurity = new Rep_Security__c(
 			Rep_Number__c = rep1.Rep_Number__c,
 			Rep__c = rep1.Id,
-			GroupId__c = rep1.GroupId__c,
 			User__c = user1.Id,
 			Davenport_Username__c = user1.Davenport_Username__c,
 			Type__c = 'Rep');
