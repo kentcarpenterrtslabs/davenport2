@@ -347,7 +347,7 @@ export default class FmaReviewComponent extends NavigationMixin(LightningElement
         let index = -1,
             arrLength = testArray ? testArray.length : 0,
             resIndex = -1,
-            result = ["-"];
+            result = [];
     
         while (++index < arrLength) {
             let value = testArray[index];
