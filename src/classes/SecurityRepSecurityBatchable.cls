@@ -99,7 +99,7 @@ global class SecurityRepSecurityBatchable implements Database.Batchable<SObject>
                 System.debug(e);
             }
 
-			Database.executeBatch(new SecurityRepSecurityGroupsBatchable());		
+			Database.executeBatch(new SecurityRepSecurityGroupsBatchable(), 5);		
         }
 	}
 }

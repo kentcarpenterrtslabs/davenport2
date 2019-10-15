@@ -19,7 +19,8 @@ global class SecurityRepSecurityGroupsBatchable implements Database.Batchable<SO
 					Davenport_Username__c,
 					UPI_GroupId__c
 				FROM User
-				WHERE Id IN :testUserIds
+				WHERE Davenport_Username__c != null
+				AND Id IN :testUserIds
 			]);
 		} else {
 			return Database.getQueryLocator([
@@ -27,6 +28,7 @@ global class SecurityRepSecurityGroupsBatchable implements Database.Batchable<SO
 					Davenport_Username__c,
 					UPI_GroupId__c
 				FROM User
+				WHERE Davenport_Username__c != null
 			]);
 		}
 	}
