@@ -74,7 +74,7 @@ global class SecurityRepSecurityGroupsBatchable implements Database.Batchable<SO
 			// create a group for each user that has UPI groups left
 			if (mapUserIdToUPIRepGroupIds.get(usrId).size() > 0) {
 				mapUserIdToGroupforUPIAccess.put(usrId, new Group(
-					Name = 'Rep-UPI-' + usr.Davenport_Username__c + '-' + usrId,
+					Name = 'Rep-UPI-' + usrId,
 					Type = 'Regular'
 				));
 			}
@@ -117,11 +117,14 @@ global class SecurityRepSecurityGroupsBatchable implements Database.Batchable<SO
 						GroupId = repGroupId,
 						UserOrGroupId = usrId
 					));
-					for (Id assistantId : mapUserIdToAssistants.get(usr.Id)) {
-						groupMembers.add(new GroupMember(
-							GroupId = repGroupId,
-							UserOrGroupId = assistantId
-						));
+
+					if (mapUserIdToAssistants.containsKey(usr.Id)) {
+						for (Id assistantId : mapUserIdToAssistants.get(usr.Id)) {
+							groupMembers.add(new GroupMember(
+								GroupId = repGroupId,
+								UserOrGroupId = assistantId
+							));
+						}
 					}
 				}
 			}

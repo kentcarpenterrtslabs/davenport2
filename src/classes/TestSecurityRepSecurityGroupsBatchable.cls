@@ -110,7 +110,7 @@ private class TestSecurityRepSecurityGroupsBatchable {
 				Name
 			FROM Group
 			WHERE Type = 'Regular'
-			AND Name = :('Rep-UPI-' + user1.Davenport_Username__c + '-' + user1.Id)
+			AND Name = :('Rep-UPI-' + user1.Id)
 		];
 		System.assertEquals(1, groupsUPI.size());
 
