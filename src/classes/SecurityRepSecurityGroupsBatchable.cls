@@ -17,16 +17,7 @@ global class SecurityRepSecurityGroupsBatchable implements Database.Batchable<SO
 			return Database.getQueryLocator([
 				SELECT
 					Davenport_Username__c,
-					UPI_GroupId__c,
-					( SELECT
-						Rep__r.GroupId__c,
-						Type__c
-					FROM Rep_Securities__r ),
-					(
-						SELECT
-							Assistant__c
-						FROM Assistants__r
-					)
+					UPI_GroupId__c
 				FROM User
 				WHERE Id IN :testUserIds
 			]);
@@ -34,16 +25,7 @@ global class SecurityRepSecurityGroupsBatchable implements Database.Batchable<SO
 			return Database.getQueryLocator([
 				SELECT
 					Davenport_Username__c,
-					UPI_GroupId__c,
-					( SELECT
-						Rep__r.GroupId__c,
-						Type__c
-					FROM Rep_Securities__r ),
-					(
-						SELECT
-							Assistant__c
-						FROM Assistants__r
-					)
+					UPI_GroupId__c
 				FROM User
 			]);
 		}
@@ -55,22 +37,26 @@ global class SecurityRepSecurityGroupsBatchable implements Database.Batchable<SO
 		Map<Id,Set<Id>> mapUserIdToRepGroupIds = new Map<Id,Set<Id>>();
 		Map<Id,Set<Id>> mapUserIdToUPIRepGroupIds = new Map<Id,Set<Id>>();
 
+		Map<Id,List<Rep_Security__c>> mapUserIdToRepSecurities = getMapUserIdToRepSecurities(scope);
+
 		// find the Rep groups where the user has access and sort them by Type
 		for (User usr : scope) {
 			mapUserIdToUser.put(usr.Id, usr);
 
-			for (Rep_Security__c repSeurity : usr.Rep_Securities__r) {
-				if (null != repSeurity.Rep__c && null != repSeurity.Rep__r.GroupId__c) {
-					if ('Rep' == repSeurity.Type__c) {
-						if (!mapUserIdToRepGroupIds.containsKey(usr.Id)) {
-							mapUserIdToRepGroupIds.put(usr.Id, new Set<Id>());
+			if (mapUserIdToRepSecurities.containsKey(usr.Id)) {
+				for (Rep_Security__c repSeurity : mapUserIdToRepSecurities.get(usr.Id)) {
+					if (null != repSeurity.Rep__c && null != repSeurity.Rep__r.GroupId__c) {
+						if ('Rep' == repSeurity.Type__c) {
+							if (!mapUserIdToRepGroupIds.containsKey(usr.Id)) {
+								mapUserIdToRepGroupIds.put(usr.Id, new Set<Id>());
+							}
+							mapUserIdToRepGroupIds.get(usr.Id).add(repSeurity.Rep__r.GroupId__c);
+						} else {
+							if (!mapUserIdToUPIRepGroupIds.containsKey(usr.Id)) {
+								mapUserIdToUPIRepGroupIds.put(usr.Id, new Set<Id>());
+							}
+							mapUserIdToUPIRepGroupIds.get(usr.Id).add(repSeurity.Rep__r.GroupId__c);
 						}
-						mapUserIdToRepGroupIds.get(usr.Id).add(repSeurity.Rep__r.GroupId__c);
-					} else {
-						if (!mapUserIdToUPIRepGroupIds.containsKey(usr.Id)) {
-							mapUserIdToUPIRepGroupIds.put(usr.Id, new Set<Id>());
-						}
-						mapUserIdToUPIRepGroupIds.get(usr.Id).add(repSeurity.Rep__r.GroupId__c);
 					}
 				}
 			}
@@ -119,26 +105,71 @@ global class SecurityRepSecurityGroupsBatchable implements Database.Batchable<SO
 		}
 		update usersToUpdate;
 
+		Map<Id,Set<Id>> mapUserIdToAssistants = getMapUserIdToAssistants(scope);
+
 		// add the user and assistants as members to the Rep type groups
 		for (Id usrId : mapUserIdToRepGroupIds.keySet()) {
 			User usr = mapUserIdToUser.get(usrId);
 
-			for (Id repGroupId : mapUserIdToRepGroupIds.get(usrId)) {
-				groupMembers.add(new GroupMember(
-					GroupId = repGroupId,
-					UserOrGroupId = usrId
-				));
-				for (Assistant_Assignment__c assistant : usr.Assistants__r) {
+			if (mapUserIdToRepGroupIds.containsKey(usrId)) {
+				for (Id repGroupId : mapUserIdToRepGroupIds.get(usrId)) {
 					groupMembers.add(new GroupMember(
 						GroupId = repGroupId,
-						UserOrGroupId = assistant.Assistant__c
+						UserOrGroupId = usrId
 					));
+					for (Id assistantId : mapUserIdToAssistants.get(usr.Id)) {
+						groupMembers.add(new GroupMember(
+							GroupId = repGroupId,
+							UserOrGroupId = assistantId
+						));
+					}
 				}
 			}
 		}
 		insert groupMembers;
 	}
-	
+
+	public Map<Id,Set<Id>> getMapUserIdToAssistants(List<User> users) {
+		Map<Id,Set<Id>> mapUserIdToAssistants = new Map<Id,Set<Id>>();
+
+		List<Assistant_Assignment__c> assignments = [
+			SELECT
+				Assistee__c,
+				Assistant__c
+			FROM Assistant_Assignment__c
+			WHERE Assistee__c IN :users
+		];
+
+		for (Assistant_Assignment__c assignment : assignments) {
+			if (!mapUserIdToAssistants.containsKey(assignment.Assistee__c)) {
+				mapUserIdToAssistants.put(assignment.Assistee__c,new Set<Id>());
+			}
+			mapUserIdToAssistants.get(assignment.Assistee__c).add(assignment.Assistant__c);
+		}
+		return mapUserIdToAssistants;
+	}
+
+	public Map<Id,List<Rep_Security__c>> getMapUserIdToRepSecurities(List<User> users) {
+		Map<Id,List<Rep_Security__c>> mapUserIdToRepSecurities = new Map<Id,List<Rep_Security__c>>();
+
+		List<Rep_Security__c> repSecurities = [
+			SELECT
+				User__c,
+				Rep__r.GroupId__c,
+				Type__c
+			FROM Rep_Security__c
+			WHERE User__c IN :users
+		];
+
+		for (Rep_Security__c repSecurity : repSecurities) {
+			if (!mapUserIdToRepSecurities.containsKey(repSecurity.User__c)) {
+				mapUserIdToRepSecurities.put(repSecurity.User__c,new List<Rep_Security__c>());
+			}
+			mapUserIdToRepSecurities.get(repSecurity.User__c).add(repSecurity);
+		}
+		return mapUserIdToRepSecurities;
+	}
+
 	global void finish(Database.BatchableContext context) {
         Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
         mail.setToAddresses(new String[] {UserInfo.getUserEmail()});
