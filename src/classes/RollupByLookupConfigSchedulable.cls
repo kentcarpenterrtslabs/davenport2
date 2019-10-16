@@ -66,13 +66,13 @@ global class RollupByLookupConfigSchedulable implements Schedulable {
     return rollups;
   }
     
-    public List<FinServ__RollupByLookupConfig__c> getInactiveRollups() {
+    public List<FinServ__RollupByLookupConfig__c> getRollupsForState(Boolean state) {
     List<FinServ__RollupByLookupConfig__c> rollups = [
       SELECT
         Id,
         FinServ__Active__c
       FROM FinServ__RollupByLookupConfig__c
-      WHERE ((Name IN :namesToToggle OR Name IN :namesToToggleAndRun) AND FinServ__Active__c = False)
+      WHERE ((Name IN :namesToToggle OR Name IN :namesToToggleAndRun) AND FinServ__Active__c = :state)
     ];
     return rollups;
   }
@@ -87,13 +87,19 @@ global class RollupByLookupConfigSchedulable implements Schedulable {
     return rollups;
   }
   public void toggleRollups(Boolean active) {
-    List<FinServ__RollupByLookupConfig__c> inactive_rollups = getInactiveRollups();
+        
+    List<FinServ__RollupByLookupConfig__c> rollups;
+         if ( active == True ) {
+            rollups = getRollupsForState(False);
+         } else {
+             rollups = getRollupsForState(True);
+         }
 
-    for (FinServ__RollupByLookupConfig__c rollup : inactive_rollups) {
+    for (FinServ__RollupByLookupConfig__c rollup : rollups) {
       rollup.FinServ__Active__c = active;
     }
 
-    update inactive_rollups;
+    update rollups;
         
 Boolean dontrunit = False;
     if (active) {

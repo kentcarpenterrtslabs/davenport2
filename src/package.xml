@@ -50,7 +50,6 @@
         <members>RepNumHouseholdSearchControllerTest</members>
         <members>RollupByLookupConfigSchedulable</members>
         <members>SObjectUpdateQueueable</members>
-        <members>SecurityAssignmentConfig</members>
         <members>SecurityAssignmentTestFactory</members>
         <members>SecurityDeleteAllBatchable</members>
         <members>SecurityDeleteAllLauncher</members>
@@ -106,26 +105,18 @@
         <name>CustomMetadata</name>
     </types>
     <types>
-        <members>*</members>
         <members>Account</members>
         <members>AccountContactRelation</members>
         <members>AccountContactRole</members>
-        <members>AccountTeamMember</members>
         <members>Account_Notice__c</members>
         <members>Account_Split__c</members>
         <members>ActionPlan</members>
-        <members>ActionPlanTmplItmAssessmentInd</members>
         <members>Activity</members>
-        <members>Address</members>
         <members>Annuities__c</members>
-        <members>AssessmentIndicatorDefinition</members>
-        <members>AssessmentTask</members>
-        <members>AssessmentTaskContentDocument</members>
         <members>Asset</members>
         <members>AssetRelationship</members>
         <members>AssistantProgress</members>
         <members>Assistant_Assignment__c</members>
-        <members>AssociatedLocation</members>
         <members>AuthorizationForm</members>
         <members>AuthorizationFormConsent</members>
         <members>AuthorizationFormDataUse</members>
@@ -134,8 +125,6 @@
         <members>Branch_Production__c</members>
         <members>Branch_Region__c</members>
         <members>BusinessLicense</members>
-        <members>BusinessMilestone</members>
-        <members>BusinessProfile</members>
         <members>Campaign</members>
         <members>CampaignMember</members>
         <members>Case</members>
@@ -143,7 +132,6 @@
         <members>CaseGatewayRequest</members>
         <members>ChatterActivity</members>
         <members>Claim</members>
-        <members>ClaimItem</members>
         <members>ClaimParticipant</members>
         <members>CollaborationGroup</members>
         <members>CollaborationGroupMember</members>
@@ -195,23 +183,9 @@
         <members>Legacy_Announcement__c</members>
         <members>Legacy_Folder__c</members>
         <members>Legacy_Note__c</members>
-        <members>LoanApplicant</members>
-        <members>LoanApplicantAddress</members>
-        <members>LoanApplicantAsset</members>
-        <members>LoanApplicantDeclaration</members>
-        <members>LoanApplicantEmployment</members>
-        <members>LoanApplicantIncome</members>
-        <members>LoanApplicantLiability</members>
-        <members>LoanApplicationAsset</members>
-        <members>LoanApplicationFinancial</members>
-        <members>LoanApplicationLiability</members>
-        <members>LoanApplicationProperty</members>
-        <members>LoanApplicationTitleHolder</members>
-        <members>Location</members>
         <members>Macro</members>
         <members>MacroAction</members>
         <members>MacroInstruction</members>
-        <members>MacroUsage</members>
         <members>MoneyGuidePro_License__c</members>
         <members>Nightly_Job_Finished__e</members>
         <members>Nightly_Run_Status__c</members>
@@ -219,8 +193,6 @@
         <members>OpportunityCompetitor</members>
         <members>OpportunityContactRole</members>
         <members>OpportunityLineItem</members>
-        <members>OrgMetricScanResult</members>
-        <members>OrgMetricScanSummary</members>
         <members>PartnerRole</members>
         <members>PersonAccount</members>
         <members>PersonEducation</members>
@@ -237,7 +209,6 @@
         <members>QuoteLineItem</members>
         <members>Recommendation</members>
         <members>RecordAction</members>
-        <members>RecordMergeHistory</members>
         <members>Recruit__c</members>
         <members>Related_Contact__c</members>
         <members>Rep_Assignment__c</members>
@@ -245,12 +216,9 @@
         <members>Rep_Split__c</members>
         <members>Rep__c</members>
         <members>RequestsForAccessSIQ</members>
-        <members>ResidentialLoanApplication</members>
         <members>Scorecard</members>
         <members>ScorecardAssociation</members>
         <members>ScorecardMetric</members>
-        <members>SecuritiesHolding</members>
-        <members>SecurityAssignmentConfiguration__c</members>
         <members>Service_Level_Defaults__c</members>
         <members>Site</members>
         <members>SocialPersona</members>
@@ -267,7 +235,6 @@
         <members>WorkBadge</members>
         <members>WorkBadgeDefinition</members>
         <members>WorkThanks</members>
-        <members>WorkerCompCoverageClass</members>
         <name>CustomObject</name>
     </types>
     <types>
