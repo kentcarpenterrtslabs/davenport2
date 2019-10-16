@@ -12,8 +12,6 @@ public class RepNumHouseholdSearchControllerTest {
     }
 
     @TestSetup static void setupData(){
-        SecurityAssignmentConfig.disableTriggers();
-
         SecurityAssignmentTestFactory.createData();
     }
 }

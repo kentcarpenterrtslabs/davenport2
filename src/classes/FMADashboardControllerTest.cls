@@ -5,8 +5,6 @@
 @isTest
 public class FMADashboardControllerTest {
     @TestSetup static void setupData(){
-        SecurityAssignmentConfig.disableTriggers();
-
         SecurityAssignmentTestFactory.createData();
     }
 }

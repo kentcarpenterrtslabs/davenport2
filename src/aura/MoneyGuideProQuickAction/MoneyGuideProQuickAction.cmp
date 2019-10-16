@@ -3,11 +3,12 @@
  -->
 
 <aura:component description="MoneyGuideProQuickAction" implements="force:lightningQuickAction,force:hasRecordId" controller="MoneyGuideProRequestController">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     <aura:attribute name="recordId" type="String" />
     <aura:attribute name="request" type="String" description="The request being submitted to MoneyGuidePro" />
     <aura:attribute name="requestDisplay" type="String" description="The request being submitted to MoneyGuidePro, with line breaks added for readability" />
     <aura:attribute name="response" type="Object" description="Response from MoneyGuidePro after a request is submitted" />
-    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<aura:attribute name="loginAsOptions" type="List" default="[]" />
 
     <p>This will initiate the SAML connection to MoneyGuidePro. Below is the response MGP will retrieve from Salesforce.</p>
 
@@ -16,10 +17,7 @@
     <aura:if isTrue="{!v.response == null}">
         <div class="slds-grid">
             <div class="slds-col">
-                Login as...
-                <select class="slds-select">
-                    <option>Myself</option>
-                </select>
+				<lightning:combobox aura:id="loginAsCmbx" name="loginAsCmbx" label="Login as:" options="{! v.loginAsOptions }" />
             </div>
             <div class="slds-col slds-p-top--medium">
                 <button class="slds-button slds-button--brand slds-float--right" onclick="{!c.submit}">Open MoneyGuidePro</button>

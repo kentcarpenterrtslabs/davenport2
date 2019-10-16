@@ -11,8 +11,6 @@ public class HouseholdFAControllerTest {
     }
 
     @TestSetup static void setupData(){
-        SecurityAssignmentConfig.disableTriggers();
-
         SecurityAssignmentTestFactory.createData();
     }
 }

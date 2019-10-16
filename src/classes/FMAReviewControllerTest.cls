@@ -42,8 +42,6 @@ public class FMAReviewControllerTest {
     }
 
     @TestSetup static void setupData(){
-        SecurityAssignmentConfig.disableTriggers();
-
         SecurityAssignmentTestFactory.createData();
     }
 }
