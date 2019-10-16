@@ -19,14 +19,14 @@
         </div>
         <div class="slds-card__body slds-card__body_inner">
             <div class="slds-grid">
-                <div class="slds-col slds-size--1-of-3">
+                <div class="slds-col slds-size--2-of-3">
                     <lightning:radioGroup
                             aura:id="radioButtonGroup"
                             name="radioButtonGroup"
                             options="{! v.options }"
                             value="{! v.value }" />
                 </div>
-                <div class="slds-col slds-p-top--small">
+                <div class="slds-col slds-p-top--small slds-size--1-of-3">
                     <lightning:button variant="brand" label="Submit" title="Submit" onclick="{! c.handleSubmit }" />
                 </div>
             </div>
