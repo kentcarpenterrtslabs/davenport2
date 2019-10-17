@@ -101,7 +101,11 @@
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
-        <members>*</members>
+        <members>FinServ__IndividualRecordTypeMapper.Contact_Client</members>
+        <members>FinServ__IndividualRecordTypeMapper.Contact_Non_Client</members>
+        <members>FinServ__IndividualRecordTypeMapper.Contact_Prospect</members>
+        <members>FinServ__IndividualRecordTypeMapper.PersonAccount</members>
+        <members>MGP_Configuration.MGP</members>
         <name>CustomMetadata</name>
     </types>
     <types>
