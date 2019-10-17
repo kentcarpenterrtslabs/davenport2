@@ -4,134 +4,123 @@
 
 @isTest
 public class MoneyGuideProRequestControllerTest {
-    @isTest static void testGenerateXml(){
-        Id householdId = [select id from Account limit 1][0].Id;
-        String result = MoneyGuideProRequestController.buildRequestBody(householdId);
-        System.assertNotEquals(result, null);
-        System.debug(result);
-        MoneyGuideProRequestController.sendRequest(householdId);
-        MoneyGuideProRequestController.updateUser(householdId, UserInfo.getUserId());
 
-        MoneyGuideProRequestController.getPicklistOptions(householdId);
-    }
+	@IsTest
+	public static void test_updateUser() {
 
-    @isTest static void testBuildHoldings(){
-        MoneyGuideProRequestController.buildHoldings(null, new List<FinServ__FinancialHolding__c>{
-            new FinServ__FinancialHolding__c(
-                Cost_Basis__c = 1234,
-                Finserv__Shares__c = 1234
-            )
-        });
-    }
+        Id profileId = [Select Id from Profile where Name = 'Standard User' limit 1][0].Id;
 
-    @isTest static void testBuildCoclients(){
-        MoneyGuideProRequestController.buildCoclients(new List<Contact>{
-                new Contact(
-                    LastName = 'Test',
-                    MailingState = 'VA'
-                )
-        });
-    }
+		User user1 = new User(
+			Username = 'daventestuser1@test.com',
+			FirstName = 'Test1',
+			LastName = 'TestUser1',
+			Email = 'testuser1@test.com',
+			Alias = 'tus1',
+			Davenport_Username__c = 'testuser1',
+			ProfileId = profileId,
+			EmailEncodingKey = 'UTF-8',
+			LanguageLocaleKey = 'en_US',
+			LocaleSidKey = 'en_US',
+			TimeZoneSidKey = 'America/Los_Angeles');
+		insert user1;
 
-    @isTest static void testBuildClient(){
-        MoneyGuideProRequestController.buildClient(new Account(
-                LastName = 'Test'
-        ));
-    }
+		User user2 = new User(
+			Username = 'daventestuser2@test.com',
+			FirstName = 'test2',
+			LastName = 'TestUser2',
+			MGP_User_ID__c = 'mgp.testuser2@test.com',
+			Email = 'testuser2@test.com',
+			Alias = 'tus2',
+			Davenport_Username__c = 'testuser2',
+			ProfileId = profileId,
+			EmailEncodingKey = 'UTF-8',
+			LanguageLocaleKey = 'en_US',
+			LocaleSidKey = 'en_US',
+			TimeZoneSidKey = 'America/Los_Angeles');
+		insert user2;
+	
+		Rep__c rep1 = new Rep__c(
+			Rep_Number__c = 'TS01'
+		);
+		insert rep1;
 
-    @isTest static void testBuildInvestmentAssets(){
-        MoneyGuideProRequestController.buildInvestmentAssets(new List<FinServ__FinancialAccount__c>{
-            new FinServ__FinancialAccount__c(
-                Name = 'Test'
-            )
-        }, new List<FinServ__FinancialHolding__c>{
-                new FinServ__FinancialHolding__c(
-                        Cost_Basis__c = 1234,
-                        Finserv__Shares__c = 1234
-                )
-        });
-    }
+		Group groupRep1 = new Group(
+			Name = 'Rep-' + rep1.Rep_Number__c + '-' + rep1.Id
+		);
+		insert groupRep1;
+		rep1.GroupId__c = groupRep1.Id;
+		update rep1;
 
-    @TestVisible @TestSetup public static void setupData(){
-        Account household = new Account(
-            Name = 'Test Household'
-        );
-        insert household;
+		User thisUser = [ select Id from User where Id = :UserInfo.getUserId() ];
+		System.runAs ( thisUser ) {
+			GroupMember groupMember1 = new GroupMember(
+				GroupId = groupRep1.Id,
+				UserOrGroupId = user1.Id
+			);
+			insert groupMember1;
 
-        Account individual = new Account(
-            LastName = 'Test Individual',
-            RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get(SecurityAssignmentTestFactory.INDIVIDUAL_RECORDTYPE_NAME).getRecordTypeId()
-        );
-        insert individual;
+			GroupMember groupMember2 = new GroupMember(
+				GroupId = groupRep1.Id,
+				UserOrGroupId = user2.Id
+			);
+			insert groupMember2;
+		}
 
-        FinServ__FinancialAccount__c testFinAcct = new FinServ__FinancialAccount__c(
-            FinServ__Household__c = household.Id,
-            FinServ__PrimaryOwner__c = individual.Id,
-            FinServ__JointOwner__C = null,
-            FinServ__FinancialAccountSource__c = 'Manually Entered',
-            Cost_Basis__c = 123.45,
-            FinServ__Description__c = 'This is a description of my financial account.'
-        );
+		Id householdRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Household').getRecordTypeId();
+        Id clientRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Contact Client/Prospect').getRecordTypeId();
 
-        FinServ__FinancialAccount__c testFinAcct2 = new FinServ__FinancialAccount__c(
-            FinServ__Household__c = household.Id,
-            FinServ__PrimaryOwner__c = individual.Id,
-            FinServ__JointOwner__c = null,
-            FinServ__FinancialAccountSource__c = 'Manually Entered',
-            Cost_Basis__c = 9999.12,
-            FinServ__Description__c = 'This is a description of my other financial account.'
-        );
-        insert new List<FinServ__FinancialAccount__c>{ testFinAcct, testFinAcct2 };
+		Account account1 = new Account(Name = 'test account one', RecordTypeId = householdRecordTypeId);
+		insert account1;
 
-        //System.assertEquals(household.Id, [Select FinServ__Household__c from FinServ__FinancialAccount__c where Id = :testFinAcct.Id limit 1][0].FinServ__Household__c, 'The correct household should be assigned');
+		Account client1 = new Account(LastName = 'test client one', RecordTypeId = clientRecordTypeId);
+		insert client1;
 
-        FinServ__Securities__c security = new FinServ__Securities__c(
-            FinServ__AssetCategory__c = 'U.S. Equity',
-            FinServ__AssetCategoryName__c = 'Large Growth',
-            FinServ__AssetClass__c = 'Equities',
-            FinServ__CUSIP__c = '037833100',
-            FinServ__Exchange__c = 'NASDAQ',
-            FinServ__LastUpdated__c = Date.today(),
-            FinServ__Price__c = 1234.56,
-            FinServ__SecuritiesName__c = 'TestSecurity',
-            Name = 'AAPL'
-        );
+		AccountShare accountShare1 = new AccountShare(
+			RowCause = 'Manual',
+			AccountAccessLevel = 'Edit',
+			OpportunityAccessLevel = 'Edit',
+			AccountId = account1.Id,
+			UserOrGroupId = groupRep1.Id
+		);
+		insert accountShare1;
 
-        FinServ__Securities__c security2 = new FinServ__Securities__c(
-            FinServ__AssetCategory__c = 'U.S. Equity',
-            FinServ__AssetCategoryName__c = 'Large Growth',
-            FinServ__AssetClass__c = 'Equities',
-            FinServ__CUSIP__c = '935935935',
-            FinServ__Exchange__c = 'NASDAQ',
-            FinServ__LastUpdated__c = Date.today(),
-            FinServ__Price__c = 7777.00,
-            FinServ__SecuritiesName__c = 'TestSecurity2',
-            Name = 'MSFT'
-        );
-        insert new List<FinServ__Securities__c>{ security, security2 };
+		FinServ__FinancialAccount__c financialAccount1 = new FinServ__FinancialAccount__c(
+			Name = 'financial account one',
+			Rep__c = rep1.Id,
+			FinServ__PrimaryOwner__c = client1.Id);
+		insert financialAccount1;
 
-        FinServ__FinancialHolding__c holding = new FinServ__FinancialHolding__c(
-            FinServ__FinancialAccount__c = testFinAcct.Id,
-            FinServ__Shares__c = 123,
-            Cost_Basis__c = 81365.20,
-            FinServ__MarketValue__c = 62.00,
-            FinServ__Securities__c = security.Id
-        );
-        FinServ__FinancialHolding__c holding2 = new FinServ__FinancialHolding__c(
-            FinServ__FinancialAccount__c = testFinAcct.Id,
-            FinServ__Shares__c = 10,
-            Cost_Basis__c = 81365.20,
-            FinServ__MarketValue__c = 9319519.00,
-            FinServ__Securities__c = security2.Id
-        );
-        FinServ__FinancialHolding__c holding3 = new FinServ__FinancialHolding__c(
-            FinServ__FinancialAccount__c = testFinAcct2.Id,
-            FinServ__Shares__c = 15,
-            Cost_Basis__c = 81365.20,
-            FinServ__MarketValue__c = 9319519.00,
-            FinServ__Securities__c = security.Id
-        );
-        //insert holding;
-        insert new List<FinServ__FinancialHolding__c>{ holding, holding2, holding3 };
-    }
+		FinServ__FinancialAccount__Share financialAcountShare1 = new FinServ__FinancialAccount__Share(
+			AccessLevel = 'Edit',
+			ParentId = financialAccount1.Id,
+			RowCause = 'RTSSecurityAssignment__c',
+			UserOrGroupId = groupRep1.Id);
+		insert financialAcountShare1;
+
+		System.runAs(user1) {
+			String url = MoneyGuideProRequestController.updateUser(account1.Id,user2.Id);
+			System.assertNotEquals(0, url.length());
+		}
+
+		User user1After = [
+			SELECT
+				Id,
+				SAML_UserId__c,
+				SAML_HHID__c,
+				SAML_MGP_FirstName__c,
+				SAML_MGP_LastName__c,
+				SAML_MGP_Username__c
+			FROM User
+			WHERE Id = :user1.Id
+		];
+		System.assertEquals(user2.Id, user1After.SAML_UserID__c);
+		System.assertEquals(account1.Id, user1After.SAML_HHID__c);
+		System.assertEquals(user2.FirstName, user1After.SAML_MGP_FirstName__c);
+		System.assertEquals(user2.LastName, user1After.SAML_MGP_LastName__c);
+		System.assertEquals(user2.MGP_User_ID__c, user1After.SAML_MGP_Username__c);
+
+		List<User> picklistOptions = MoneyGuideProRequestController.getPicklistOptions(account1.Id);
+		System.assertEquals(1, picklistOptions.size());
+		System.assertEquals(user2.Id, picklistOptions[0].Id);
+	}
 }

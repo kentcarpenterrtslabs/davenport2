@@ -257,6 +257,36 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>SAML_MGP_FirstName__c</fullName>
+        <externalId>false</externalId>
+        <label>SAML_MGP_FirstName</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SAML_MGP_LastName__c</fullName>
+        <externalId>false</externalId>
+        <label>SAML_MGP_LastName</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SAML_MGP_Username__c</fullName>
+        <externalId>false</externalId>
+        <label>SAML_MGP_Username</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>SAML_UserID__c</fullName>
         <externalId>false</externalId>
         <label>SAML UserID</label>
