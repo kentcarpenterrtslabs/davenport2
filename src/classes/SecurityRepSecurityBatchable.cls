@@ -16,15 +16,10 @@ global class SecurityRepSecurityBatchable implements Database.Batchable<SObject>
    	global void execute(Database.BatchableContext context, List<Rep_Security__c> scope) {
 
 		Set<String> davenportUserNames = new Set<String>();
-		Set<String> repTypeDavenportUserNames = new Set<String>();
 		Set<String> repNumbers = new Set<String>();
-			
 
 		for (Rep_Security__c repSecurity : scope) {
-			if ('Rep' == repSecurity.Type__c) {
-				davenportUserNames.add(repSecurity.Davenport_Username__c);
-				repTypeDavenportUserNames.add(repSecurity.Davenport_Username__c);
-			}
+			davenportUserNames.add(repSecurity.Davenport_Username__c);
 			repNumbers.add(repSecurity.Rep_Number__c);
 		}
 

@@ -11,6 +11,8 @@ public with sharing class RepAssignmentController {
 			User__r.Id,
 			User__r.Name
 		FROM Rep_Security__c
+		WHERE Rep__c != null
+		AND User__c != null
     ];
     
     return repAssignmentData;

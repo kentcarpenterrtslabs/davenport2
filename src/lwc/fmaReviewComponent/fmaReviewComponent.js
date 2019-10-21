@@ -164,28 +164,30 @@ export default class FmaReviewComponent extends NavigationMixin(LightningElement
         let uniqueUsersList = []
 
         createUniqueRepList = data.map(user => {
-            let userId = user.User__r.Id;
-            if (uniqueUsersList.indexOf(userId) === -1){
-                uniqueUsersList.push(userId);
+			if (typeof user.User__r !== "undefined") {
+				let userId = user.User__r.Id;
+				if (uniqueUsersList.indexOf(userId) === -1){
+					uniqueUsersList.push(userId);
             
-                let sObj = {
-                    repName: user.User__r.Name,
-                    repId: user.User__r.Id,
-                    repNumbers: [user.Rep__r.Rep_Number__c],
-                    repNumberIds: [user.Rep__r.Id]
-                };
-                repDataList.push(sObj);
-            }
-            else {
-                for (let i=0; i<repDataList.length; i++){
-                    let numArray = repDataList[i].repNumbers;
-                    let idArray = repDataList[i].repNumberIds;
-                    if (repDataList[i].repName === user.User__r.Name){
-                        numArray.push(user.Rep__r.Rep_Number__c);
-                        idArray.push(user.Rep__r.Id); 
-                    }
-                }
-            }
+					let sObj = {
+						repName: user.User__r.Name,
+						repId: user.User__r.Id,
+						repNumbers: [user.Rep__r.Rep_Number__c],
+						repNumberIds: [user.Rep__r.Id]
+					};
+					repDataList.push(sObj);
+				}
+				else {
+					for (let i=0; i<repDataList.length; i++){
+						let numArray = repDataList[i].repNumbers;
+						let idArray = repDataList[i].repNumberIds;
+						if (repDataList[i].repName === user.User__r.Name){
+							numArray.push(user.Rep__r.Rep_Number__c);
+							idArray.push(user.Rep__r.Id); 
+						}
+					}
+				}
+			}
         })
      
         this.repDataList = repDataList;
