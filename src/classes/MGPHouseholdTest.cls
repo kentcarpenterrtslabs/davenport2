@@ -28,7 +28,7 @@ public with sharing class MGPHouseholdTest {
         MGPHousehold.buildHoldings(null, new List<FinServ__FinancialHolding__c>{
             new FinServ__FinancialHolding__c(
                 Cost_Basis__c = 1234,
-                Finserv__Shares__c = 1234
+                Quantity__c = 1234
             )
         });
     }
@@ -56,7 +56,7 @@ public with sharing class MGPHouseholdTest {
         }, new List<FinServ__FinancialHolding__c>{
                 new FinServ__FinancialHolding__c(
                         Cost_Basis__c = 1234,
-                        Finserv__Shares__c = 1234
+                        Quantity__c = 1234
                 )
         });
     }
@@ -121,21 +121,21 @@ public with sharing class MGPHouseholdTest {
 
         FinServ__FinancialHolding__c holding = new FinServ__FinancialHolding__c(
             FinServ__FinancialAccount__c = testFinAcct.Id,
-            FinServ__Shares__c = 123,
+            Quantity__c = 123,
             Cost_Basis__c = 81365.20,
             FinServ__MarketValue__c = 62.00,
             FinServ__Securities__c = security.Id
         );
         FinServ__FinancialHolding__c holding2 = new FinServ__FinancialHolding__c(
             FinServ__FinancialAccount__c = testFinAcct.Id,
-            FinServ__Shares__c = 10,
+            Quantity__c = 10,
             Cost_Basis__c = 81365.20,
             FinServ__MarketValue__c = 9319519.00,
             FinServ__Securities__c = security2.Id
         );
         FinServ__FinancialHolding__c holding3 = new FinServ__FinancialHolding__c(
             FinServ__FinancialAccount__c = testFinAcct2.Id,
-            FinServ__Shares__c = 15,
+            Quantity__c = 15,
             Cost_Basis__c = 81365.20,
             FinServ__MarketValue__c = 9319519.00,
             FinServ__Securities__c = security.Id

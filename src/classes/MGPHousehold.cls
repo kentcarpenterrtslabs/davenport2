@@ -35,17 +35,20 @@ global with sharing class MGPHousehold {
 
         List<FinServ__FinancialAccount__c> finAccts = [Select Id,
                 FinServ__FinancialAccountSource__c,
-                FinServ__CurrentPostedBalance__c,
+				Total_Acct_Value__c,
+				Inst_code_desc__c,
                 Cost_Basis__c,
                 OwnerId,
-                FinServ__Description__c
+                FinServ__Description__c,
+				Performance_As_Of_Date__c
             from Finserv__FinancialAccount__c
             where FinServ__Household__c = :householdId
         ];
 
         List<FinServ__FinancialHolding__c> holdings = [Select Id,
+				Name,
                 FinServ__Symbol__c,
-                FinServ__Shares__c,
+                Quantity__c,
                 Cost_Basis__c,
                 FinServ__MarketValue__c,
                 FinServ__FinancialAccount__c
@@ -102,12 +105,12 @@ global with sharing class MGPHousehold {
         for (FinServ__FinancialAccount__c finAcct : finAccts){
             result += '<InvestmentAsset id="' + finAcct.Id + '">' +
                     '<Source>' + finAcct.FinServ__FinancialAccountSource__c + '</Source>' + // -> Held Account, Aggregated Account, Manually Entered
-                    '<CurrentValue>' + finAcct.FinServ__CurrentPostedBalance__c + '</CurrentValue>' +
+                    '<CurrentValue>' + finAcct.Total_Acct_Value__c + '</CurrentValue>' +
                     '<CostBasis>' + finAcct.Cost_Basis__c + '</CostBasis>' + //Amount can be passed at Account or Holding Level
                     '<Owner>' + finAcct.OwnerId + '</Owner>' +
-                    '<Type></Type>' + // not sure what goes here
-                    '<Company></Company>' + // not sure what goes here
-                    '<Description>' + finAcct.FinServ__Description__c + '</Description>'
+                    '<Type>' + finAcct.Inst_code_desc__c + '</Type>' + // Unique account type (taxable, Roth IRA, 401k, etc)
+                    '<Description>' + finAcct.FinServ__Description__c + '</Description>' +
+                    '<AsOfDate>' + finAcct.Performance_As_Of_Date__c + '</AsOfDate>'
                     + buildHoldings(finAcct.Id, holdings)
                     + '</InvestmentAsset>';
         }
@@ -121,9 +124,9 @@ global with sharing class MGPHousehold {
         for (FinServ__FinancialHolding__c holding : holdings){
             if (holding.FinServ__FinancialAccount__c == finAcctId){
                 result += '<Holding id="' + holding.Id +  '">' +
-                            '<Description></Description>' + // no description field on holding in SF
+                            '<Description>' + holding.Name + '</Description>' + 
                             '<Ticker>' + holding.FinServ__Symbol__c + '</Ticker>' +
-                            '<Quantity>' + holding.FinServ__Shares__c + '</Quantity>' +
+                            '<Quantity>' + holding.Quantity__c + '</Quantity>' +
                             '<CostBasis>' + holding.Cost_Basis__c + '</CostBasis>' + //Can be passed at account or holding level
                             '<CurrentValue>' + holding.FinServ__MarketValue__c + '</CurrentValue>' +
                           '</Holding>';
