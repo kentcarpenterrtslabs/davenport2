@@ -82,12 +82,10 @@
     <compactLayouts>
         <fullName>FinServ__HouseholdCompactLayout</fullName>
         <fields>Name</fields>
-        <fields>Icon__c</fields>
-        <fields>Phone_Email__c</fields>
-        <fields>Tier__c</fields>
-        <fields>Relationship_Call_Status__c</fields>
-        <fields>Portfolio_Review_Status__c</fields>
-        <fields>In_Person_Meeting_Status__c</fields>
+        <fields>FinServ__TotalFinancialAccounts__c</fields>
+        <fields>FinServ__AUM__c</fields>
+        <fields>FinServ__NextInteraction__c</fields>
+        <fields>FinServ__LastInteraction__c</fields>
         <label>Household Compact Layout</label>
     </compactLayouts>
     <compactLayouts>
@@ -1814,6 +1812,20 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>FinServ__ClaimsOnHouseholdPolicies__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The total number of claims that were ever raised for the policies currently owned by the policyholder&apos;s primary household.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This includes all the claims (irrespective of their current status), including the ones that are settled, as long as the related policy is active.</inlineHelpText>
+        <label>Claims on Household Policies</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>FinServ__ClientCategory__c</fullName>
         <deprecated>false</deprecated>
         <externalId>false</externalId>
@@ -2045,6 +2057,20 @@
         <visibleLines>4</visibleLines>
     </fields>
     <fields>
+        <fullName>FinServ__HouseholdPolicies__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The total number of policies currently owned by the policyholder&apos;s primary household.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This is the count of the policies owned by the members in the household. For example, if the Rachel Adam&apos;s primary household has three members, including Rachel, and each of them owns two policies, this field will show a value of 6.</inlineHelpText>
+        <label>Household Policies</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>FinServ__IndividualId__c</fullName>
         <caseSensitive>true</caseSensitive>
         <deprecated>false</deprecated>
@@ -2081,6 +2107,16 @@
                 </value>
             </valueSetDefinition>
         </valueSet>
+    </fields>
+    <fields>
+        <fullName>FinServ__InsuranceCustomerSince__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Represents the insurance relationship start date. This field can be used in both B2B, and B2C cases</description>
+        <externalId>false</externalId>
+        <label>Insurance Customer Since</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
     </fields>
     <fields>
         <fullName>FinServ__InvestmentExperience__c</fullName>
@@ -2777,6 +2813,19 @@ if(And( month(Today())= month(FinServ__RelationshipStartDate__c), Day(Today())&l
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>FinServ__TotalClaimAmountPaid__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total amount paid for all the claims that were ever raised for the policies currently owned by the policyholder&apos;s primary household.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This includes amount paid for all the claims (irrespective of their current status), including the ones that are settled, as long as the related policy is active.</inlineHelpText>
+        <label>Total Claim Amount Paid</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>FinServ__TotalFinAcctsJointOwner__c</fullName>
         <deprecated>false</deprecated>
         <description>Calculated total of jointly owned financial account balances for which the client is the joint owner.</description>
@@ -2831,6 +2880,19 @@ if(And( month(Today())= month(FinServ__RelationshipStartDate__c), Day(Today())&l
         <description>Calculated total of held financial account balances where the client is the primary owner of either individually owned or jointly owned accounts.</description>
         <externalId>false</externalId>
         <label>Total Held Financial Accounts Primary</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FinServ__TotalHouseholdPremiums__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total premiums for all the policies currently owned by the policyholder&apos;s primary household.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This is the sum of gross written premium (GWP) for all the active policies currently owned by the household.</inlineHelpText>
+        <label>Total Household Premiums</label>
         <precision>18</precision>
         <required>false</required>
         <scale>2</scale>
@@ -3640,6 +3702,14 @@ FLOOR( 365 / Relationship_Calls_Year__c) + Last_Relationship_Call__c ), null)</f
         <trackFeedHistory>false</trackFeedHistory>
     </fields>
     <fields>
+        <fullName>PhoneB__c</fullName>
+        <externalId>false</externalId>
+        <label>PhoneB</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Phone</type>
+    </fields>
+    <fields>
         <fullName>Phone_Email__c</fullName>
         <description>Phone+ Email - For display on Compact Layout only</description>
         <externalId>false</externalId>
@@ -4184,6 +4254,24 @@ IMAGE(&quot;/img/samples/color_red.gif&quot;, &quot;Overdue&quot;, 16,100))
             <value>Group</value>
         </filters>
         <label>My Groups</label>
+        <language>en_US</language>
+    </listViews>
+    <listViews>
+        <fullName>FinServ__My_Institutions</fullName>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>FinServ__ClientCategory__c</columns>
+        <columns>FinServ__TotalFinancialAccounts__c</columns>
+        <columns>FinServ__AUM__c</columns>
+        <columns>FinServ__WalletShare__c</columns>
+        <columns>FinServ__LastInteraction__c</columns>
+        <columns>FinServ__NextInteraction__c</columns>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>ACCOUNT.RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Account.FinServ__IndustriesInstitution</value>
+        </filters>
+        <label>My Institutions</label>
         <language>en_US</language>
     </listViews>
     <listViews>
@@ -6150,12 +6238,12 @@ IMAGE(&quot;/img/samples/color_red.gif&quot;, &quot;Overdue&quot;, 16,100))
     <validationRules>
         <fullName>FinServ__SingleReferredByEntryByRecord</fullName>
         <active>true</active>
-        <errorConditionFormula>AND( 
-                ISBLANK(FinServ__ConversionDateTime__c), 
-                AND( 
-                    NOT(ISBLANK(FinServ__ReferredByUser__c)), 
-                    NOT(ISBLANK(FinServ__ReferredByContact__c)) 
-                ) 
+        <errorConditionFormula>AND(
+                ISBLANK(FinServ__ConversionDateTime__c),
+                AND(
+                    NOT(ISBLANK(FinServ__ReferredByUser__c)),
+                    NOT(ISBLANK(FinServ__ReferredByContact__c))
+                )
             )</errorConditionFormula>
         <errorDisplayField>FinServ__ReferredByContact__c</errorDisplayField>
         <errorMessage>Enter an internal referrer or an external referrer. You can list only one referrer for each referral.</errorMessage>

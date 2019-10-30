@@ -78,7 +78,6 @@
         <members>UPIAccessToggleControllerTest</members>
         <members>VfpageUrlGenerator</members>
         <members>VfpageUrlGeneratorTest</members>
-        <members>createPercentsTriggerTest</members>
         <members>getTaskPicklist</members>
         <members>newCall</members>
         <name>ApexClass</name>
@@ -93,7 +92,6 @@
     </types>
     <types>
         <members>NightlyRunStatusTrigger</members>
-        <members>createPercentsTrigger</members>
         <name>ApexTrigger</name>
     </types>
     <types>
