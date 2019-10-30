@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
+        <members>AccountTriggerHandler</members>
         <members>ActivityController</members>
         <members>ActivityControllerTest</members>
         <members>EventToFMABatchable</members>
@@ -91,6 +92,7 @@
         <name>ApexPage</name>
     </types>
     <types>
+        <members>AccountTrigger</members>
         <members>NightlyRunStatusTrigger</members>
         <name>ApexTrigger</name>
     </types>
