@@ -217,8 +217,6 @@ public class AccountTriggerHandler  {
 					parentAccount.Daml_Email__c = primaryContactAccount.Daml_Email__c;
 				}
 			}
-
-			update allPrimaryContactAccounts;
 		}
 	}
 }
