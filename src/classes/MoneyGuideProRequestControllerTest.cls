@@ -119,8 +119,8 @@ public class MoneyGuideProRequestControllerTest {
 		System.assertEquals(user2.LastName, user1After.SAML_MGP_LastName__c);
 		System.assertEquals(user2.MGP_User_ID__c, user1After.SAML_MGP_Username__c);
 
-		List<User> picklistOptions = MoneyGuideProRequestController.getPicklistOptions(account1.Id);
-		System.assertEquals(1, picklistOptions.size());
-		System.assertEquals(user2.Id, picklistOptions[0].Id);
+		MoneyGuideProRequestController.HouseholdData householdData = MoneyGuideProRequestController.getHouseholdData(account1.Id);
+		System.assertEquals(1, householdData.mgpUsers.size());
+		System.assertEquals(user2.Id, householdData.mgpUsers[0].Id);
 	}
 }
