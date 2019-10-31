@@ -4,25 +4,30 @@
 ({
     doInit: function(component, event, helper){
 
-        var action = component.get("c.getPicklistOptions");
+        var action = component.get("c.getHouseholdData");
         action.setParam('householdId', component.get("v.recordId"));
 
         action.setCallback(this, function(response) {
             var state = response.getState();
 
             if (state == 'SUCCESS') {
-                var users = response.getReturnValue();
-				console.log('getPicklistOptions users' + users);
+                var householdInfo = response.getReturnValue();
+				console.log('getPicklistOptions users' + householdInfo.mgpUsers);
 				var loginAsOptions = [];
-                users.forEach(function(user) {
+                householdInfo.mgpUsers.forEach(function(user) {
                     loginAsOptions.push({
                         "label" : user.FirstName + ' ' + user.LastName,
                         "value" : user.Id
                     });
                 });
 				component.set("v.loginAsOptions", loginAsOptions);
-                //component.set("v.requestDisplay", helper.formatXml(returnValue));
+				component.set("v.allowOpenMGP", householdInfo.hasPrimaryContact);
 
+				//if (! householdInfo.hasPrimaryContact) {
+				//	var error = {};
+				//	error.message = "This household does not have a primary contact. This is required to use Money Guide Pro.";
+				//	component.find("errorMessage").setError(error);
+				//}
             } else {
 
                 console.log('getPicklistOptions ' + state);

@@ -2,6 +2,11 @@ public class MoneyGuideProRequestController {
     //static String redirectToUrl = 'https://qa.moneyguidepro.com/davenport/ssosamlnoref.aspx?IntegrationId=170';
     //static String endpointUrl = 'https://qa.moneyguidepro.com/davenport/ssosamlnoref.aspx?IntegrationId=170';
 
+	public class HouseholdData {
+		@AuraEnabled public Boolean hasPrimaryContact;
+		@AuraEnabled public List<User> mgpUsers;
+	}
+
     @AuraEnabled public static string updateUser(String householdId, String userId){
 		Id myUserId = UserInfo.getUserId();
 		Id mgpUsrId = (userId == null ? myUserId : userId);
@@ -46,9 +51,17 @@ public class MoneyGuideProRequestController {
 		//return MGP_Config__c.getInstance().SAML_IdP_Initiated_Login_URL__c;
     }
 
-    @AuraEnabled public static List<User> getPicklistOptions(Id householdId){
+    @AuraEnabled
+	public static MoneyGuideProRequestController.HouseholdData getHouseholdData(Id householdId){
 		String userTypePrefix = Schema.SObjectType.User.getKeyPrefix();
         String groupTypePrefix = Schema.SObjectType.Group.getKeyPrefix();
+
+        Account household = [
+			select Id,
+                FinServ__PrimaryContact__c
+            from Account
+			where Id = :householdId
+        ];
 
 		//System.debug('userTypePrefix = ' + userTypePrefix);
 		//System.debug('groupTypePrefix = ' + groupTypePrefix);
@@ -118,7 +131,11 @@ public class MoneyGuideProRequestController {
 		];
 
 		//System.debug(JSON.serializePretty(users));
-		return users;
+		MoneyGuideProRequestController.HouseholdData householdData = new MoneyGuideProRequestController.HouseholdData();
+		
+		householdData.hasPrimaryContact = (null != household.FinServ__PrimaryContact__c);
+		householdData.mgpUsers = users;
+		
+		return householdData;
    }
-
 }

@@ -186,7 +186,7 @@ global with sharing class MGPHousehold {
 		if (null != primaryContact) {
 			buildClients(w, primaryContact, true);
 		}
-		buildClients(w, coclients, false);
+		//buildClients(w, coclients, false); MGP requires a single co-client, but the Davenport data does not support a way to pick a single co-client
 		w.writeEndElement();
 
 		w.writeStartElement(null, 'Resources', null);
