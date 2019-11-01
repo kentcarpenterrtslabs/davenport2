@@ -10,7 +10,7 @@ public class MGPHouseholdTest {
 			SELECT
 				Id
 			FROM Account
-			WHERE Name = 'Household-02'
+			WHERE Name = 'Household-01'
 			LIMIT 1][0].Id;
         RestRequest req = new RestRequest();
         RestResponse res = new RestResponse();
@@ -112,6 +112,7 @@ public class MGPHouseholdTest {
         client0101 = [select Id, PersonContactId from Account where id = :client0101.id];
         client0102 = [select Id, PersonContactId from Account where id = :client0102.id];
         System.debug('DataSetup: Assigning PrimaryContact: ' + client0102.PersonContactId);
+
         Account hh01 = new Account (RecordTypeId=hh_id, Name='Household-01', FinServ__PrimaryContact__c  = client0102.PersonContactId);
         insert hh01;
         hh01 = [select Id, BillingCity from Account where id = :hh01.id];
@@ -175,7 +176,7 @@ public class MGPHouseholdTest {
         insert rep05;
        
         // create financial accounts
-        FinServ__FinancialAccount__c fin010101 = new FinServ__FinancialAccount__c(Name='fin0101-(Bailey)', FinServ__PrimaryOwner__c = client0101.Id,
+        FinServ__FinancialAccount__c fin010101 = new FinServ__FinancialAccount__c(Name='fin0101-(Bailey)', FinServ__PrimaryOwner__c = client0102.Id,
                                                                                   FinServ__Household__c = hh01.Id,
                                                                                   Rep__c = rep01.Id,
                                                                                   //Rep_Number__c = rep01.Id,
@@ -184,7 +185,7 @@ public class MGPHouseholdTest {
                                                                                   Fixed_Income_Value__c = 10,
                                                                                   Other_Value__c = 10,
                                                                                   FinServ__Balance__c = 40);
-        FinServ__FinancialAccount__c fin010102 = new FinServ__FinancialAccount__c(Name='fin0101-(Jim)', FinServ__PrimaryOwner__c = client0101.Id,
+        FinServ__FinancialAccount__c fin010102 = new FinServ__FinancialAccount__c(Name='fin0101-(Jim)', FinServ__PrimaryOwner__c = client0102.Id,
                                                                                   FinServ__Household__c = hh01.Id,
                                                                                   Rep__c = rep02.Id,
                                                                                   //Rep_Number__c = rep02.Id,
