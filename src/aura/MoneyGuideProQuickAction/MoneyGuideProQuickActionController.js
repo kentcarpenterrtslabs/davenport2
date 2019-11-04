@@ -21,13 +21,16 @@
                     });
                 });
 				component.set("v.loginAsOptions", loginAsOptions);
-				component.set("v.allowOpenMGP", householdInfo.hasPrimaryContact);
 
-				//if (! householdInfo.hasPrimaryContact) {
-				//	var error = {};
-				//	error.message = "This household does not have a primary contact. This is required to use Money Guide Pro.";
-				//	component.find("errorMessage").setError(error);
-				//}
+				if (! householdInfo.hasPrimaryContact) {
+					component.set("v.cannotOpenMGPTitle","No Primary Contact On This Account");
+					component.set("v.cannotOpenMGPReason","A household must have a primary contact to use Money Guide Pro.");
+				} else if (householdInfo.mgpUsers.length <= 0) {
+					component.set("v.cannotOpenMGPTitle","No Money Guide Pro Users Can Access This Account");
+					component.set("v.cannotOpenMGPReason","There are no users that have access to this household and have access to Money Guide Pro.");
+				} else {
+					component.set("v.allowOpenMGP", true);
+				}
             } else {
 
                 console.log('getPicklistOptions ' + state);
@@ -62,7 +65,6 @@
 					});
 					eUrl.fire();
 				} else {
-					//console.log('buildRequestBody ' + state);
 					console.log(response.getError());
 				}
 			});

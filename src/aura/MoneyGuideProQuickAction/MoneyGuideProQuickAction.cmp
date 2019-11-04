@@ -9,9 +9,9 @@
     <aura:attribute name="requestDisplay" type="String" description="The request being submitted to MoneyGuidePro, with line breaks added for readability" />
     <aura:attribute name="response" type="Object" description="Response from MoneyGuidePro after a request is submitted" />
 	<aura:attribute name="loginAsOptions" type="List" default="[]" />
-	<aura:attribute name="allowOpenMGP" type="Boolean" />
-
-    <div class="request">{!v.requestDisplay}</div>
+	<aura:attribute name="allowOpenMGP" type="Boolean" default="false" />
+	<aura:attribute name="cannotOpenMGPTitle" type="String" />
+	<aura:attribute name="cannotOpenMGPReason" type="String" />
 
     <aura:if isTrue="{!v.response == null}">
         <div class="slds-grid_vertical">
@@ -27,8 +27,8 @@
 					</div>
 				<aura:set attribute="else">
 					<div class="slds-col">
-						<ui:message title="No Pirmary Contact" severity="error" closable="false">
-							This household does not have a primary contact. This is required to use Money Guide Pro.
+						<ui:message title="{! v.cannotOpenMGPTitle}" severity="error" closable="false">
+							{! v.cannotOpenMGPReason }
 						</ui:message>
 					</div>
 				</aura:set>
