@@ -2,34 +2,6 @@
  * Created by Eric Stansbury on 4/29/2019.
  */
 ({
-    doInit: function(component, event, helper){
-        // populate searchableFields from field set
-        var getSearchableFieldsAction = component.get("c.getSearchableFields");
-        getSearchableFieldsAction.setCallback(this, function(response){
-            var state = response.getState();
-            if (state == 'SUCCESS'){
-                var fields = JSON.parse(response.getReturnValue());;
-                console.log('searchableFields', fields);
-                component.set("v.searchableFields", fields);
-            }else{
-                throw response.getError();
-            }
-        });
-
-        var getResultFieldsAction = component.get("c.getResultFields");
-        getResultFieldsAction.setCallback(this, function(response){
-            var state = response.getState();
-            if (state == 'SUCCESS'){
-                var fields = JSON.parse(response.getReturnValue());;
-                console.log('resultFields', fields);
-                component.set("v.resultFields", fields);
-            }else{
-                throw response.getError();
-            }
-        });
-        $A.enqueueAction(getSearchableFieldsAction);
-        $A.enqueueAction(getResultFieldsAction);
-    },
 
     search: function(component, event, helper){
         var searchableFields = component.get("v.searchableFields");
@@ -84,11 +56,11 @@
         var selectedHousehold = component.get("v.resultRecords")[index];
         component.set("v.selectedHousehold", selectedHousehold);
 
-        helper.toggleModal(component);
+        helper.toggleModal(component, event, helper);
     },
 
     toggleModal: function(component, event, helper){
-        helper.toggleModal(component);
+        helper.toggleModal(component, event, helper);
     },
 
     clearHousehold: function(component, event, helper){

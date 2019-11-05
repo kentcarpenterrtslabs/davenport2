@@ -3,47 +3,35 @@
  -->
 
 <aura:component description="NewHousehold" controller="HouseholdAssignmentQueueController">
-    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     <aura:attribute name="showModal" type="boolean" default="false" />
     <aura:attribute name="fields" type="List" />
     <aura:attribute name="newHousehold" type="Account" />
 
-    <lightning:button class="slds-theme_neutral slds-size_1-of-1 slds-m-top_large" iconPosition="left" variant="neutral" type="button" label="New Household" iconName="standard:home" onclick="{!c.toggleModal}"/>
-    <!-- new household modal -->
-    <aura:if isTrue="{!v.showModal}">
-        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-modal_large">
+	<lightning:button class="slds-theme_neutral slds-size_1-of-1 slds-m-top_large" iconPosition="left" variant="neutral" type="button" label="New Household" iconName="standard:home" onclick="{!c.toggleModal}"/>
+	<!-- new household modal -->
+	<aura:if isTrue="{!v.showModal}">
+		<div aura:id="editProfessionalDialog" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container">
-                <header class="slds-modal__header">
-                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.toggleModal}">
-                        <lightning:icon iconName="utility:close" size="medium" />
-                        <span class="slds-assistive-text">Close</span>
-                    </button>
+                <div class="slds-modal__header">
                     <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create New Household</h2>
-                </header>
-                <lightning:recordEditForm aura:id="recordEditForm"
-                                          objectApiName="Account" onsuccess="{!c.onSuccess}">
-                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                            <lightning:messages />
-                            <div class="slds-grid">
-                                <div class="slds-col slds-size_1-of-2">
-                                    <aura:iteration items="{!v.fields}" var="field" start="0" end="{!v.fields.length / 2}">
-                                        <lightning:inputField fieldName="{!field.fieldPath}" />
-                                    </aura:iteration>
-                                </div>
-                                <div class="slds-col slds-size_1-of-2">
-                                    <aura:iteration items="{!v.fields}" var="field" start="{!v.fields.length / 2}">
-                                        <lightning:inputField fieldName="{!field.fieldPath}" />
-                                    </aura:iteration>
-                                </div>
-                            </div>
-
-                    </div>
-                    <footer class="slds-modal__footer">
-                        <button class="slds-button slds-button_brand" type="submit">Save</button>
-                    </footer>
-                </lightning:recordEditForm>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+				<lightning:recordEditForm
+						aura:id="recordEditForm"
+						objectApiName="Account"
+						onsuccess="{!c.onSuccess}">
+						<lightning:messages />
+							<aura:iteration items="{!v.fields}" var="field">
+								<lightning:inputField fieldName="{!field.fieldPath}" />
+							</aura:iteration>
+				</lightning:recordEditForm>
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning:button variant="neutral" onclick="{!c.toggleModal}" name="cancel" label="Cancel" />
+                    <button class="slds-button slds-button_brand" type="submit">Save</button>
+                </div>
             </div>
-        </section>
+        </div>
         <div class="slds-backdrop slds-backdrop_open" onclick="{!c.toggleModal}"></div>
     </aura:if>
 </aura:component>

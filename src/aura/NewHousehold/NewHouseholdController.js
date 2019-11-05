@@ -2,23 +2,12 @@
  * Created by Eric Stansbury on 4/29/2019.
  */
 ({
-    doInit: function(component, event, helper){
-        var action = component.get("c.getNewHouseholdDisplayFields");
-        action.setCallback(this, function(response){
-            var state = response.getState();
-            if (state == 'SUCCESS'){
-                var fields = JSON.parse(response.getReturnValue());;
-                console.log('NewHousehold fields', fields);
-                component.set("v.fields", fields);
-            }else{
-                throw response.getError();
-            }
-        })
-        $A.enqueueAction(action);
-    },
 
     toggleModal: function(component, event, helper){
         component.set("v.showModal", !component.get("v.showModal"));
+		if (component.get("v.showModal") === true) {
+			helper.loadFields(component);
+		}
     },
 
     onSuccess: function(component, event, helper){

@@ -6,6 +6,7 @@
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     <aura:attribute name="fieldMapping" type="List"/>
     <aura:attribute name="rows" type="List" />
+	<aura:attribute name="showLoading" type="Boolean" default="true" />
     <aura:registerEvent name="HouseholdAssignmentSaveAll" type="c:HouseholdAssignmentSaveAll"/>
 
     <div class="slds-page-header">
@@ -29,22 +30,25 @@
         </div>
     </div>
 
-    <lightning:accordion class="slds-theme_shade">
-        <aura:iteration items="{!v.rows}" var="row">
-            <c:HouseholdAssignmentRow financialAccount="{!row.financialAccount}" household="{!row.household}" />
-        </aura:iteration>
-    </lightning:accordion>
-
-    <aura:if isTrue="{!or(v.rows == null, v.rows.length == 0)}">
-        <div class="slds-card slds-p-around--large slds-align-content-center">
-            You have no financial accounts left to assign. If this is not what you expect, please contact an administrator.
-        </div>
-
+    <aura:if isTrue="{! v.showLoading}">
+			<lightning:spinner alternativeText="Loading" size="large" />
         <aura:set attribute="else">
-            <div class="slds-align--absolute-center">
-                <lightning:button label="Save All" onclick="{!c.saveAll}" />
-            </div>
-        </aura:set>
-    </aura:if>
+			<aura:if isTrue="{!or(v.rows == null, v.rows.length == 0)}">
+					<div class="slds-card slds-p-around--large slds-align-content-center">
+						You have no financial accounts left to assign. If this is not what you expect, please contact an administrator.
+					</div>
+				<aura:set attribute="else">
+					<lightning:accordion class="slds-theme_shade">
+						<aura:iteration items="{!v.rows}" var="row">
+							<c:HouseholdAssignmentRow financialAccount="{!row.financialAccount}" household="{!row.household}" />
+						</aura:iteration>
+					</lightning:accordion>
 
+					<div class="slds-align--absolute-center">
+						<lightning:button label="Save All" onclick="{!c.saveAll}" />
+					</div>
+				</aura:set>
+			</aura:if>
+		</aura:set>
+	</aura:if>
 </aura:component>

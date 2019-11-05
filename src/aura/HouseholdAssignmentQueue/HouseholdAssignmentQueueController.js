@@ -16,6 +16,7 @@
             var state = response.getState();
             if (state == 'SUCCESS'){
                 component.set("v.rows", response.getReturnValue());
+				component.set("v.showLoading", false);
             }else{
                 throw response.getError();
             }
