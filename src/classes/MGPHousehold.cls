@@ -236,9 +236,9 @@ global with sharing class MGPHousehold {
 	}
 
     @TestVisible static void buildInvestmentAssets(XmlStreamWriter w, List<FinServ__FinancialAccount__c> finAccts){
-        for (FinServ__FinancialAccount__c finAcct : finAccts){
+		w.writeStartElement(null, 'InvestmentAssets', null);
 
-			w.writeStartElement(null, 'InvestmentAssets', null);
+        for (FinServ__FinancialAccount__c finAcct : finAccts){
 
 			w.writeStartElement(null, 'InvestmentAsset', null);
 			w.writeAttribute(null, null, 'Id', finAcct.Id);
@@ -274,14 +274,15 @@ global with sharing class MGPHousehold {
 			buildHoldings(w, finAcct.FinServ__FinancialHoldings__r);
 
 			w.writeEndElement();
-			w.writeEndElement();
 		}
+
+		w.writeEndElement();
 	}
 
     @TestVisible static void buildHoldings(XmlStreamWriter w, List<FinServ__FinancialHolding__c> holdings){
-        for (FinServ__FinancialHolding__c holding : holdings){
+		w.writeStartElement(null, 'Holdings', null);
 
-			w.writeStartElement(null, 'Holdings', null);
+        for (FinServ__FinancialHolding__c holding : holdings){
 
 			w.writeStartElement(null, 'Holding', null);
 			w.writeAttribute(null, null, 'Id', holding.Id);
@@ -307,8 +308,8 @@ global with sharing class MGPHousehold {
 			w.writeEndElement();
 
 			w.writeEndElement();
-			w.writeEndElement();
 		}
+		w.writeEndElement();
 	}
 
     static final Map<String,Integer> genderValuesMap = new Map<String,Integer>{
