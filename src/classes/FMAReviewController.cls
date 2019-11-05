@@ -70,26 +70,17 @@ public with sharing class FMAReviewController {
         System.debug(financialAcctsIds.size());
         System.debug(financialAcctsIds);
 
+		List<FMA_Account_Review_Association__c> toInsert = new List<FMA_Account_Review_Association__c>();
+
         for (Integer i=0; i<financialAcctsIds.size(); i++){
 
-            FMA_Account_Review_Association__c rel = new FMA_Account_Review_Association__c();   
-                rel.FMA_Review_Form__c = fma.Id;
-                rel.Financial_Account__c = financialAcctsIds[i];
-                System.debug(i);
-                insert rel;
+            toInsert.add(new FMA_Account_Review_Association__c(   
+                FMA_Review_Form__c = fma.Id,
+                Financial_Account__c = financialAcctsIds[i]
+			));
+		}
+        insert toInsert;
 
-        //     try{
-        //         insert rel;
-        //         message = 'Success';
-        //         System.debug(message);
-        //         return message;
-        //     }
-        //     catch(DmlException e) {
-        //         System.debug('The following exception has occurred: ' + e.getMessage());
-        //     return message;
-        // }
-         }
-
-         return fma.Id;
+        return fma.Id;
     }
 }
