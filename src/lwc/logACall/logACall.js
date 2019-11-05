@@ -174,7 +174,7 @@ handleClick() {
 
          let fmaFormParms = {
             AccountRep: this.accountRep,
-            financialAcctsIds: finarray,
+            financialAcctsIds: this.finAcctValue,
             personClientComments: this.clientValue,
             personClientBtn: this.clientInfoBtn,
             InvestObjComments: this.investValue,
