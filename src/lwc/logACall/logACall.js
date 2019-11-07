@@ -326,7 +326,7 @@ handleClick() {
         const newmap = data.map(field => {
             let sObj = {};
             sObj = {
-                label:field.Name + " - " + field.FinServ__FinancialAccountNumber__c,
+                label:field.Name + " - " + field.Plan_ID__c,
                 value:field.Id
             }
             optArray.push(sObj);
