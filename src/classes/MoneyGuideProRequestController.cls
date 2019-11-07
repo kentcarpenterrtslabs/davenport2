@@ -4,6 +4,7 @@ public class MoneyGuideProRequestController {
 
 	public class HouseholdData {
 		@AuraEnabled public Boolean hasPrimaryContact;
+		@AuraEnabled public Boolean hasMGPLicense;
 		@AuraEnabled public List<User> mgpUsers;
 	}
 
@@ -52,7 +53,26 @@ public class MoneyGuideProRequestController {
     }
 
     @AuraEnabled
-	public static MoneyGuideProRequestController.HouseholdData getHouseholdData(Id householdId){
+	public static MoneyGuideProRequestController.HouseholdData getHouseholdData(Id householdId, Id loggedInUserId){
+
+		//System.debug(JSON.serializePretty(users));
+		MoneyGuideProRequestController.HouseholdData householdData = new MoneyGuideProRequestController.HouseholdData();
+
+		// verify that the current user has an MGP license and if so, what type
+		User loggedInUser = [
+			SELECT
+				Id,
+				MGP_License_Type__c,
+				MGP_User_Id__c
+			FROM User
+			WHERE Id = :loggedInUserId
+		];
+
+		if (null == loggedInUser || String.isBlank(loggedInUser.MGP_License_Type__c) || 'None' == loggedInUser.MGP_License_Type__c || 'Admin' == loggedInUser.MGP_License_Type__c) {
+			return householdData; // no license
+		}
+
+
 		String userTypePrefix = Schema.SObjectType.User.getKeyPrefix();
         String groupTypePrefix = Schema.SObjectType.Group.getKeyPrefix();
 
@@ -130,12 +150,20 @@ public class MoneyGuideProRequestController {
 			AND MGP_User_Id__c != null
 		];
 
-		//System.debug(JSON.serializePretty(users));
-		MoneyGuideProRequestController.HouseholdData householdData = new MoneyGuideProRequestController.HouseholdData();
+		Map<Id,User> mapIdToUser = new Map<Id,User>(users);
 		
 		householdData.hasPrimaryContact = (null != household.FinServ__PrimaryContact__c);
-		householdData.mgpUsers = users;
-		
+		householdData.hasMGPLicense = true;
+
+		if ('Advisor' == loggedInUser.MGP_License_Type__c) { // advisor may only login to MGP as him/herself
+			householdData.mgpUsers = new List<User>();
+			if (mapIdToUser.containsKey(loggedInUserId)) {
+				householdData.mgpUsers.add(mapIdToUser.get(loggedInUserId));
+			}
+		} else {
+			householdData.mgpUsers = users;
+		}
+
 		return householdData;
    }
 }
