@@ -47,7 +47,11 @@ public with sharing class FMADashboardController {
                 Trading_Low_Trading_pl__c,
                 Trading_Low_Trading_Comments__c,
                 Call_Notes__c,
-                Create_Date__c
+                Create_Date__c,
+				(
+					 SELECT
+						Financial_Account__r.Name
+					FROM FMA_Account_Review_Associations__r )
             FROM FMA_Review_Form__c 
             WHERE Account__r.Id IN :ids
             AND Create_Date__c >= :startDateTime

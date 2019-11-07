@@ -24,11 +24,10 @@ const eoy = yyyy + '-12-31';
 
 //Sets columns for Rep Household Dashboard
 const columns = [
-    {label: 'Household', fieldName: 'house', type: 'text'},
-    {label: 'Account #', fieldName: 'acctnum', type: 'text'},
-    {label:'Count of Notes', fieldName: 'countofNotes', type: 'number'},
-    {label: 'Date of Last Note', fieldName: 'lastNoteDate', type: 'date'},
-    {label: 'Date of Last FMA Review', fieldName: 'lastReviewDate', type: 'date'}
+    {label: 'Household', fieldName: 'house', initialWidth: 500, type: 'text'},
+    {label: 'Financial Accounts', fieldName: 'acctnums', type: 'text', typeAttributes: { tooltip: { fieldName: 'acctnums' } }},
+    {label: 'Notes', fieldName: 'countofNotes', type: 'number', initialWidth: 75, cellAttributes: { alignment: 'right' }}, //
+    {label: 'Last FMA Review', fieldName: 'lastReviewDate', type: 'date', initialWidth: 150, cellAttributes: { alignment: 'right' }}
 
 ]
 
@@ -58,7 +57,7 @@ export default class FmaReviewComponent extends NavigationMixin(LightningElement
     @track selectedRepName="Select Rep"
     @track repNumbers;
     @track repLabel = "Select a Rep";
-    @track userList;
+    //@track userList; // never used
     @track domRepNumbers;
     @track repDataList;
     @track vbBaseUrl="";
@@ -191,7 +190,11 @@ export default class FmaReviewComponent extends NavigationMixin(LightningElement
         })
      
         this.repDataList = repDataList;
-        this.userList = repDataList
+
+		//
+		// the field userListis is not used anywhere else in this file
+		//
+        //this.userList = repDataList
         const rList = repDataList.map(rep => {
             
             let sObj = {
@@ -226,36 +229,37 @@ export default class FmaReviewComponent extends NavigationMixin(LightningElement
         const tableData = houses.map(house => {
             let sObj;
             let id = house.Id;
-            let numberOfForms = data[id].length;
-            let houseName = house.Name;
-            let houseAcctNum = house.AccountNumber;
-            let reviewDate = house.ReviewDate__c
             let forms = data[id]
-            let formdate = new Date(house.Last_FMA_Form_Created__c);
-            let utcString = formdate.toUTCString();
-
-            let reviewedDate = new Date(reviewDate);
-            
-            const dd2 = String(reviewedDate.getDate()).padStart(2, '0');
-            const mm2 = String(reviewedDate.getMonth() + 1).padStart(2, '0');
-            const yyyy2 = reviewedDate .getFullYear();
-            reviewedDate =  mm2 + '-' + dd2  + '-' + yyyy2;
+            let numberOfForms = (typeof forms === "undefined" ? 0 : data[id].length);
+            let houseName = house.Name;
+            let houseAcctNums = house.Account_Numbers__c;
+            let reviewDate = house.Last_FMA_Form_Created__c;
     
             if(numberOfForms > 0 || reviewDate > this.startDateRange || reviewDate < '2019-01-01' || reviewDate === ""){
-                    sObj ={
-                        id: id,
-                        house: houseName,
-                        acctnum: houseAcctNum,
-                        countofNotes: numberOfForms,
-                        lastNoteDate: utcString,
-                        lastReviewDate: reviewDate === undefined ? "No Review Conducted" : reviewedDate,
-                        forms: forms
-                    }
-                } 
-                else{
-                    sObj = undefined;
-                } 
 
+				let financialAccountNames = [];
+				forms.forEach(function(form) {
+					if (typeof form.FMA_Account_Review_Associations__r !== "undefined") {
+						form.FMA_Account_Review_Associations__r.forEach(function(association) {
+							if (! financialAccountNames.includes(association.Financial_Account__r.Name)) {
+								financialAccountNames.push(association.Financial_Account__r.Name);
+							}
+						});
+					}
+				});
+
+                sObj ={
+                    id: id,
+                    house: houseName,
+                    acctnums: financialAccountNames.join(', '),
+                    countofNotes: numberOfForms,
+                    lastReviewDate: reviewDate === undefined ? "No Review Conducted" : reviewDate,
+                    forms: forms
+                }
+            } 
+            else{
+                sObj = undefined;
+            } 
             
             return sObj;
         })
@@ -273,7 +277,7 @@ export default class FmaReviewComponent extends NavigationMixin(LightningElement
 
         this.fmaData = sortedTable;
         this.tableLoadingState = false;
-        }
+    }
 
 
     handleClick(event){
