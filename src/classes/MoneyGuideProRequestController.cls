@@ -3,8 +3,9 @@ public class MoneyGuideProRequestController {
     //static String endpointUrl = 'https://qa.moneyguidepro.com/davenport/ssosamlnoref.aspx?IntegrationId=170';
 
 	public class HouseholdData {
-		@AuraEnabled public Boolean hasPrimaryContact;
-		@AuraEnabled public Boolean hasMGPLicense;
+		@AuraEnabled public Boolean hasPrimaryContact = false;
+		@AuraEnabled public Boolean isFirmWideAccessEnabled = false;
+		@AuraEnabled public Boolean hasMGPLicense = false;
 		@AuraEnabled public List<User> mgpUsers;
 	}
 
@@ -63,10 +64,16 @@ public class MoneyGuideProRequestController {
 			SELECT
 				Id,
 				MGP_License_Type__c,
-				MGP_User_Id__c
+				MGP_User_Id__c,
+				Firm_Wide_Access_Enabled__c
 			FROM User
 			WHERE Id = :loggedInUserId
 		];
+
+		if (loggedInUser.Firm_Wide_Access_Enabled__c) {
+			householdData.isFirmWideAccessEnabled = true;
+			return householdData;
+		}
 
 		if (null == loggedInUser || String.isBlank(loggedInUser.MGP_License_Type__c) || 'None' == loggedInUser.MGP_License_Type__c || 'Admin' == loggedInUser.MGP_License_Type__c) {
 			return householdData; // no license

@@ -29,6 +29,8 @@ public class MoneyGuideProRequestControllerTest {
 			FirstName = 'test2',
 			LastName = 'TestUser2',
 			MGP_User_ID__c = 'mgp.testuser2@test.com',
+			MGP_License_Type__c = 'Advisor',
+			Firm_Wide_Access_Enabled__c = false,
 			Email = 'testuser2@test.com',
 			Alias = 'tus2',
 			Davenport_Username__c = 'testuser2',
@@ -69,11 +71,18 @@ public class MoneyGuideProRequestControllerTest {
 		Id householdRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Household').getRecordTypeId();
         Id clientRecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Contact Client/Prospect').getRecordTypeId();
 
-		Account account1 = new Account(Name = 'test account one', RecordTypeId = householdRecordTypeId);
-		insert account1;
-
 		Account client1 = new Account(LastName = 'test client one', RecordTypeId = clientRecordTypeId);
 		insert client1;
+
+		client1 = [
+			SELECT
+				PersonContactId
+			FROM Account
+			WHERE Id = :client1.Id
+		];
+
+		Account account1 = new Account(Name = 'test account one', RecordTypeId = householdRecordTypeId, FinServ__PrimaryContact__c = client1.PersonContactId);
+		insert account1;
 
 		AccountShare accountShare1 = new AccountShare(
 			RowCause = 'Manual',
@@ -119,7 +128,10 @@ public class MoneyGuideProRequestControllerTest {
 		System.assertEquals(user2.LastName, user1After.SAML_MGP_LastName__c);
 		System.assertEquals(user2.MGP_User_ID__c, user1After.SAML_MGP_Username__c);
 
-		MoneyGuideProRequestController.HouseholdData householdData = MoneyGuideProRequestController.getHouseholdData(account1.Id);
+		MoneyGuideProRequestController.HouseholdData householdData = MoneyGuideProRequestController.getHouseholdData(account1.Id,user2.Id);
+		System.assertEquals(true,householdData.hasPrimaryContact);
+		System.assertEquals(false,householdData.isFirmWideAccessEnabled);
+		System.assertEquals(true,householdData.hasMGPLicense);
 		System.assertEquals(1, householdData.mgpUsers.size());
 		System.assertEquals(user2.Id, householdData.mgpUsers[0].Id);
 	}

@@ -14,7 +14,10 @@
             if (state == 'SUCCESS') {
                 var householdInfo = response.getReturnValue();
 
-				if (! householdInfo.hasMGPLicense) {
+				if (householdInfo.isFirmWideAccessEnabled) {
+					component.set("v.cannotOpenMGPTitle","Universal Access Enabled");
+					component.set("v.cannotOpenMGPReason","You must turn off universal access to use Money Guide Pro.");
+				} else if (! householdInfo.hasMGPLicense) {
 					component.set("v.cannotOpenMGPTitle","No MGP License");
 					component.set("v.cannotOpenMGPReason","You must have a license to connect to Money Guide Pro.");
 				} else if (! householdInfo.hasPrimaryContact) {
