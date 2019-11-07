@@ -159,7 +159,8 @@ global with sharing class MGPHousehold {
 				Total_Acct_Value__c,
 				Inst_code_desc__c,
                 Cost_Basis__c,
-                Owner.Name,
+                FinServ__PrimaryOwner__c,
+                FinServ__PrimaryOwner__r.Name,
                 FinServ__Description__c,
 				Performance_As_Of_Date__c,
 				(
@@ -205,7 +206,7 @@ global with sharing class MGPHousehold {
     @TestVisible static void buildClients(XmlStreamWriter w, List<Account> clients, Boolean isPrimary) {
         for (Account client : clients) {
 			w.writeStartElement(null, (isPrimary ? 'Client' : 'CoClient'), null);
-			w.writeAttribute(null, null, (isPrimary ? 'UniqueClientKey' : 'UniqueclientKey'), client.Id);
+			w.writeAttribute(null, null, (isPrimary ? 'UniqueClientKey' : 'UniqueCoClientKey'), client.Id);
 
 			w.writeStartElement(null, 'FirstName', null);
 			w.writeCharacters(null == client.FirstName ? '' : client.FirstName);
@@ -256,7 +257,8 @@ global with sharing class MGPHousehold {
 			w.writeEndElement();
 
 			w.writeStartElement(null, 'Owner', null);
-			w.writeCharacters(null == finAcct.Owner ? '' : finAcct.Owner.Name);
+			//w.writeAttribute(null, null, 'UniqueClientKey', finAcct.FinServ__PrimaryOwner__c);
+			w.writeCharacters(null == finAcct.FinServ__PrimaryOwner__c ? '' : finAcct.FinServ__PrimaryOwner__c);
 			w.writeEndElement();
 
 			w.writeStartElement(null, 'Type', null);
