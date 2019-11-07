@@ -180,7 +180,7 @@ global with sharing class MGPHousehold {
 		XmlStreamWriter w = new XmlStreamWriter();
 
 		w.writeStartDocument('UTF-8', '1.0');
-		w.writeStartElement(null, 'Household', null);
+		w.writeStartElement(null, 'HouseholdResponse', null);
 		w.writeAttribute(null, null, 'Id', household.Id);
 
 		w.writeStartElement(null, 'Participants', null);
