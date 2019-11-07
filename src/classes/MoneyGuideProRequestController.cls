@@ -75,7 +75,7 @@ public class MoneyGuideProRequestController {
 			return householdData;
 		}
 
-		if (null == loggedInUser || String.isBlank(loggedInUser.MGP_License_Type__c) || 'None' == loggedInUser.MGP_License_Type__c || 'Admin' == loggedInUser.MGP_License_Type__c) {
+		if (null == loggedInUser || String.isBlank(loggedInUser.MGP_License_Type__c) || 'None' == loggedInUser.MGP_License_Type__c || 'Assistant' == loggedInUser.MGP_License_Type__c) {
 			return householdData; // no license
 		}
 
@@ -155,6 +155,8 @@ public class MoneyGuideProRequestController {
 			FROM User
 			WHERE Id IN :userIds
 			AND MGP_User_Id__c != null
+			AND MGP_License_Type__c != null
+			AND MGP_License_Type__c != 'None'
 		];
 
 		Map<Id,User> mapIdToUser = new Map<Id,User>(users);
