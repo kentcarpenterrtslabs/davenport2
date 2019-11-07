@@ -6,7 +6,7 @@
 public class FMAReviewControllerTest {
     @isTest static void doTest(){
         Id finAcctId = [select id from finserv__financialaccount__c limit 1][0].Id;
-        Id accountId = [Select id from account where RecordType.DeveloperName = 'Household_Client' and FMA_Account__c = true limit 1][0].Id;
+        Id accountId = [Select id from account where RecordType.DeveloperName = 'IndustriesHousehold' and FMA_Account__c = true limit 1][0].Id;
         Id repId = [Select Id from Rep__c limit 1][0].Id;
         String personClientBtn = 'Reviewed, No Change';
         String investObjBtn = 'Reviewed, No Change';
