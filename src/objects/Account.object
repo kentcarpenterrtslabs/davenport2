@@ -165,11 +165,6 @@
             <isFieldManaged>false</isFieldManaged>
             <isRequired>false</isRequired>
         </displayedFields>
-        <displayedFields>
-            <field>FinServ__CustomerType__c</field>
-            <isFieldManaged>false</isFieldManaged>
-            <isRequired>false</isRequired>
-        </displayedFields>
         <label>Household Assignment New Display Fields</label>
     </fieldSets>
     <fieldSets>
