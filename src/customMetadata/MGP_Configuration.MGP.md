@@ -5,5 +5,5 @@
     <values>
         <field>SAML_IdP_Initiated_Login_URL__c</field>
         <value xsi:type="xsd:string">https://investdavenport--rtskent.my.salesforce.com/idp/login?app=0sp0b000000XZVT</value>
-    </values>
+    </values> 
 </CustomMetadata>
