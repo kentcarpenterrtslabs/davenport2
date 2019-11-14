@@ -101,6 +101,158 @@ global with sharing class MGPHousehold {
 		i++;
 		i++;
 		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
+		i++;
     }
 
     @AuraEnabled public static String buildRequestBody(Id householdId){
@@ -155,13 +307,13 @@ global with sharing class MGPHousehold {
         List<FinServ__FinancialAccount__c> finAccts = [
 			SELECT
 				Id,
+				Name,
                 FinServ__FinancialAccountSource__c,
 				Total_Acct_Value__c,
 				Inst_code_desc__c,
                 Cost_Basis__c,
                 FinServ__PrimaryOwner__c,
                 FinServ__PrimaryOwner__r.Name,
-                FinServ__Description__c,
 				Performance_As_Of_Date__c,
 				(
 					SELECT
@@ -208,29 +360,41 @@ global with sharing class MGPHousehold {
 			w.writeStartElement(null, (isPrimary ? 'Client' : 'CoClient'), null);
 			w.writeAttribute(null, null, (isPrimary ? 'UniqueClientKey' : 'UniqueCoClientKey'), client.Id);
 
-			w.writeStartElement(null, 'FirstName', null);
-			w.writeCharacters(null == client.FirstName ? '' : client.FirstName);
-			w.writeEndElement();
+			if (! String.isBlank(client.FirstName)) {
+				w.writeStartElement(null, 'FirstName', null);
+				w.writeCharacters(client.FirstName);
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'LastName', null);
-			w.writeCharacters(null == client.LastName ? '' : client.LastName);
-			w.writeEndElement();
+			if (! String.isBlank(client.LastName)) {
+				w.writeStartElement(null, 'LastName', null);
+				w.writeCharacters(client.LastName);
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'DOB', null);
-			w.writeCharacters(null == client.PersonBirthdate ? '' : client.PersonBirthdate.format());
-			w.writeEndElement();
+			if (null != client.PersonBirthdate) {
+				w.writeStartElement(null, 'DOB', null);
+				w.writeCharacters(client.PersonBirthdate.format());
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'State', null);
-			w.writeCharacters(null == client.BillingState ? '' : client.BillingState);
-			w.writeEndElement();
+			if (! String.isBlank(client.BillingState)) {
+				w.writeStartElement(null, 'State', null);
+				w.writeCharacters(client.BillingState);
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'Sex', null);
-			w.writeCharacters(null == client.FinServ__Gender__pc ? '' : String.valueOf(genderValuesMap.get(client.FinServ__Gender__pc)));
-			w.writeEndElement();
+			if (null != client.FinServ__Gender__pc) {
+				w.writeStartElement(null, 'Sex', null);
+				w.writeCharacters(String.valueOf(genderValuesMap.get(client.FinServ__Gender__pc)));
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'MaritalStatus', null);
-			w.writeCharacters(null == client.FinServ__MaritalStatus__pc ? '' : maritalStatusValuesMap.get(client.FinServ__MaritalStatus__pc));
-			w.writeEndElement();
+			if (null != client.FinServ__MaritalStatus__pc) {
+				w.writeStartElement(null, 'MaritalStatus', null);
+				w.writeCharacters(maritalStatusValuesMap.get(client.FinServ__MaritalStatus__pc));
+				w.writeEndElement();
+			}
 
 			w.writeEndElement();
 		}
@@ -244,34 +408,48 @@ global with sharing class MGPHousehold {
 			w.writeStartElement(null, 'InvestmentAsset', null);
 			w.writeAttribute(null, null, 'Id', finAcct.Id);
 
-			w.writeStartElement(null, 'Source', null);
-			w.writeCharacters(null == finAcct.FinServ__FinancialAccountSource__c ? '' : finAcct.FinServ__FinancialAccountSource__c);
-			w.writeEndElement();
+			if (! String.isBlank(finAcct.FinServ__FinancialAccountSource__c)) {
+				w.writeStartElement(null, 'Source', null);
+				w.writeCharacters(finAcct.FinServ__FinancialAccountSource__c);
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'CurrentValue', null);
-			w.writeCharacters(null == finAcct.Total_Acct_Value__c ? '' : String.valueOf(finAcct.Total_Acct_Value__c));
-			w.writeEndElement();
+			if (null != finAcct.Total_Acct_Value__c) {
+				w.writeStartElement(null, 'CurrentValue', null);
+				w.writeCharacters(String.valueOf(finAcct.Total_Acct_Value__c));
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'CostBasis', null);
-			w.writeCharacters(null == finAcct.Cost_Basis__c ? '' : String.valueOf(finAcct.Cost_Basis__c));
-			w.writeEndElement();
+			if (null != finAcct.Cost_Basis__c) {
+				w.writeStartElement(null, 'CostBasis', null);
+				w.writeCharacters(String.valueOf(finAcct.Cost_Basis__c));
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'Owner', null);
-			//w.writeAttribute(null, null, 'UniqueClientKey', finAcct.FinServ__PrimaryOwner__c);
-			w.writeCharacters(null == finAcct.FinServ__PrimaryOwner__c ? '' : finAcct.FinServ__PrimaryOwner__c);
-			w.writeEndElement();
+			if (null != finAcct.FinServ__PrimaryOwner__c) {
+				w.writeStartElement(null, 'Owner', null);
+				//w.writeAttribute(null, null, 'UniqueClientKey', finAcct.FinServ__PrimaryOwner__c);
+				w.writeCharacters(finAcct.FinServ__PrimaryOwner__c);
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'Type', null);
-			w.writeCharacters(null == finAcct.Inst_code_desc__c ? '' : finAcct.Inst_code_desc__c);
-			w.writeEndElement();
+			if (! String.isBlank(finAcct.Inst_code_desc__c)) {
+				w.writeStartElement(null, 'Type', null);
+				w.writeCharacters(finAcct.Inst_code_desc__c);
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'Description', null);
-			w.writeCharacters(null == finAcct.FinServ__Description__c ? '' : finAcct.FinServ__Description__c);
-			w.writeEndElement();
+			if (! String.isBlank(finAcct.Name)) {
+				w.writeStartElement(null, 'Description', null);
+				w.writeCharacters(finAcct.Name);
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'AsOfDate', null);
-			w.writeCharacters(null == finAcct.Performance_As_Of_Date__c ? '' : String.valueOf(finAcct.Performance_As_Of_Date__c));
-			w.writeEndElement();
+			if (null != finAcct.Performance_As_Of_Date__c) {
+				w.writeStartElement(null, 'AsOfDate', null);
+				w.writeCharacters(null == finAcct.Performance_As_Of_Date__c ? '' : String.valueOf(finAcct.Performance_As_Of_Date__c));
+				w.writeEndElement();
+			}
 
 			buildHoldings(w, finAcct.FinServ__FinancialHoldings__r);
 
@@ -289,25 +467,35 @@ global with sharing class MGPHousehold {
 			w.writeStartElement(null, 'Holding', null);
 			w.writeAttribute(null, null, 'Id', holding.Id);
 
-			w.writeStartElement(null, 'Description', null);
-			w.writeCharacters(null == holding.Name ? '' : holding.Name);
-			w.writeEndElement();
+			if (! String.isBlank(holding.Name)) {
+				w.writeStartElement(null, 'Description', null);
+				w.writeCharacters(holding.Name);
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'Ticker', null);
-			w.writeCharacters(null == holding.FinServ__Symbol__c ? '' : holding.FinServ__Symbol__c);
-			w.writeEndElement();
+			if (! String.isBlank(holding.FinServ__Symbol__c)) {
+				w.writeStartElement(null, 'Ticker', null);
+				w.writeCharacters(holding.FinServ__Symbol__c);
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'Quantity', null);
-			w.writeCharacters(null == holding.Quantity__c ? '' : String.valueOf(holding.Quantity__c));
-			w.writeEndElement();
+			if (null != holding.Quantity__c) {
+				w.writeStartElement(null, 'Quantity', null);
+				w.writeCharacters(String.valueOf(holding.Quantity__c));
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'CostBasis', null);
-			w.writeCharacters(null == holding.Cost_Basis__c ? '' : String.valueOf(holding.Cost_Basis__c));
-			w.writeEndElement();
+			if (null != holding.Cost_Basis__c) {
+				w.writeStartElement(null, 'CostBasis', null);
+				w.writeCharacters(String.valueOf(holding.Cost_Basis__c));
+				w.writeEndElement();
+			}
 
-			w.writeStartElement(null, 'CurrentValue', null);
-			w.writeCharacters(null == holding.FinServ__MarketValue__c ? '' : String.valueOf(holding.FinServ__MarketValue__c));
-			w.writeEndElement();
+			if (null != holding.FinServ__MarketValue__c) {
+				w.writeStartElement(null, 'CurrentValue', null);
+				w.writeCharacters(String.valueOf(holding.FinServ__MarketValue__c));
+				w.writeEndElement();
+			}
 
 			w.writeEndElement();
 		}
