@@ -131,7 +131,6 @@
         </div>
         <div class="slds-card rep-box all-padding">
             <lightning-accordion allow-multiple-sections-open
-                onsectiontoggle={handleSectionToggle}
                 active-section-name={activeSections}>
                 <template for:each={finalReviewFormatData} for:item="house">
                     <lightning-accordion-section name={house.name} label={house.name} key={index}>
