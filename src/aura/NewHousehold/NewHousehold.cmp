@@ -16,19 +16,19 @@
                     <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create New Household</h2>
                 </div>
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-				<lightning:recordEditForm
+					<lightning:recordEditForm
 						aura:id="recordEditForm"
 						objectApiName="Account"
 						onsuccess="{!c.onSuccess}">
 						<lightning:messages />
-							<aura:iteration items="{!v.fields}" var="field">
-								<lightning:inputField fieldName="{!field.fieldPath}" />
-							</aura:iteration>
-				</lightning:recordEditForm>
-                </div>
-                <div class="slds-modal__footer">
-                    <lightning:button variant="neutral" onclick="{!c.toggleModal}" name="cancel" label="Cancel" />
-                    <button class="slds-button slds-button_brand" type="submit">Save</button>
+						<aura:iteration items="{!v.fields}" var="field">
+							<lightning:inputField fieldName="{!field.fieldPath}" />
+						</aura:iteration>
+						<div class="slds-modal__footer">
+							<lightning:button variant="neutral" onclick="{!c.toggleModal}" name="cancel" label="Cancel" />
+							<button class="slds-button slds-button_brand" type="submit">Save</button>
+						</div>
+					</lightning:recordEditForm>
                 </div>
             </div>
         </div>
