@@ -39,35 +39,40 @@
         
             
      <!-- Select a rep card    -->
-        <div class="select-rep">
-            <lightning-layout>
-                <lightning-layout-item size="4" padding="around-small">
-                    <lightning-combobox
-                        name="repSelector"
-                        label="Rep"
-                        placeholder="Select a Rep"
-                        value={selectedRep}
-                        options={reps}
-                        onchange={handleChange}></lightning-combobox>
-                </lightning-layout-item>
-                <lightning-layout-item size="4" padding="around-small">
-                    <lightning-input 
-                        type="date" 
-                        name="startDateRange"
-                        value={startDateRange} 
-                        label="Review Period Start"
-                        onchange={handleChange}></lightning-input>
-                </lightning-layout-item>
-                <lightning-layout-item size="4" padding="around-small">
-                    <lightning-input
-                        type="date"
-                        name="endDateRange"
-                        label="Review Period End"
-                        value={endDateRange}
-                        onchange={handleChange}></lightning-input>
-                </lightning-layout-item>  
-            </lightning-layout> 
-        </div>
+        <template if:true={reps}>
+            <div class="select-rep">
+               <lightning-layout>
+                    <lightning-layout-item size="4" padding="around-small">
+                        <lightning-combobox
+                            name="repSelector"
+                            label="Rep"
+                            placeholder="Select a Rep"
+                            value={selectedRep}
+                            options={reps}
+                            onchange={handleChange}></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4" padding="around-small">
+                        <lightning-input 
+                            type="date" 
+                            name="startDateRange"
+                            value={startDateRange} 
+                            label="Review Period Start"
+                            onchange={handleChange}></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="4" padding="around-small">
+                        <lightning-input
+                            type="date"
+                            name="endDateRange"
+                            label="Review Period End"
+                            value={endDateRange}
+                            onchange={handleChange}></lightning-input>
+                    </lightning-layout-item>  
+                </lightning-layout>
+            </div>
+        </template>
+        <template if:false={reps}>
+            <p>Loading Reps...</p>
+        </template>
         <template if:true={fmaData}>
             <div>
                 <lightning-datatable
