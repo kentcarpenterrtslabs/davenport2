@@ -13,7 +13,7 @@ private class TestRollupByLookupConfigSchedulable {
 			FinServ__ToObject__c = 'Account',
 			FinServ__UpdateOnChange__c = 'FinServ__Balance__c',
 			RTS_Order__c = 1,
-			Name = 'RBLForFinAcctsHHHeld');
+			Name = 'TestRollup1');
 
 		insert testRollup;
 
@@ -33,7 +33,7 @@ private class TestRollupByLookupConfigSchedulable {
 				Id,
 				FinServ__Active__c
 			FROM FinServ__RollupByLookupConfig__c
-			WHERE Name = 'RBLForFinAcctsHHHeld'
+			WHERE Name = 'TestRollup1'
 			LIMIT 1
 		];
 
@@ -51,7 +51,7 @@ private class TestRollupByLookupConfigSchedulable {
 			FinServ__ToField__c = 'Total_Acct_Value__c',
 			FinServ__ToObject__c = 'Account',
 			FinServ__UpdateOnChange__c = 'FinServ__Balance__c',
-			Name = 'RBLForFinAcctsHHHeld');
+			Name = 'TestRollup2');
 
 		insert testRollup;
 
@@ -71,7 +71,7 @@ private class TestRollupByLookupConfigSchedulable {
 				Id,
 				FinServ__Active__c
 			FROM FinServ__RollupByLookupConfig__c
-			WHERE Name = 'RBLForFinAcctsHHHeld'
+			WHERE Name = 'TestRollup2'
 			LIMIT 1
 		];
 
@@ -90,19 +90,23 @@ private class TestRollupByLookupConfigSchedulable {
 			FinServ__ToObject__c = 'Account',
 			FinServ__UpdateOnChange__c = 'FinServ__Balance__c',
 			RTS_Order__c = 1,
-			Name = 'RBLForFinAcctsHHHeld');
+			Name = 'TestRollup3');
 
 		insert testRollup;
 
+		Test.startTest();
+
 		RollupByLookupConfigSchedulable sched = new RollupByLookupConfigSchedulable();
 		sched.toggleRollups(true);
+
+		Test.stopTest();
 
 		FinServ__RollupByLookupConfig__c actual = [
 			SELECT
 				Id,
 				FinServ__Active__c
 			FROM FinServ__RollupByLookupConfig__c
-			WHERE Name = 'RBLForFinAcctsHHHeld'
+			WHERE Name = 'TestRollup3'
 			LIMIT 1
 		];
 
@@ -120,21 +124,26 @@ private class TestRollupByLookupConfigSchedulable {
 			FinServ__ToField__c = 'Total_Acct_Value__c',
 			FinServ__ToObject__c = 'Account',
 			FinServ__UpdateOnChange__c = 'FinServ__Balance__c',
-			Name = 'RBLForFinAcctsHHHeld');
+			Name = 'TestRollup4');
 
 		insert testRollup;
 
+		Test.startTest();
+
 		RollupByLookupConfigSchedulable sched = new RollupByLookupConfigSchedulable();
 		sched.toggleRollups(true);
+
+		Test.stopTest();
 
 		FinServ__RollupByLookupConfig__c actual = [
 			SELECT
 				Id,
 				FinServ__Active__c
 			FROM FinServ__RollupByLookupConfig__c
-			WHERE Name = 'RBLForFinAcctsHHHeld'
+			WHERE Name = 'TestRollup4'
 			LIMIT 1
 		];
 
 		System.assertEquals(false, actual.FinServ__Active__c);
-	}}
+	}
+}

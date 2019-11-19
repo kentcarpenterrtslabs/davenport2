@@ -52,7 +52,7 @@ global class RollupByLookupConfigSchedulable implements Schedulable {
 
 			System.debug('rollupsToRun: ' + JSON.serializePretty(rollupsToRun));
 
-            if (! dontRunRollups) {
+            if (! dontRunRollups && rollupsToRun.size() > 0) {
 				// Create an instance of RollupRecalculationBatchable
 				FinServ.RollupRecalculationBatchable job = new FinServ.RollupRecalculationBatchable(rollupsToRun);
 
