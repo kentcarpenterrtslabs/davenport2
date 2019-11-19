@@ -245,6 +245,18 @@ private class TestAccountTrigger {
         Account client0104 = new Account(RecordTypeId=client_id, LastName='Client-01-04',  
                                          FinServ__PrimaryContact__c = c4.Id);
         insert client0104;
+        
+        Account client_04 = [Select Phone, PhoneB__c, PersonHomePhone, PersonMobilePhone
+                     FROM Account 
+                     where Id = :client0104.id];
+        client_04.PersonMobilePhone = '8047771515';
+        update client_04;
+        
+        client_04 = [Select Phone, PhoneB__c, PersonHomePhone, PersonMobilePhone
+                             FROM Account 
+                             where Id = :client0104.id];
+        client_04.PersonHomePhone = '8047779895';
+        update client_04;
 
 		Test.stopTest();
         
@@ -252,7 +264,7 @@ private class TestAccountTrigger {
         Account b = [Select Phone, PhoneB__c, PersonHomePhone
                      FROM Account 
                      where LastName='Client-01-04'];
-        System.assertEquals('8047771212', b.PhoneB__c);
+        System.assertEquals('8047771515', b.PhoneB__c);
     }
     
     // following static code is run before each test and 

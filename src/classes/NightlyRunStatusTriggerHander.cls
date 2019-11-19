@@ -85,8 +85,6 @@ public class NightlyRunStatusTriggerHander  {
 				rollups.toggleRollups(false);
 			}
 			if (enableRollups) {
-				RollupByLookupConfigSchedulable rollups = new RollupByLookupConfigSchedulable();
-				rollups.toggleRollups(true);
 				Database.executeBatch(new FinancialAccountRollupBatchable());
 			}
 			if (runSecurityDeletions) {

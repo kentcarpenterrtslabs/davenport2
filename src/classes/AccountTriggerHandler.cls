@@ -160,7 +160,7 @@ public class AccountTriggerHandler  {
 	// and similarly copy Daml_Email also.
 	// 
 	// before insert, before update
-	private void populatePhoneAndEmail (Map<Id,Account> oldRecordsMap, Map<Id,Account> newRecordsMap, List<Account> newRecords) {
+		private void populatePhoneAndEmail (Map<Id,Account> oldRecordsMap, Map<Id,Account> newRecordsMap, List<Account> newRecords) {
 
 		List<Account> toProcess = new List<Account>();
 
@@ -168,11 +168,15 @@ public class AccountTriggerHandler  {
 			toProcess.addAll(newRecords);
 
 		} else { // before update
-			for (Id acctId : newRecordsMap.keySet()) { // only process records where the phone changed
+			for (Id acctId : newRecordsMap.keySet()) { // only process records where one of the phones changed
 				Account oldAcct = oldRecordsMap.get(acctId);
 				Account newAcct = newRecordsMap.get(acctId);
 
-				if (oldAcct.Phone != newAcct.Phone) {
+				if (oldAcct.Phone != newAcct.Phone ||
+                   oldAcct.Primary_Contact_Phone__c != newAcct.Primary_Contact_Phone__c ||
+                   oldAcct.PersonMobilePhone != newAcct.PersonMobilePhone ||
+                   oldAcct.PersonHomePhone != newAcct.PersonHomePhone ||
+                   oldAcct.Contact_Work_Phone__pc != newAcct.Contact_Work_Phone__pc ) {
 					toProcess.add(newAcct);
 				}
 			}
@@ -182,17 +186,25 @@ public class AccountTriggerHandler  {
 
 		for (Account acct : toProcess) {
         
+            /*System.debug('numbers: acct.Phone: ' + acct.Phone 
+                         + ' acct.Primary_Contact_Phone__c: ' + acct.Primary_Contact_Phone__c
+                        + ' acct.PersonMobilePhone: '+ acct.PersonMobilePhone 
+                         + ' acct.PersonHomePhone: ' + acct.PersonHomePhone
+                        + ' acct.Contact_Work_Phone__pc: ' + acct.Contact_Work_Phone__pc );
+*/
 			// process the phone numbers.
 			acct.PhoneB__c = null;
-			if (acct.Phone != null) {
+			if ( String.isNotBlank(acct.Phone) ) {
 				acct.PhoneB__c = acct.Phone;
-			} else if (acct.Primary_Contact_Phone__c != null) {
-				acct.PhoneB__c = acct.Primary_Contact_Phone__c;
-			} else if ( acct.Other_Phone__c != null ) {
-				acct.PhoneB__c = acct.Other_Phone__c;
-			} else if (acct.PersonHomePhone  != null) {
+			}  else if ( String.isNotBlank(acct.PersonMobilePhone) ) {
+				acct.PhoneB__c = acct.PersonMobilePhone;
+			} else if ( String.isNotBlank(acct.PersonHomePhone) ) {
 				acct.PhoneB__c = acct.PersonHomePhone;
-			}  
+			} else if ( String.isNotBlank(acct.Contact_Work_Phone__pc) ) {
+				acct.PhoneB__c = acct.Contact_Work_Phone__pc;
+			} else if ( String.isNotBlank(acct.Primary_Contact_Phone__c) ) {
+				acct.PhoneB__c = acct.Primary_Contact_Phone__c;
+			}
 
 			if (null != acct.FinServ__PrimaryContact__c) {
 				mapPrimaryContactToAccount.put(acct.FinServ__PrimaryContact__c, acct);

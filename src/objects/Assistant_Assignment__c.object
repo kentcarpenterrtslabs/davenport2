@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+<?xml version="1.0" encoding="utf-8"?><CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionOverrides>
         <actionName>Accept</actionName>
         <type>Default</type>
@@ -40,25 +39,12 @@
         <actionName>View</actionName>
         <type>Default</type>
     </actionOverrides>
-    <allowInChatterGroups>false</allowInChatterGroups>
-    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
-    <deploymentStatus>Deployed</deploymentStatus>
-    <description>Designates that a user is another user&apos;s assistant. A user can have multiple assistants and a user can be the assistant for multiple other users, so this is a junction object.</description>
-    <enableActivities>false</enableActivities>
-    <enableBulkApi>true</enableBulkApi>
-    <enableFeeds>false</enableFeeds>
-    <enableHistory>false</enableHistory>
-    <enableLicensing>false</enableLicensing>
-    <enableReports>false</enableReports>
-    <enableSearch>false</enableSearch>
-    <enableSharing>true</enableSharing>
-    <enableStreamingApi>true</enableStreamingApi>
     <fields>
         <fullName>Assistant__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
-        <description>This is the user who is the assistant of the user designated by the &quot;Assistee&quot; ifeld.</description>
+        <description>This is the user who is the assistant of the user designated by the "Assistee" field.</description>
         <externalId>false</externalId>
-        <inlineHelpText>This is the user who is the assistant of the user designated by the &quot;Assistee&quot; ifeld.</inlineHelpText>
+        <inlineHelpText>This is the user who is the assistant of the user designated by the "Assistee" field.</inlineHelpText>
         <label>Assistant</label>
         <referenceTo>User</referenceTo>
         <relationshipName>Assistees</relationshipName>
@@ -77,6 +63,19 @@
         <trackTrending>false</trackTrending>
         <type>Lookup</type>
     </fields>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Designates that a user is another user's assistant. A user can have multiple assistants and a user can be the assistant for multiple other users, so this is a junction object.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>false</enableReports>
+    <enableSearch>false</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
     <label>Assistant Assignment</label>
     <nameField>
         <displayFormat>{0}</displayFormat>
@@ -84,7 +83,7 @@
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Assistant Assignment</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts />
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>
