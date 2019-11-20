@@ -3,5 +3,6 @@ public class TaskPickLists {
     	@AuraEnabled public List<String> Status;
     	@AuraEnabled public List<String> Priority;
     	@AuraEnabled public List<String> Type;
+    	@AuraEnabled public List<String> Regarding;
     	@AuraEnabled public List<User> Owner;
 }

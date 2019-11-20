@@ -6,22 +6,21 @@
         <members>ActivityControllerTest</members>
         <members>EventToFMABatchable</members>
         <members>EventToFMABatchableTest</members>
-		<members>FinancialAccountRollupBatchable</members>
-        <members>FinancialAccountRollupBatchableTest</members>
-        <members>FinancialAccountRollupsFixBatchable</members>
-        <members>FinancialAccountRollupsFixBatchableTest</members>
-        <members>FinancialAccountRollupsFixPt2Batchable</members>
-        <members>FinancialSummaryController</members>
         <members>FMADashboardController</members>
         <members>FMADashboardControllerTest</members>
         <members>FMAReviewController</members>
         <members>FMAReviewControllerTest</members>
         <members>FMAReviewPDFController</members>
         <members>FMAReviewPDFController_Test</members>
+        <members>FinancialAccountRollupBatchable</members>
+        <members>FinancialAccountRollupBatchableTest</members>
+        <members>FinancialAccountRollupsFixBatchable</members>
+        <members>FinancialAccountRollupsFixBatchableTest</members>
+        <members>FinancialAccountRollupsFixPt2Batchable</members>
+        <members>FinancialSummaryController</members>
         <members>FormDataController</members>
         <members>FormDataControllerTest</members>
-		<members>getTaskPicklist</members>
-		<members>HouseholdAssignmentQueueController</members>
+        <members>HouseholdAssignmentQueueController</members>
         <members>HouseholdAssignmentQueueControllerTest</members>
         <members>HouseholdFAControllerTest</members>
         <members>HouseholdRollupsController</members>
@@ -30,14 +29,9 @@
         <members>MGPHouseholdTest</members>
         <members>MoneyGuideProRequestController</members>
         <members>MoneyGuideProRequestControllerTest</members>
-		<members>newCall</members>
-		<members>NightlyRunStatusTriggerHander</members>
-		<members>RepAssignmentController</members>
-		<members>RepNumHouseholdSearchController</members>
-		<members>RepNumHouseholdSearchControllerTest</members>
-		<members>RollupByLookupConfigSchedulable</members>
-		<members>RTS_OrgToOrg_Test</members>
-		<members>RTS_OrgToOrgRelink</members>
+        <members>NightlyRunStatusTriggerHander</members>
+        <members>RTS_OrgToOrgRelink</members>
+        <members>RTS_OrgToOrg_Test</members>
         <members>RTS_RebuildAccountTeams</members>
         <members>RTS_RebuildAnnouncements</members>
         <members>RTS_RebuildEvents</members>
@@ -53,6 +47,11 @@
         <members>RTS_RelinkRecuitOwner</members>
         <members>RTS_RelinkRepOwner</members>
         <members>RTS_RelinkWealthcareOwner</members>
+        <members>RepAssignmentController</members>
+        <members>RepNumHouseholdSearchController</members>
+        <members>RepNumHouseholdSearchControllerTest</members>
+        <members>RollupByLookupConfigSchedulable</members>
+        <members>SObjectUpdateQueueable</members>
         <members>SecurityAssignmentTestFactory</members>
         <members>SecurityDeleteAllBatchable</members>
         <members>SecurityDeleteAllLauncher</members>
@@ -63,8 +62,7 @@
         <members>SecurityRepSecurityGroupsBatchable</members>
         <members>SecurityRepSplitsBatchable</members>
         <members>SecurityResetFirmWideAccessBatchable</members>
-		<members>SObjectUpdateQueueable</members>
-		<members>TaskPickLists</members>
+        <members>TaskPickLists</members>
         <members>TestAccountTrigger</members>
         <members>TestCreateTask</members>
         <members>TestNightlyRunStatusTrigger</members>
@@ -83,11 +81,9 @@
         <members>UPIAccessToggleControllerTest</members>
         <members>VfpageUrlGenerator</members>
         <members>VfpageUrlGeneratorTest</members>
+        <members>getTaskPicklist</members>
+        <members>newCall</members>
         <name>ApexClass</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexComponent</name>
     </types>
     <types>
         <members>*</members>
@@ -112,17 +108,17 @@
     </types>
     <types>
         <members>Account</members>
-		<members>Account_Notice__c</members>
-		<members>Account_Split__c</members>
-		<members>AccountContactRelation</members>
+        <members>AccountContactRelation</members>
         <members>AccountContactRole</members>
+        <members>Account_Notice__c</members>
+        <members>Account_Split__c</members>
         <members>ActionPlan</members>
         <members>Activity</members>
         <members>Annuities__c</members>
         <members>Asset</members>
         <members>AssetRelationship</members>
-		<members>Assistant_Assignment__c</members>
-		<members>AssistantProgress</members>
+        <members>AssistantProgress</members>
+        <members>Assistant_Assignment__c</members>
         <members>AuthorizationForm</members>
         <members>AuthorizationFormConsent</members>
         <members>AuthorizationFormDataUse</members>
@@ -159,12 +155,12 @@
         <members>ExchangeUserMapping</members>
         <members>ExpressionFilter</members>
         <members>ExpressionFilterCriteria</members>
-        <members>Fee_Schedule__c</members>
-        <members>FeedItem</members>
         <members>FMA_Account_Note__c</members>
         <members>FMA_Account_Review_Association__c</members>
         <members>FMA_History__c</members>
         <members>FMA_Review_Form__c</members>
+        <members>Fee_Schedule__c</members>
+        <members>FeedItem</members>
         <members>ForecastingAdjustment</members>
         <members>ForecastingCategoryMapping</members>
         <members>ForecastingOwnerAdjustment</members>
@@ -176,12 +172,12 @@
         <members>IdentityDocument</members>
         <members>Image</members>
         <members>Individual</members>
-        <members>Insurance__c</members>
         <members>InsurancePolicy</members>
         <members>InsurancePolicyAsset</members>
         <members>InsurancePolicyCoverage</members>
         <members>InsurancePolicyParticipant</members>
         <members>InsuranceProfile</members>
+        <members>Insurance__c</members>
         <members>Interested_Party__c</members>
         <members>KYC__c</members>
         <members>Lead</members>
@@ -217,10 +213,10 @@
         <members>RecordAction</members>
         <members>Recruit__c</members>
         <members>Related_Contact__c</members>
-        <members>Rep__c</members>
         <members>Rep_Assignment__c</members>
         <members>Rep_Security__c</members>
         <members>Rep_Split__c</members>
+        <members>Rep__c</members>
         <members>RequestsForAccessSIQ</members>
         <members>Scorecard</members>
         <members>ScorecardAssociation</members>
@@ -244,11 +240,12 @@
         <name>CustomObject</name>
     </types>
     <types>
-        <members>*</members>
-        <name>GlobalValueSet</name>
+        <members>ClientRecordPage_RTS</members>
+        <name>FlexiPage</name>
     </types>
     <types>
         <members>Account-Davenport Account Layout</members>
+        <members>Task-Task Layout</members>
         <name>Layout</name>
     </types>
     <types>

@@ -1,6 +1,6 @@
 public with sharing class newCall {
    @AuraEnabled (cacheable=false)
-   public static String createTask(String rId, String uId, String subject, String status, String comments, Date dueDate){
+   public static String createTask(String rId, String uId, String subject, String status, String regarding, String comments, Date dueDate){
        //String rId = (String) acctparams.get('id');
 
        
@@ -13,6 +13,7 @@ public with sharing class newCall {
         t.OwnerId = uId;
         t.Subject = subject;
         t.Status = status;
+		t.FinServ__Regarding__c = regarding;
     
         t.WhatId = rId;
         t.Description = comments;

@@ -32,10 +32,20 @@
                     <div class="input-spacing">
                         <lightning-combobox
                             name="User"
-                            label="Assign To"
+                            label="Assign To" 
                             value={userId}
                             placeholder=""
                             options={user}
+                            onchange={handleChange} ></lightning-combobox>
+    
+                    </div>
+                    <div class="input-spacing">
+                        <lightning-combobox
+                            name="Regarding"
+                            label="Regarding"
+                            value={regardingValue}
+                            placeholder=""
+                            options={regarding}
                             onchange={handleChange} ></lightning-combobox>
     
                     </div>

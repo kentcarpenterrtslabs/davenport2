@@ -37,6 +37,7 @@ export default class LogACall extends LightningElement {
     priority="";
     userId = Id;
     user="";
+    regarding="";
     type="";
     acctId="";
     userValue=Id
@@ -46,6 +47,7 @@ export default class LogACall extends LightningElement {
     @track finAcctValue;
     @track subjectValue="Call";
     @track statusValue="Completed";
+    @track regardingValue="";
     @track TypeValue="";
     @track callCommentsValue="";
     @track dateValue=today;
@@ -144,7 +146,7 @@ export default class LogACall extends LightningElement {
             this.finerror = error;
         }
     } 
-    @wire(getFinAccounts, { rId: '$recordId' })
+
     finacctdata;
 
 
@@ -164,6 +166,7 @@ handleClick() {
            uId: this.userValue,
            subject: this.subjectValue,
            status: this.statusValue,
+           regarding: this.regardingValue,
            comments: this.callCommentsValue,
            dueDate: this.dateValue
    
@@ -251,15 +254,12 @@ handleClick() {
     this.activeSections = [];
     this.subjectValue="Call";
     this.statusValue="Completed";
+    this.regardingValue="";
     this.typeValue="";
     this.callCommentsValue="";
     this.dateValue=today;
     this.includeCommentsToggle=false;
-    this.subjectValue="Call";
-    this.statusValue="Completed";
     this.callValue="";
-    this.callCommentsValue="";
-    this.dateValue=today;
     this.userPickOpt="";
     //Btn group 1
     this.display1 = "hidden";
@@ -333,7 +333,7 @@ handleClick() {
             return optArray
         })
        //Set Value for checkbox, this is required
-        this.finAcctValue = optArray[0].value
+        //this.finAcctValue = optArray[0].value
         //Set options for checkbox group
         
         
@@ -348,6 +348,7 @@ handleClick() {
         let subjectArray = [];
         let priorityArray = [];
         let statusArray = [];
+        let regardingArray = [];
         let typeArray = [];
         let userArray = [];
      
@@ -391,6 +392,18 @@ handleClick() {
          this.status = statusArray;
 
          // eslint-disable-next-line no-unused-vars
+         const regardingMap = data.Regarding.map(field => {
+            let sObj = {};
+            sObj = {
+                label: field,
+                value: field
+            }
+            regardingArray.push(sObj);
+            return regardingArray;
+         })
+         this.regarding = regardingArray;
+
+         // eslint-disable-next-line no-unused-vars
          const callmap = data.Type.map(field => {
             let sObj = {};
             sObj = {
@@ -430,6 +443,8 @@ handleClick() {
             this.subjectValue = event.target.value;
         } else if (name === "Status"){
             this.statusValue = event.target.value;
+        } else if (name === "Regarding"){
+            this.regardingValue = event.target.value;
         } else if (name === "comments"){
             this.callCommentsValue = event.target.value;
         } else if (name === "Type"){
@@ -453,7 +468,8 @@ handleClick() {
         } else if (name === "includeToggle")
            this.includeCommentsToggle = event.target.checked;
            //this.activeSections = (event.target.checked ? ["FMAReview"] : [])
-           this.activeSections = ["FMAReview"]
+       
+	   this.activeSections = ["FMAReview"]
 }
 
 
