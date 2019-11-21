@@ -64,7 +64,6 @@
         <members>SecurityResetFirmWideAccessBatchable</members>
         <members>TaskPickLists</members>
         <members>TestAccountTrigger</members>
-        <members>TestCreateTask</members>
         <members>TestNightlyRunStatusTrigger</members>
         <members>TestPermssions</members>
         <members>TestRepAssignmentController</members>

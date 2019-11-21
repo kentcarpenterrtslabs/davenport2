@@ -7,7 +7,7 @@
             <!-- Start of Activity Tab -->
             <lightning-tabset variant="scoped">
                  <!-- Start of Log a Call tab -->
-                <lightning-tab label="Log a Call">
+                <lightning-tab label="Log Client Interaction">
                     <div>
                     <div class="input-spacing">
                         <!-- <lightning-combobox
@@ -19,7 +19,16 @@
                             onchange={handleChange} ></lightning-combobox> -->
                         <lightning-input name="Subject" label="Subject" value={subjectValue} onchange={handleChange} ></lightning-input>
                     </div>
-                    
+                    <div class="input-spacing">
+                        <lightning-combobox
+                            name="Regarding"
+                            label="Regarding"
+                            value={regardingValue}
+                            placeholder=""
+                            options={regarding}
+                            onchange={handleChange} ></lightning-combobox>
+    
+                    </div>
                     <div class="input-spacing">
                         <lightning-input type="toggle" label="Include Comments in FMA Review" name="includeToggle" message-toggle-active="Include" message-toggle-inactive="Do Not Include" onchange={handleChange} ></lightning-input>
                     </div>
@@ -36,16 +45,6 @@
                             value={userId}
                             placeholder=""
                             options={user}
-                            onchange={handleChange} ></lightning-combobox>
-    
-                    </div>
-                    <div class="input-spacing">
-                        <lightning-combobox
-                            name="Regarding"
-                            label="Regarding"
-                            value={regardingValue}
-                            placeholder=""
-                            options={regarding}
                             onchange={handleChange} ></lightning-combobox>
     
                     </div>
