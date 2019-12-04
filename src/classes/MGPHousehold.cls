@@ -310,7 +310,10 @@ global with sharing class MGPHousehold {
 				Name,
                 FinServ__FinancialAccountSource__c,
 				Total_Acct_Value__c,
+				FinServ__PrimaryOwner__r.FirstName,
+				Instit__c,
 				Inst_code_desc__c,
+				FinServ__FinancialAccountNumber__c,
                 Cost_Basis__c,
                 FinServ__PrimaryOwner__c,
                 FinServ__PrimaryOwner__r.Name,
@@ -363,12 +366,6 @@ global with sharing class MGPHousehold {
 			if (! String.isBlank(client.FirstName)) {
 				w.writeStartElement(null, 'FirstName', null);
 				w.writeCharacters(client.FirstName);
-				w.writeEndElement();
-			}
-
-			if (! String.isBlank(client.LastName)) {
-				w.writeStartElement(null, 'LastName', null);
-				w.writeCharacters(client.LastName);
 				w.writeEndElement();
 			}
 
@@ -441,7 +438,11 @@ global with sharing class MGPHousehold {
 
 			if (! String.isBlank(finAcct.Name)) {
 				w.writeStartElement(null, 'Description', null);
-				w.writeCharacters(finAcct.Name);
+				w.writeCharacters(
+					finAcct.FinServ__PrimaryOwner__r.FirstName + ' - ' +
+					finAcct.Instit__c + ' - ' +
+					finAcct.Inst_code_desc__c + ' - ' +
+					'XXXX' + finAcct.FinServ__FinancialAccountNumber__c.right(4));
 				w.writeEndElement();
 			}
 
