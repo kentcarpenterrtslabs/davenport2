@@ -16,8 +16,8 @@ global class SecurityRepSplitsBatchable implements Database.Batchable<SObject> {
 		List<GroupMember> groupMembers = new List<GroupMember>();
 		for (Rep_Split__c repSplit : scope) {
 			groupMembers.add(new GroupMember(
-				GroupId = Id.valueOf(repSplit.Split_Rep__r.GroupId__c),
-				UserOrGroupId = Id.valueOf(repSplit.Grant_Access_to_Rep__r.GroupId__c)
+				GroupId = Id.valueOf(repSplit.Grant_Access_to_Rep__r.GroupId__c),
+				UserOrGroupId = Id.valueOf(repSplit.Split_Rep__r.GroupId__c)
 			));
 		}
 		insert groupMembers;
