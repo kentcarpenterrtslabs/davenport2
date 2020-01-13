@@ -7,6 +7,7 @@
         component.set("v.showModal", !component.get("v.showModal"));
 		if (component.get("v.showModal") === true) {
 			helper.loadFields(component);
+			helper.getRecordTypeId(component);
 		}
     },
 

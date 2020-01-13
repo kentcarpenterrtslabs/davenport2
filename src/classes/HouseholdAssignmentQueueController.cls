@@ -43,6 +43,11 @@ public with sharing class HouseholdAssignmentQueueController {
         return JSON.serialize(Schema.SObjectType.Account.fieldSets.Household_Assignment_New_Display_Fields.getFields());
     }
 
+    @AuraEnabled
+    public static Id getNewHouseholdRecordTypeId() {
+        return Schema.SObjectType.Account.getRecordTypeInfosByName().get(HOUSEHOLD_RECORDTYPE_NAME).getRecordTypeId();
+    }
+
     @AuraEnabled public static List<Account> searchHouseholds(Map<String,String> paramsMap){
         if (paramsMap == null || paramsMap.keySet().size() == 0){
             return new List<Account>();

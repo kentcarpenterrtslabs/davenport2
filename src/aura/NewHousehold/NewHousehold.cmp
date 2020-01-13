@@ -5,6 +5,7 @@
 <aura:component description="NewHousehold" controller="HouseholdAssignmentQueueController">
     <aura:attribute name="showModal" type="boolean" default="false" />
     <aura:attribute name="fields" type="List" />
+    <aura:attribute name="recordTypeId" type="String" default="" />
     <aura:attribute name="newHousehold" type="Account" />
 
 	<lightning:button class="slds-theme_neutral slds-size_1-of-1 slds-m-top_large" iconPosition="left" variant="neutral" type="button" label="New Household" iconName="standard:home" onclick="{!c.toggleModal}"/>
@@ -19,6 +20,7 @@
 					<lightning:recordEditForm
 						aura:id="recordEditForm"
 						objectApiName="Account"
+						recordTypeId="{!v.recordTypeId}"
 						onsuccess="{!c.onSuccess}">
 						<lightning:messages />
 						<aura:iteration items="{!v.fields}" var="field">
