@@ -57,6 +57,10 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>CashSurrenderValue</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
         <fullName>ChangeSubtype</fullName>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
@@ -83,15 +87,41 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>FinServ__Household__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Household</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Household Insurance Policies</relationshipLabel>
+        <relationshipName>HouseholdInsurancePolicies</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>FinalRenewalDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>FnolChannel</fullName>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>GrossWrittenPremium</fullName>
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>HasAnyAutoCoverage</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
         <fullName>IsActive</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>IsLoanEligibile</fullName>
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
@@ -177,6 +207,11 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>RenewalChannel</fullName>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>RenewalDate</fullName>
         <trackHistory>false</trackHistory>
     </fields>
@@ -217,9 +252,18 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>TaxesSurcharges</fullName>
+        <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
         <fullName>UniversalPolicyNumber</fullName>
         <trackHistory>false</trackHistory>
     </fields>
+    <listViews>
+        <fullName>All_InsurancePolicies</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All Insurance Policies</label>
+    </listViews>
     <listViews>
         <fullName>All_InsurancePolicies</fullName>
         <filterScope>Everything</filterScope>

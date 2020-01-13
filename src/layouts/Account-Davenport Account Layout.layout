@@ -533,7 +533,6 @@
         <fields>Total_Acct_Value__c</fields>
         <fields>Cash_Value__c</fields>
         <fields>FinServ__Performance1Yr__c</fields>
-        <fields>Rep_link__c</fields>
         <relatedList>FinServ__FinancialAccount__c.FinServ__Household__c</relatedList>
         <sortField>Total_Acct_Value__c</sortField>
         <sortOrder>Desc</sortOrder>

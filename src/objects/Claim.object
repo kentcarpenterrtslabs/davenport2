@@ -79,8 +79,26 @@
         <trackHistory>false</trackHistory>
     </fields>
     <fields>
+        <fullName>FinServ__Household__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Household</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Household Claims</relationshipLabel>
+        <relationshipName>HouseholdClaims</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>FinalizedDate</fullName>
         <trackHistory>false</trackHistory>
+    </fields>
+    <fields>
+        <fullName>FnolChannel</fullName>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>IncidentSite</fullName>
@@ -135,6 +153,11 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>RenewalChannel</fullName>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>RepairShop</fullName>
         <trackHistory>false</trackHistory>
     </fields>
@@ -158,6 +181,11 @@
         <fullName>Severity</fullName>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>SourceId</fullName>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>SourceSystem</fullName>
@@ -184,6 +212,11 @@
         <fullName>VisitSite</fullName>
         <trackHistory>false</trackHistory>
     </fields>
+    <listViews>
+        <fullName>All_Claims</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All Claims</label>
+    </listViews>
     <listViews>
         <fullName>All_Claims</fullName>
         <filterScope>Everything</filterScope>
