@@ -315,6 +315,7 @@ global with sharing class MGPHousehold {
 				Inst_code_desc__c,
 				FinServ__FinancialAccountNumber__c,
                 Cost_Basis__c,
+				Cash_Value__c,
                 FinServ__PrimaryOwner__c,
                 FinServ__PrimaryOwner__r.Name,
 				Performance_As_Of_Date__c,
@@ -452,7 +453,7 @@ global with sharing class MGPHousehold {
 				w.writeEndElement();
 			}
 
-			buildHoldings(w, finAcct.FinServ__FinancialHoldings__r);
+			buildHoldings(w, finAcct.FinServ__FinancialHoldings__r, finAcct.Cash_Value__c);
 
 			w.writeEndElement();
 		}
@@ -460,13 +461,23 @@ global with sharing class MGPHousehold {
 		w.writeEndElement();
 	}
 
-    @TestVisible static void buildHoldings(XmlStreamWriter w, List<FinServ__FinancialHolding__c> holdings){
+    @TestVisible static void buildHoldings(XmlStreamWriter w, List<FinServ__FinancialHolding__c> holdings, Decimal cashValue){
 		w.writeStartElement(null, 'Holdings', null);
 
-        for (FinServ__FinancialHolding__c holding : holdings){
+		List<FinServ__FinancialHolding__c> holdingsPlusCashValue = new List<FinServ__FinancialHolding__c>(holdings);
+		holdingsPlusCashValue.add(new FinServ__FinancialHolding__c(
+			//Id = Id.valueOf('000000000000000000'),
+			Name = 'Cash Value',
+			//FinServ__Symbol__c = 'Cash Value',
+			Quantity__c = 1,
+			Cost_Basis__c = cashValue,
+			FinServ__MarketValue__c = cashValue));
+
+
+        for (FinServ__FinancialHolding__c holding : holdingsPlusCashValue){
 
 			w.writeStartElement(null, 'Holding', null);
-			w.writeAttribute(null, null, 'Id', holding.Id);
+			w.writeAttribute(null, null, 'Id', holding.Name == 'Cash Value' ? '1' : holding.Id);
 
 			if (! String.isBlank(holding.Name)) {
 				w.writeStartElement(null, 'Description', null);
@@ -474,9 +485,9 @@ global with sharing class MGPHousehold {
 				w.writeEndElement();
 			}
 
-			if (! String.isBlank(holding.FinServ__Symbol__c)) {
+			if (holding.Name == 'Cash Value' || ! String.isBlank(holding.FinServ__Symbol__c)) {
 				w.writeStartElement(null, 'Ticker', null);
-				w.writeCharacters(holding.FinServ__Symbol__c);
+				w.writeCharacters(holding.Name == 'Cash Value' ? holding.Name : holding.FinServ__Symbol__c);
 				w.writeEndElement();
 			}
 
