@@ -160,7 +160,7 @@ public class AccountTriggerHandler  {
 	// but not all of them have data, we need one for sure in the highlights panel.
 	// for that we will fill in the PhoneB field based on available values.
 	// before insert, before update
-	private void populatePhones (Map<Id,Account> oldRecordsMap, Map<Id,Account> newRecordsMap, List<Account> newRecords) {
+	public void populatePhones (Map<Id,Account> oldRecordsMap, Map<Id,Account> newRecordsMap, List<Account> newRecords) {
 
 		List<Account> toUpdatePhones = new List<Account>();
 
@@ -208,7 +208,7 @@ public class AccountTriggerHandler  {
 	// This trigger will copy Demo_Email field from Primary Contact to Demo_Email field on parent HH (or Client) record.
 	// and similarly copy Daml_Email also.
 	// 
-	private void populateEmails (Map<Id,Account> oldRecordsMap, Map<Id,Account> newRecordsMap, List<Account> newRecords) {
+	public void populateEmails (Map<Id,Account> oldRecordsMap, Map<Id,Account> newRecordsMap, List<Account> newRecords) {
 
 		List<Account> toUpdateFromPrimaryContact = new List<Account>();
 
@@ -310,7 +310,7 @@ public class AccountTriggerHandler  {
 		}
 	}
 
-	private void populatePersonEmail (Map<Id,Account> oldRecordsMap, Map<Id,Account> newRecordsMap) {
+	public void populatePersonEmail (Map<Id,Account> oldRecordsMap, Map<Id,Account> newRecordsMap) {
 		List<Account> toProcess = new List<Account>();
 
 		if (null == oldRecordsMap) { // after insert
