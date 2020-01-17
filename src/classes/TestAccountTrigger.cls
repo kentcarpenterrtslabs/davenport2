@@ -160,112 +160,294 @@ private class TestAccountTrigger {
     static Id hh_id, client_id;
     
     @isTest
-    public static void phoneAndEmail_testEmail() {
-		Test.startTest();
+    public static void testEmail_PrimaryContactSetOnInsert() {
 
-        Account client05 = new Account(RecordTypeId=client_id, LastName='email-05-01', 
+        Account primaryContact = new Account(RecordTypeId=client_id, LastName='email-05-01', 
                                        Daml_Email__c = 'daml@email.com', 
                                        Demo_Email__c = 'demo@email.com');
-        insert client05;
-        client05 = [select PersonContactId from Account where id = :client05.id];
+        insert primaryContact;
+
+		primaryContact = [
+			SELECT
+				PersonContactId,
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :primaryContact.Id
+		];
         
-        Account hh05 = new Account (RecordTypeId=hh_id, Name='email_hh-05',  
-                                    FinServ__PrimaryContact__c = client05.PersonContactId);
-        insert hh05;
+        Account household = new Account (RecordTypeId=hh_id, Name='email_hh-05',  
+										 FinServ__PrimaryContact__c = primaryContact.PersonContactId);
+		Test.startTest();
+        insert household;
 		Test.stopTest();
+
+		household = [
+			SELECT
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :household.Id
+		];
+
+		System.assertEquals(primaryContact.Daml_Email__c, household.Daml_Email__c);
+		System.assertEquals(primaryContact.Demo_Email__c, household.Demo_Email__c);
     }
     
     @isTest
-    public static void phoneAndEmail_testPhone1() {
+    public static void testEmail_PrimaryContactSetOnUpdate() {
+		Test.startTest();
 
-        // pull the IDs for record types.
-        List<RecordType> rtypes = [Select Name, Id From RecordType
-                                   where sObjectType='Account' and isActive=true];
-        Map<String,String> accountRecordTypes = new Map<String,String>{};
-            
-        for(RecordType rt: rtypes) {
-            accountRecordTypes.put(rt.Name,rt.Id);
-        }
+        Account primaryContact = new Account(RecordTypeId=client_id, LastName='email-05-01', 
+                                       Daml_Email__c = 'daml@email.com', 
+                                       Demo_Email__c = 'demo@email.com');
+        insert primaryContact;
+
+		primaryContact = [
+			SELECT
+				PersonContactId,
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :primaryContact.Id
+		];
         
-        Id hh_id = accountRecordTypes.get('Household');
-        Id client_id = accountRecordTypes.get('Contact Client/Prospect');
+        Account household = new Account (RecordTypeId=hh_id, Name='email_hh-05');
+        insert household;
+		
+		household = [
+			SELECT
+				FinServ__PrimaryContact__c
+			FROM Account
+			WHERE Id = :household.Id
+		];
+
+		household.FinServ__PrimaryContact__c = primaryContact.PersonContactId;
+		update household;
+
+		Test.stopTest();
+
+		household = [
+			SELECT
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :household.Id
+		];
+
+		System.assertEquals(primaryContact.Daml_Email__c, household.Daml_Email__c);
+		System.assertEquals(primaryContact.Demo_Email__c, household.Demo_Email__c);
+    }
+     
+    @isTest
+    public static void testEmail_UpdateParentWhenPrimaryContactDamlEmailChanged() {
+
+        Account primaryContact = new Account(RecordTypeId=client_id, LastName='email-05-01', 
+                                       Daml_Email__c = 'daml@email.com', 
+                                       Demo_Email__c = 'demo@email.com');
+        insert primaryContact;
+
+		primaryContact = [
+			SELECT
+				PersonContactId,
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :primaryContact.Id
+		];
         
 		Test.startTest();
 
-        Account client0101 = new Account(RecordTypeId=client_id, LastName='Client-01-01', 
-                                         Phone='8045551212'
-                                        );
-        insert client0101;
+        Account household = new Account (RecordTypeId=hh_id, Name='email_hh-05',
+										 FinServ__PrimaryContact__c = primaryContact.PersonContactId);
+        insert household;
+
+        primaryContact = [
+			SELECT
+				PersonContactId,
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :primaryContact.id
+		];
+
+		primaryContact.Daml_Email__c = 'changed' + primaryContact.Daml_Email__c;
+		update primaryContact;
+
+		Test.stopTest();
+
+		household = [
+			SELECT
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :household.Id
+		];
+
+		System.assertEquals(primaryContact.Daml_Email__c, household.Daml_Email__c);
+		System.assertEquals(primaryContact.Demo_Email__c, household.Demo_Email__c);
+    }
+    
+
+    @isTest
+    public static void testEmail_UpdateParentWhenPrimaryContactDemoEmailChanged() {
+
+        Account primaryContact = new Account(RecordTypeId=client_id, LastName='email-05-01', 
+                                       Daml_Email__c = 'daml@email.com', 
+                                       Demo_Email__c = 'demo@email.com');
+        insert primaryContact;
+
+		primaryContact = [
+			SELECT
+				PersonContactId
+			FROM Account
+			WHERE Id = :primaryContact.Id
+		];
         
-        // validate
-        Account a = [Select Phone, PhoneB__c 
-                     FROM Account 
-                     where LastName='Client-01-01'];
-        System.assertEquals('8045551212', a.PhoneB__c);
-        
-        Contact c2 = new Contact (LastName = 'lname', Email = 'test@junk.com', Phone='8047771212');
-        insert c2;
-        Account client0102 = new Account(RecordTypeId=client_id, LastName='Client-01-02', 
-                                         PersonHomePhone='8045551212', 
-                                         FinServ__PrimaryContact__c = c2.Id);
-        insert client0102;
-        
-        Account client0103 = new Account(RecordTypeId=client_id, LastName='Client-01-03', 
-                                         PersonHomePhone='8045551212');
-        insert client0103;
-        
+		Test.startTest();
+
+        Account household = new Account (RecordTypeId=hh_id, Name='email_hh-05',
+										 FinServ__PrimaryContact__c = primaryContact.PersonContactId);
+        insert household;
+
+        primaryContact = [
+			SELECT
+				PersonContactId,
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :primaryContact.id
+		];
+
+		primaryContact.Demo_Email__c = 'changed' + primaryContact.Demo_Email__c;
+		update primaryContact;
+
+		Test.stopTest();
+
+		household = [
+			SELECT
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :household.Id
+		];
+
+		System.assertEquals(primaryContact.Daml_Email__c, household.Daml_Email__c);
+		System.assertEquals(primaryContact.Demo_Email__c, household.Demo_Email__c);
+    }
+     
+    @isTest
+    public static void testEmail_PersonEmailSetToDamlEmailAfterInsert() {
+
+		Test.startTest();
+
+        Account primaryContact = new Account(RecordTypeId=client_id, LastName='email-05-01', 
+                                       Daml_Email__c = 'daml@email.com');
+        insert primaryContact;
+
+		primaryContact = [
+			SELECT
+				PersonContactId,
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :primaryContact.Id
+		];
+
+		Test.stopTest();
+
+        Account primaryContactActual = [
+			SELECT
+				PersonEmail,
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :primaryContact.id
+		];
+
+		System.assertEquals(primaryContact.Daml_Email__c, primaryContactActual.PersonEmail);
+    }
+     
+    @isTest
+    public static void testEmail_PersonEmailSetToDemoEmailAfterInsert() {
+
+		Test.startTest();
+
+        Account primaryContact = new Account(RecordTypeId=client_id, LastName='email-05-01', 
+                                       Demo_Email__c = 'demo@email.com');
+        insert primaryContact;
+
+		primaryContact = [
+			SELECT
+				PersonContactId,
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :primaryContact.Id
+		];
+
+		Test.stopTest();
+
+        Account primaryContactActual = [
+			SELECT
+				PersonEmail,
+				Daml_Email__c,
+				Demo_Email__c
+			FROM Account
+			WHERE Id = :primaryContact.id
+		];
+
+		System.assertEquals(primaryContact.Demo_Email__c, primaryContactActual.PersonEmail);
+    }
+
+
+    @isTest
+    public static void testPhones() {
+
+		Contact primaryContact = new Contact(LastName='primaryContact', Phone='8045551212');
+		insert primaryContact;
+
+		Test.startTest();
+
+		List<Account> toInsert = new List<Account>();
+
+        Account acctPhone = new Account(RecordTypeId=client_id, LastName='acctPhone', Phone='8045551212');
+        toInsert.add(acctPhone);
+
+        Account acctPersonMobilePhone = new Account(RecordTypeId=client_id, LastName='testPersonMobilePhone', PersonMobilePhone='8045551212');
+        toInsert.add(acctPersonMobilePhone);
+
+        Account acctPersonHomePhone = new Account(RecordTypeId=client_id, LastName='vPersonHomePhone', PersonHomePhone='8045551212');
+        toInsert.add(acctPersonHomePhone);
+
+        Account acctContact_Work_Phone = new Account(RecordTypeId=client_id, LastName='testContact_Work_Phone__pc', Contact_Work_Phone__pc='8045551212');
+        toInsert.add(acctContact_Work_Phone);
+
+        Account acctPrimary_Contact_Phone = new Account(RecordTypeId=client_id, LastName='testPrimary_Contact_Phone__c', FinServ__PrimaryContact__c = primaryContact.Id);
+        toInsert.add(acctPrimary_Contact_Phone);
+         
+		insert toInsert;
+
 		Test.stopTest();
 
         // validate
-        Account x = [Select Phone, PhoneB__c, PersonHomePhone
-                     FROM Account 
-                     where LastName='Client-01-03'];
-        System.assertEquals('8045551212', x.PhoneB__c);
+        
+        Account acctPhoneAfter = [SELECT PhoneB__c FROM Account WHERE Id = :acctPhone.Id];
+		System.assertEquals(acctPhone.Phone, acctPhoneAfter.PhoneB__c);
+        
+        Account acctPersonMobilePhoneAfter = [SELECT PhoneB__c FROM Account WHERE Id = :acctPersonMobilePhone.Id];
+		System.assertEquals(acctPersonMobilePhone.PersonMobilePhone, acctPersonMobilePhoneAfter.PhoneB__c);
+        
+        Account acctPersonHomePhoneAfter = [SELECT PhoneB__c FROM Account WHERE Id = :acctPersonHomePhone.Id];
+		System.assertEquals(acctPersonHomePhone.PersonHomePhone, acctPersonHomePhoneAfter.PhoneB__c);
+        
+        Account acctContact_Work_PhoneAFter = [SELECT PhoneB__c FROM Account WHERE Id = :acctContact_Work_Phone.Id];
+		System.assertEquals(acctContact_Work_Phone.Contact_Work_Phone__pc, acctContact_Work_PhoneAFter.PhoneB__c);
+        
+        Account acctPrimary_Contact_PhoneAfter = [SELECT PhoneB__c FROM Account WHERE Id = :acctPrimary_Contact_Phone.Id];
+		System.assertEquals(primaryContact.Phone, acctPrimary_Contact_PhoneAfter.PhoneB__c);
 	}
 	
-    @isTest
-    public static void phoneAndEmail_testPhone2() {
-
-        // pull the IDs for record types.
-        List<RecordType> rtypes = [Select Name, Id From RecordType
-                                   where sObjectType='Account' and isActive=true];
-        Map<String,String> accountRecordTypes = new Map<String,String>{};
-            
-        for(RecordType rt: rtypes) {
-            accountRecordTypes.put(rt.Name,rt.Id);
-        }
-        
-        Id hh_id = accountRecordTypes.get('Household');
-        Id client_id = accountRecordTypes.get('Contact Client/Prospect');
-        
-		Test.startTest();
-        
-        Contact c4 = new Contact (LastName = 'lname4', Email = 'test4@junk4.com', MobilePhone='8047771212');
-        insert c4;
-        Account client0104 = new Account(RecordTypeId=client_id, LastName='Client-01-04',  
-                                         FinServ__PrimaryContact__c = c4.Id);
-        insert client0104;
-        
-        Account client_04 = [Select Phone, PhoneB__c, PersonHomePhone, PersonMobilePhone
-                     FROM Account 
-                     where Id = :client0104.id];
-        client_04.PersonMobilePhone = '8047771515';
-        update client_04;
-        
-        client_04 = [Select Phone, PhoneB__c, PersonHomePhone, PersonMobilePhone
-                             FROM Account 
-                             where Id = :client0104.id];
-        client_04.PersonHomePhone = '8047779895';
-        update client_04;
-
-		Test.stopTest();
-        
-        // validate
-        Account b = [Select Phone, PhoneB__c, PersonHomePhone
-                     FROM Account 
-                     where LastName='Client-01-04'];
-        System.assertEquals('8047771515', b.PhoneB__c);
-    }
     
     // following static code is run before each test and 
     // keep its scope for the test it is going to run. 
