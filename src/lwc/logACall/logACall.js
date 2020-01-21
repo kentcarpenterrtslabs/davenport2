@@ -44,8 +44,8 @@ export default class LogACall extends LightningElement {
     finAccounts=[];
     @track activeSections = [];
     @track includeCommentsToggle=false;
-    @track finAcctValue;
-    @track subjectValue="Call";
+    @track finAcctValue=[];
+    @track subjectValue="FMA Review";
     @track statusValue="Completed";
     @track regardingValue="";
     @track TypeValue="";
@@ -147,35 +147,29 @@ export default class LogACall extends LightningElement {
         }
     } 
 
-    finacctdata;
 
 
    
 
-handleClick() {
+	handleClick() {
     
-       let finarray = []
-       for(let i=0; i < this.finAccounts.length; i++){
-           finarray.push(this.finAccounts[i].value) ;
-            
-       }
-       //console.log(finarray)
+		let finarray = []
+		for(let i=0; i < this.finAccounts.length; i++) {
+			finarray.push(this.finAccounts[i].value) ;
+		}
+		//console.log(finarray)
        
-        let acctparams = {
-           rId: this.recordId,
-           uId: this.userValue,
-           subject: this.subjectValue,
-           status: this.statusValue,
-           regarding: this.regardingValue,
-           comments: this.callCommentsValue,
-           dueDate: this.dateValue
-   
-         };
+		let acctparams = {
+			rId: this.recordId,
+			uId: this.userValue,
+			subject: this.subjectValue,
+			status: this.statusValue,
+			regarding: this.regardingValue,
+			comments: this.callCommentsValue,
+			dueDate: this.dateValue
+		};
 
-        
-        
-
-         let fmaFormParms = {
+		let fmaFormParms = {
             AccountRep: this.accountRep,
             financialAcctsIds: this.finAcctValue,
             personClientComments: this.clientValue,
@@ -195,122 +189,103 @@ handleClick() {
             AccountId: this.accountId,
             CallNotes: (this.includeCommentsToggle ? this.callCommentsValue : ""),
             Subject: this.subjectValue,
-         }
+         };
       
 
+        // require financial accounts for an FMA Review
+		var finAccountsCheckboxGroup = this.template.querySelector("lightning-checkbox-group.FinAccountCheckbox");
+		var finAccountsValid = finAccountsCheckboxGroup.reportValidity();
+		console.log("finAccountsValid="+finAccountsValid);
 
-        // eslint-disable-next-line no-undef
-        
-    if(
-            this.clientInfoBtn === "Not Applicable" &&
-            this.investInfoBtn === "Not Applicable" &&
-            this.timeInfoBtn === "Not Applicable" &&
-            this.highInfoBtn === "Not Applicable" &&
-            this.unSolInfoBtn === "Not Applicable" &&
-            this.inPerfInfoBtn === "Not Applicable" &&
-            this.conInfoBtn === "Not Applicable" &&
-            this.includeCommentsToggle === false
-    ){
-            newCall(acctparams)
-        // eslint-disable-next-line no-unused-vars
-        .then(result => {
-            const evt = new ShowToastEvent({
-                title: "Call Log Saved",
-                message: "Call log has been created",
-                variant: "success",
-            });
-            this.dispatchEvent(evt);
-    
-        })
-        .catch(error => {
-            console.log(error);
-        })
-     } else {
-            newCall(acctparams)
-            // eslint-disable-next-line no-unused-vars
-            .then(result => {
+		if (!finAccountsValid) {
+			finAccountsCheckboxGroup.focus();
+		} else {
+			newCall(acctparams)
+			// eslint-disable-next-line no-unused-vars
+			.then(result => {
                
-            })
-            .catch(error => {
-                console.log(error);
-            })
-            newFMAReview(fmaFormParms)
-        // eslint-disable-next-line no-unused-vars
-            .then(result =>{
-                console.log("New FMA Review");
-               
-                const evt = new ShowToastEvent({
-                    title: "Form Created",
-                    message: "FMA review has been created",
-                    variant: "success",
-                });
-                this.dispatchEvent(evt); 
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
+			})
+			.catch(error => {
+				console.log(error);
+			})
 
-    this.activeSections = [];
-    this.subjectValue="Call";
-    this.statusValue="Completed";
-    this.regardingValue="";
-    this.typeValue="";
-    this.callCommentsValue="";
-    this.dateValue=today;
-    this.includeCommentsToggle=false;
-    this.callValue="";
-    this.userPickOpt="";
-    //Btn group 1
-    this.display1 = "hidden";
-    this.naVariant1="brand";
-    this.rvVariant1="neutral";
-    this.chVariant1="neutral";
-    this.clientValue="";
-    this.clientInfoBtn="Not Applicable";
-    //Btn group 2
-    this.display2="hidden";
-    this.naVariant2="brand";
-    this.rvVariant2="neutral";
-    this.chVariant2="neutral";
-    this.investValue="";
-    this.investInfoBtn="Not Applicable";
-    //Btn group 3
-    this.display3="hidden";
-    this.naVariant3="brand";
-    this.rvVariant3="neutral";
-    this.chVariant3="neutral";
-    this.timeValue="";
-    this.timeInfoBtn="Not Applicable";
-    //Btn group 4
-    this.display4="hidden";
-    this.naVariant4="brand";
-    this.rvVariant4="neutral";
-    this.chVariant4="neutral";
-    this.inPerfValue="";
-    this.inPerfInfoBtn="Not Applicable";
-    //Btn group 5
-    this.display5="hidden";
-    this.naVariant5="brand";
-    this.rvVariant5="neutral";
-    this.chVariant5="neutral";
-    this.conValue="";
-    this.conInfoBtn="Not Applicable";
-    //Btn group 6
-    this.display6="hidden";
-    this.naVariant6="brand";
-    this.rvVariant6="neutral";
-    this.chVariant6="neutral";
-    this.highValue="";
-    this.highInfoBtn="Not Applicable";
-    //Btn group 7
-    this.display7="hidden";
-    this.naVariant7="brand";
-    this.rvVariant7="neutral";
-    this.chVariant7="neutral";
-    this.unSolValue="";
-    this.unSolInfoBtn="Not Applicable";
+			newFMAReview(fmaFormParms)
+			// eslint-disable-next-line no-unused-vars
+			.then(result =>{
+				console.log("New FMA Review");
+               
+				const evt = new ShowToastEvent({
+					title: "Form Created",
+					message: "FMA review has been created",
+					variant: "success",
+				});
+				this.dispatchEvent(evt); 
+			})
+			.catch(error => {
+				console.log(error)
+			})
+
+			this.activeSections = [];
+			this.subjectValue="FMA Review";
+			this.statusValue="Completed";
+			this.regardingValue="";
+			this.typeValue="";
+			this.callCommentsValue="";
+			this.dateValue=today;
+			this.includeCommentsToggle=false;
+			this.callValue="";
+			this.userPickOpt="";
+			//Btn group 1
+			this.display1 = "hidden";
+			this.naVariant1="brand";
+			this.rvVariant1="neutral";
+			this.chVariant1="neutral";
+			this.clientValue="";
+			this.clientInfoBtn="Not Applicable";
+			//Btn group 2
+			this.display2="hidden";
+			this.naVariant2="brand";
+			this.rvVariant2="neutral";
+			this.chVariant2="neutral";
+			this.investValue="";
+			this.investInfoBtn="Not Applicable";
+			//Btn group 3
+			this.display3="hidden";
+			this.naVariant3="brand";
+			this.rvVariant3="neutral";
+			this.chVariant3="neutral";
+			this.timeValue="";
+			this.timeInfoBtn="Not Applicable";
+			//Btn group 4
+			this.display4="hidden";
+			this.naVariant4="brand";
+			this.rvVariant4="neutral";
+			this.chVariant4="neutral";
+			this.inPerfValue="";
+			this.inPerfInfoBtn="Not Applicable";
+			//Btn group 5
+			this.display5="hidden";
+			this.naVariant5="brand";
+			this.rvVariant5="neutral";
+			this.chVariant5="neutral";
+			this.conValue="";
+			this.conInfoBtn="Not Applicable";
+			//Btn group 6
+			this.display6="hidden";
+			this.naVariant6="brand";
+			this.rvVariant6="neutral";
+			this.chVariant6="neutral";
+			this.highValue="";
+			this.highInfoBtn="Not Applicable";
+			//Btn group 7
+			this.display7="hidden";
+			this.naVariant7="brand";
+			this.rvVariant7="neutral";
+			this.chVariant7="neutral";
+			this.unSolValue="";
+			this.unSolInfoBtn="Not Applicable";
         
+		}
     }
 
 
@@ -326,19 +301,21 @@ handleClick() {
         const newmap = data.map(field => {
             let sObj = {};
             sObj = {
-                label:field.Name + " - " + field.Plan_ID__c,
+                label:field.Name + ("undefined" !== typeof(field.Plan_ID__c) ? " - " + field.Plan_ID__c : ""),
                 value:field.Id
             }
             optArray.push(sObj);
             return optArray
         })
-       //Set Value for checkbox, this is required
-        //this.finAcctValue = optArray[0].value
         //Set options for checkbox group
-        
-        
-        
         this.finAccounts = optArray;
+
+		if (this.finAccounts.length > 0) {
+		   //Set Value for checkbox, this is required
+			this.finacctdata = true;
+			//this.finAcctValue = this.finacctdata[0].value;
+		}
+
      
     
         return optArray
@@ -465,11 +442,8 @@ handleClick() {
             this.unSolInfo = event.target.value;
         } else if (name === "FinAccountCheckbox"){
             this.finAcctValue = event.target.value;
-        } else if (name === "includeToggle")
-           this.includeCommentsToggle = event.target.checked;
-           //this.activeSections = (event.target.checked ? ["FMAReview"] : [])
-       
-	   this.activeSections = ["FMAReview"]
+			event.target.reportValidity();
+        }
 }
 
 
