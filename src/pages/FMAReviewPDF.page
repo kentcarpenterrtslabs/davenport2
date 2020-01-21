@@ -1,6 +1,6 @@
 <apex:page controller="FMAReviewPDFController" renderAs="PDF">
     <apex:stylesheet value="{!$Resource.FMAReviewPDFCss}" html-media="print"/>
-    
+
     <apex:repeat value="{!HouseholdReviews}" var="review">
         <div class="{! IF( 
                     ('Not Applicable' == review.topics[0].answer ) && 
@@ -38,7 +38,7 @@
                             </p>
                             <p class="{! IF( null != topic.comment, ' ', 'hide')}">Comments:</p>
                             <p class="{! IF( null != topic.comment, 'comments', 'hide')}">
-                                {!topic.comment}
+                                <apex:outputtext value="{!topic.comment}" escape="false" />
                             </p>
                         </div>
                         <div class="answers">
@@ -62,5 +62,4 @@
             
         </div>
     </apex:repeat>
-    
 </apex:page>

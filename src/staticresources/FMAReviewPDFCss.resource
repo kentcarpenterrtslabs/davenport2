@@ -12,7 +12,7 @@ p {margin : 0; line-height:1.5;}
 
 .na {display:none;}
 
-.header-left{position: running(header-left); margin:24px 0;}
+.header-left{position: running(header-left); margin:24px 0; padding-bottom:24px;}
 .header-right {position: running(header-right); text-align:right; margin:24px 0;}
 .footer-left {position: running(footer-left);}
 .footer-right {position: running(footer-right); text-align:right;}
@@ -25,7 +25,27 @@ p {margin : 0; line-height:1.5;}
 .hide {position:absolute; left:-99999px;}
 
 @page {
-  
+    margin-top: 100px;
+
+  height:99%;
+  size: letter;
+  @top-left {
+    content: element(header-left);
+  }
+  @top-right {
+    content: element(header-right);
+  }
+  @bottom-left {
+    content: element(footer-left);
+  }
+  @bottom-right {
+    content: element(footer-right);
+  }
+}
+
+@page:first {
+    margin-top: 50px;
+
   height:99%;
   size: letter;
   @top-left {

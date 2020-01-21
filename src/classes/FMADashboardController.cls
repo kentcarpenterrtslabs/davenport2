@@ -50,7 +50,8 @@ public with sharing class FMADashboardController {
                 Create_Date__c,
 				(
 					 SELECT
-						Financial_Account__r.Name
+						Financial_Account__r.Name,
+						Financial_Account__r.Plan_ID__c
 					FROM FMA_Account_Review_Associations__r )
             FROM FMA_Review_Form__c 
             WHERE Account__r.Id IN :ids

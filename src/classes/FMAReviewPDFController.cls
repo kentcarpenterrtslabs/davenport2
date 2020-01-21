@@ -16,32 +16,38 @@ public with sharing class FMAReviewPDFController {
         
         reviewList = [
             SELECT 
-            Account__c, 
-            Rep__c, 
-            Current_Review__c , 
-            Account__r.Name, 
-            Rep__r.Name, 
-            Rep__r.Rep_Number__c,
-            Account__r.AccountNumber,
-            Concentrated_Positions_pl__c, 
-            Concentrated_Positions_Comments__c,
-            High_Cash_Balance_pl__c,
-            High_Cash_Balance_Comments__c,
-            Investment_and_Performance_pl__c,
-            Investment_and_Performance_Comments__c,
-            Investment_Objective_and_Risk_comments__c,
-            Investment_Objective_and_Risk_pl__c,
-            Personal_Client_Info_pl__c,
-            Personal_Client_Info_co__c,
-            Time_Horizon_pl__c,
-            Time_Horizon_and_Liquidity_Needs_Comment__c,
-            Trading_Low_Trading_pl__c,
-            Trading_Low_Trading_Comments__c,
-            Call_Notes__c,
-            CreatedDate,
-            IsDeleted
-            FROM FMA_Review_Form__c 
-            WHERE Id IN :reviewIds
+				Account__c, 
+				Rep__c, 
+				Current_Review__c , 
+				Account__r.Name, 
+				Rep__r.Name, 
+				Rep__r.Rep_Number__c,
+				Account__r.AccountNumber,
+				Concentrated_Positions_pl__c, 
+				Concentrated_Positions_Comments__c,
+				High_Cash_Balance_pl__c,
+				High_Cash_Balance_Comments__c,
+				Investment_and_Performance_pl__c,
+				Investment_and_Performance_Comments__c,
+				Investment_Objective_and_Risk_comments__c,
+				Investment_Objective_and_Risk_pl__c,
+				Personal_Client_Info_pl__c,
+				Personal_Client_Info_co__c,
+				Time_Horizon_pl__c,
+				Time_Horizon_and_Liquidity_Needs_Comment__c,
+				Trading_Low_Trading_pl__c,
+				Trading_Low_Trading_Comments__c,
+				Call_Notes__c,
+				CreatedDate,
+				IsDeleted,
+				(
+					SELECT
+						Financial_Account__r.Name,
+						Financial_Account__r.Plan_ID__c
+					FROM FMA_Account_Review_Associations__r
+				)
+				FROM FMA_Review_Form__c 
+				WHERE Id IN :reviewIds
             ORDER BY Account__c ];
         
         //households = getHouseholdReviews();
@@ -105,13 +111,21 @@ public with sharing class FMAReviewPDFController {
             trading.answer = 'Not Applicable';
             for (FMA_Review_Form__c review : reviewList) {
                 if (review.Account__r.Name == accName) {
+
+					String financialAccountNames = '';
+					for (FMA_Account_Review_Association__c assoc : review.FMA_Account_Review_Associations__r) {
+						financialAccountNames += (financialAccountNames.length() > 0 ? ', ' : '') + assoc.Financial_Account__r.Name + (String.isBlank(assoc.Financial_Account__r.Plan_ID__c) ? '' : '-' + assoc.Financial_Account__r.Plan_ID__c);
+					}
+
+					String newline = '<br/>';
+					String newlineIndent = newline + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                     
                     if (REVIEW_CHANGES == review.Concentrated_Positions_pl__c || (NO_CHANGES == review.Concentrated_Positions_pl__c && REVIEW_CHANGES != concentratedPositions.answer) ) {
                         concentratedPositions.answer = review.Concentrated_Positions_pl__c;
                         if (null != review.Concentrated_Positions_Comments__c && null == concentratedPositions.comment) {
-                            concentratedPositions.comment = review.Concentrated_Positions_Comments__c;
+                            concentratedPositions.comment = financialAccountNames + ':' + newlineIndent + review.Concentrated_Positions_Comments__c;
                         } else if (null != review.Concentrated_Positions_Comments__c && null != concentratedPositions.comment) {
-                            concentratedPositions.comment += '; ' + review.Concentrated_Positions_Comments__c;
+                            concentratedPositions.comment += newline + financialAccountNames + ':' + newlineIndent + review.Concentrated_Positions_Comments__c;
                         }
                         hhWrapper.isBlank = false;
                     }
@@ -119,9 +133,9 @@ public with sharing class FMAReviewPDFController {
                     if (REVIEW_CHANGES == review.High_Cash_Balance_pl__c || (NO_CHANGES == review.High_Cash_Balance_pl__c && REVIEW_CHANGES != highCash.answer) ) {
                         highCash.answer = review.High_Cash_Balance_pl__c;
                         if (null != review.High_Cash_Balance_Comments__c && null == highCash.comment) {
-                            highCash.comment = review.High_Cash_Balance_Comments__c;
+                            highCash.comment = financialAccountNames + ':' + newlineIndent +  review.High_Cash_Balance_Comments__c;
                         } else if (null != review.High_Cash_Balance_Comments__c && null != highCash.comment) {
-                            highCash.comment += '; ' + review.High_Cash_Balance_Comments__c;
+                            highCash.comment += newline + financialAccountNames + ':' + newlineIndent + review.High_Cash_Balance_Comments__c;
                         }
                         hhWrapper.isBlank = false;
                     }
@@ -129,9 +143,9 @@ public with sharing class FMAReviewPDFController {
                     if (REVIEW_CHANGES == review.Investment_and_Performance_pl__c || (NO_CHANGES == review.Investment_and_Performance_pl__c && REVIEW_CHANGES != investPerformance.answer) ) {
                         investPerformance.answer = review.Investment_and_Performance_pl__c;
                         if (null != review.Investment_and_Performance_Comments__c && null == investPerformance.comment) {
-                            investPerformance.comment = review.Investment_and_Performance_Comments__c;
+                            investPerformance.comment = financialAccountNames + ':' + newlineIndent + review.Investment_and_Performance_Comments__c;
                         } else if (null != review.Investment_and_Performance_Comments__c && null != investPerformance.comment) {
-                            investPerformance.comment += '; ' + review.Investment_and_Performance_Comments__c;
+                            investPerformance.comment += newline + financialAccountNames + ':' + newlineIndent + review.Investment_and_Performance_Comments__c;
                         }
                         hhWrapper.isBlank = false;
                     }
@@ -139,9 +153,9 @@ public with sharing class FMAReviewPDFController {
                     if (REVIEW_CHANGES == review.Investment_Objective_and_Risk_pl__c || ('Reviewe' == review.Investment_Objective_and_Risk_pl__c && REVIEW_CHANGES != objectiveRisk.answer) ) {
                         objectiveRisk.answer = review.Investment_Objective_and_Risk_pl__c;
                         if (null != review.Investment_Objective_and_Risk_comments__c && null == objectiveRisk.comment) {
-                            objectiveRisk.comment = review.Investment_Objective_and_Risk_comments__c;
+                            objectiveRisk.comment = financialAccountNames + ':' + newlineIndent + review.Investment_Objective_and_Risk_comments__c;
                         } else if (null != review.Investment_Objective_and_Risk_comments__c && null != objectiveRisk.comment) {
-                            objectiveRisk.comment += '; ' + review.Investment_Objective_and_Risk_comments__c;
+                            objectiveRisk.comment += newline + financialAccountNames + ':' + newlineIndent + review.Investment_Objective_and_Risk_comments__c;
                         }
                         hhWrapper.isBlank = false;
                     }
@@ -149,9 +163,9 @@ public with sharing class FMAReviewPDFController {
                     if (REVIEW_CHANGES == review.Personal_Client_Info_pl__c || (NO_CHANGES == review.Personal_Client_Info_pl__c && REVIEW_CHANGES != clientInfo.answer) ) {
                         clientInfo.answer = review.Personal_Client_Info_pl__c;
                         if (null != review.Personal_Client_Info_co__c && null == clientInfo.comment) {
-                            clientInfo.comment = review.Personal_Client_Info_co__c;
+                            clientInfo.comment = financialAccountNames + ':' + newlineIndent + review.Personal_Client_Info_co__c;
                         } else if (null != review.Personal_Client_Info_co__c && null != clientInfo.comment) {
-                            clientInfo.comment += '; ' + review.Personal_Client_Info_co__c;
+                            clientInfo.comment += newline + financialAccountNames + ':' + newlineIndent + review.Personal_Client_Info_co__c;
                         }
                         hhWrapper.isBlank = false;
                     }
@@ -159,9 +173,9 @@ public with sharing class FMAReviewPDFController {
                     if (REVIEW_CHANGES == review.Time_Horizon_pl__c || (NO_CHANGES == review.Time_Horizon_pl__c && REVIEW_CHANGES != timeHorizon.answer) ) {
                         timeHorizon.answer = review.Time_Horizon_pl__c;
                         if (null != review.Time_Horizon_and_Liquidity_Needs_Comment__c && null == timeHorizon.comment) {
-							timeHorizon.comment = review.Time_Horizon_and_Liquidity_Needs_Comment__c;
+							timeHorizon.comment = financialAccountNames + ':' + newlineIndent + review.Time_Horizon_and_Liquidity_Needs_Comment__c;
                         } else if (null != review.Time_Horizon_and_Liquidity_Needs_Comment__c && null != timeHorizon.comment) {
-                            timeHorizon.comment += '; ' + review.Time_Horizon_and_Liquidity_Needs_Comment__c;
+                            timeHorizon.comment += newline + financialAccountNames + ':' + newlineIndent + review.Time_Horizon_and_Liquidity_Needs_Comment__c;
                         }
                         hhWrapper.isBlank = false;
                     }
@@ -169,18 +183,18 @@ public with sharing class FMAReviewPDFController {
                     if (REVIEW_CHANGES == review.Trading_Low_Trading_pl__c || (NO_CHANGES == review.Trading_Low_Trading_pl__c && REVIEW_CHANGES != trading.answer) ) {
                         trading.answer = review.Trading_Low_Trading_pl__c;
                         if (null != review.Trading_Low_Trading_Comments__c && null == trading.comment) {
-                            trading.comment = review.Trading_Low_Trading_Comments__c;
+                            trading.comment = financialAccountNames + ':' + newlineIndent + review.Trading_Low_Trading_Comments__c;
                         } else if (null != review.Trading_Low_Trading_Comments__c && null != trading.comment) {
-                            trading.comment += '; ' + review.Trading_Low_Trading_Comments__c;
+                            trading.comment += newline + financialAccountNames + ':' + newlineIndent + review.Trading_Low_Trading_Comments__c;
                         }
                         hhWrapper.isBlank = false;
                     }
                     
                    if (null != review.Call_Notes__c) {
                        if (null == hhWrapper.additionalComments) {
-                          hhWrapper.additionalComments = review.Call_Notes__c;
+                          hhWrapper.additionalComments = financialAccountNames + ':' + newlineIndent + review.Call_Notes__c;
                        } else if (null != hhWrapper.additionalComments) {
-                           hhWrapper.additionalComments += '; ' + review.Call_Notes__c;
+                           hhWrapper.additionalComments += newline + financialAccountNames + ':' + newlineIndent + review.Call_Notes__c;
                        }
                        hhWrapper.isBlank = false;
                    }
@@ -241,11 +255,13 @@ public with sharing class FMAReviewPDFController {
         public String name {get; set;}
         public String answer {get; set;}
         public String comment {get; set;}
+        public String financialAccountNames {get; set;}
         
-        public TopicWrapper(String topicName, String topicAnswer, String topicComment) {
+        public TopicWrapper(String topicName, String topicAnswer, String topicComment, String topicFinancialAccountNames) {
             name = topicName;
             answer = topicAnswer;
             comment = topicComment;
+			financialAccountNames = topicFinancialAccountNames;
         }
         public TopicWrapper () {}
     }

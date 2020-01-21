@@ -153,9 +153,9 @@
                                             </lightning-layout>
                                             <lightning-layout horizontal-align="spread" >
                                                 <lightning-layout-item padding="around-small" size="12">
-                                                    <div style="overflow-y: scroll; height:50px;margin:0px" class={form.displayComments}>
+                                                    <div style="overflow-y: scroll; height:150px;margin:0px" class={form.displayComments}>
                                                         <template for:each={form.comments} for:item="comment">
-                                                            <p key={index}>{comment}</p>
+                                                            <p key={index}><lightning-formatted-rich-text value={comment}></lightning-formatted-rich-text></p>
                                                         </template>
                                                     </div>
                                                 </lightning-layout-item>

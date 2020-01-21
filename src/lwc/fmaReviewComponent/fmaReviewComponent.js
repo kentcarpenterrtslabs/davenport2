@@ -242,7 +242,7 @@ export default class FmaReviewComponent extends NavigationMixin(LightningElement
 					if (typeof form.FMA_Account_Review_Associations__r !== "undefined") {
 						form.FMA_Account_Review_Associations__r.forEach(function(association) {
 							if (! financialAccountNames.includes(association.Financial_Account__r.Name)) {
-								financialAccountNames.push(association.Financial_Account__r.Name);
+								financialAccountNames.push(association.Financial_Account__r.Name + ("undefined" === typeof(association.Financial_Account__r.Plan_ID__c) ? '' : '-' + association.Financial_Account__r.Plan_ID__c));
 							}
 						});
 					}
@@ -372,122 +372,138 @@ export default class FmaReviewComponent extends NavigationMixin(LightningElement
        
            //Each topic is visble or not visble, if visble button, topic always (optional comments) 
 
-    const selectedDataArray = selectedRowData.map(house =>{
-        let highCashComments = [];
-        let highCashBtn = [];
-        let conPositionsComments = [];
-        let conPositionsBtn = [];
-        let investPerfComments = [];
-        let investPerfBtn = [];
-        let investObjComments = [];
-        let investObjBtn = [];
-        let clientInfoComments = [];
-        let clientInfoBtn = [];
-        let timeHorzComments = [];
-        let timeHorzBtn = [];
-        let tradingComments = [];
-        let tradingBtn = [];
-        let additionalComments = []
-        let formsdata = house.forms;
+		const selectedDataArray = selectedRowData.map(house =>{
+			let highCashComments = [];
+			let highCashBtn = [];
+			let conPositionsComments = [];
+			let conPositionsBtn = [];
+			let investPerfComments = [];
+			let investPerfBtn = [];
+			let investObjComments = [];
+			let investObjBtn = [];
+			let clientInfoComments = [];
+			let clientInfoBtn = [];
+			let timeHorzComments = [];
+			let timeHorzBtn = [];
+			let tradingComments = [];
+			let tradingBtn = [];
+			let additionalComments = [];
+			let formsdata = house.forms;
        
        
 
-        // eslint-disable-next-line array-callback-return
-        // eslint-disable-next-line no-unused-vars
-        let formArray = formsdata.map(form =>{
-            highCashComments.push(form.High_Cash_Balance_Comments__c);
-            highCashBtn.push(form.High_Cash_Balance_pl__c);
-            conPositionsComments.push(form.Concentrated_Positions_Comments__c);
-            conPositionsBtn.push(form.Concentrated_Positions_pl__c);
-            investPerfComments.push(form.Investment_and_Performance_Comments__c);
-            investPerfBtn.push(form.Investment_and_Performance_pl__c);
-            investObjComments.push(form.Investment_Objective_and_Risk_comments__c);
-            investObjBtn.push(form.Investment_Objective_and_Risk_pl__c);
-            clientInfoComments.push(form.Personal_Client_Info_co__c);
-            clientInfoBtn.push(form.Personal_Client_Info_pl__c);
-            timeHorzComments.push(form.Time_Horizon_and_Liquidity_Needs_Comment__c);
-            timeHorzBtn.push(form.Time_Horizon_pl__c);
-            tradingComments.push(form.Trading_Low_Trading_Comments__c);
-            tradingBtn.push(form.Trading_Low_Trading_pl__c);
-            additionalComments.push(form.Call_Notes__c);
-            formsArray.push(form.Id)
-            return form
-        })
+			// eslint-disable-next-line array-callback-return
+			// eslint-disable-next-line no-unused-vars
+			let formArray = formsdata.map(form =>{
+				let financialAccountNames = [];
+				form.FMA_Account_Review_Associations__r.forEach(association =>
+					financialAccountNames.push(
+						association.Financial_Account__r.Name
+						+ ("undefined" === typeof(association.Financial_Account__r.Plan_ID__c) ? '' : '-' + association.Financial_Account__r.Plan_ID__c))
+				);
+				if ("undefined" !== typeof(form.High_Cash_Balance_Comments__c)) { highCashComments.push(financialAccountNames + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + form.High_Cash_Balance_Comments__c + '<br/>'); }
+				highCashBtn.push(form.High_Cash_Balance_pl__c);
+
+				if ("undefined" !== typeof(form.Concentrated_Positions_Comments__c)) { conPositionsComments.push(financialAccountNames + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + form.Concentrated_Positions_Comments__c + '<br/>'); }
+				conPositionsBtn.push(form.Concentrated_Positions_pl__c);
+
+				if ("undefined" !== typeof(form.Investment_and_Performance_Comments__c)) { investPerfComments.push(financialAccountNames + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + form.Investment_and_Performance_Comments__c + '<br/>'); }
+				investPerfBtn.push(form.Investment_and_Performance_pl__c);
+
+				if ("undefined" !== typeof(form.Investment_Objective_and_Risk_comments__c)) { investObjComments.push(financialAccountNames + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + form.Investment_Objective_and_Risk_comments__c + '<br/>'); }
+				investObjBtn.push(form.Investment_Objective_and_Risk_pl__c);
+
+				if ("undefined" !== typeof(form.Personal_Client_Info_co__c)) { clientInfoComments.push(financialAccountNames + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + form.Personal_Client_Info_co__c + '<br/>'); }
+				clientInfoBtn.push(form.Personal_Client_Info_pl__c);
+
+				if ("undefined" !== typeof(form.Time_Horizon_and_Liquidity_Needs_Comment__c)) { timeHorzComments.push(financialAccountNames + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + form.Time_Horizon_and_Liquidity_Needs_Comment__c + '<br/>'); }
+				timeHorzBtn.push(form.Time_Horizon_pl__c);
+
+				if ("undefined" !== typeof(form.Trading_Low_Trading_Comments__c)) { tradingComments.push(financialAccountNames + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + form.Trading_Low_Trading_Comments__c + '<br/>'); }
+				tradingBtn.push(form.Trading_Low_Trading_pl__c);
+
+				if ("undefined" !== typeof(form.Call_Notes__c)) { additionalComments.push(financialAccountNames + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + form.Call_Notes__c + '<br/>'); }
+
+				formsArray.push(form.Id)
+
+				return form
+			})
        
-        const addComments = this.filterArray(additionalComments)
+			const addComments = this.filterArray(additionalComments)
        
 
-    const fObj = [
-        {
-            display: this.reviewButtonFilter(clientInfoBtn) === "Not Applicable" ? 'hidden' : 'display', 
-            topic: 'Personal Client Info', 
-            button: this.reviewButtonFilter(clientInfoBtn), 
-            displayComments: this.reviewButtonFilter(clientInfoBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
-            comments: this.filterArray(clientInfoComments)
-        },
-        {
-            display: this.reviewButtonFilter(investObjBtn) === "Not Applicable" ? 'hidden' : 'display', 
-            topic: 'Investment Objective and Risk Tolerance', 
-            button: this.reviewButtonFilter(investObjBtn), 
-            displayComments: this.reviewButtonFilter(investObjBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
-            comments: this.filterArray(investObjComments)
-        },
-        {
-            display: this.reviewButtonFilter(timeHorzBtn) === "Not Applicable" ? 'hidden' : 'display', 
-            topic: 'Time Horizon and Liquidity Needs', 
-            button: this.reviewButtonFilter(timeHorzBtn), 
-            displayComments: this.reviewButtonFilter(timeHorzBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
-            comments: this.filterArray(timeHorzComments)
-        },
-        {
-            display: this.reviewButtonFilter(investPerfBtn) === "Not Applicable" ? 'hidden' : 'display', 
-            topic: 'Investment and Performance', 
-            button: this.reviewButtonFilter(investPerfBtn), 
-            displayComments: this.reviewButtonFilter(investPerfBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
-            comments: this.filterArray(investPerfComments)
-        },
-        {
-            display: this.reviewButtonFilter(conPositionsBtn) === "Not Applicable" ? 'hidden' : 'display', 
-            topic: 'Concentrated Positions', 
-            button: this.reviewButtonFilter(conPositionsBtn), 
-            displayComments: this.reviewButtonFilter(conPositionsBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
-            comments: this.filterArray(conPositionsComments)
-        },
-        {
-            display: this.reviewButtonFilter(highCashBtn) === "Not Applicable" ? 'hidden' : 'display', 
-            topic: 'High Cash Balance', 
-            button: this.reviewButtonFilter(highCashBtn), 
-            displayComments: this.reviewButtonFilter(highCashBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
-            comments: this.filterArray(highCashComments)
-        },
-        {
-            display: this.reviewButtonFilter(tradingBtn) === "Not Applicable" ? 'hidden' : 'display', 
-            topic: 'Trading/Low Trading', 
-            button: this.reviewButtonFilter(tradingBtn), 
-            displayComments: this.reviewButtonFilter(tradingBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
-            comments: this.filterArray(tradingComments)
-        },
-        {
-            display: addComments[0] === "-" ? 'hidden' : 'display', 
-            topic: 'Additional Comments',  
-            displayComments: addComments[0] === "-" ? 'slds-p-horizontal_small hidden' : 'slds-p-horizontal_small display slds-box', 
-            comments: this.filterArray(additionalComments)
-        },
+			const fObj = [
+				{
+					display: this.reviewButtonFilter(clientInfoBtn) === "Not Applicable" ? 'hidden' : 'display', 
+					topic: 'Personal Client Info', 
+					button: this.reviewButtonFilter(clientInfoBtn), 
+					displayComments: this.reviewButtonFilter(clientInfoBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden',
+					comments: this.filterArray(clientInfoComments)
+				},
+				{
+					display: this.reviewButtonFilter(investObjBtn) === "Not Applicable" ? 'hidden' : 'display', 
+					topic: 'Investment Objective and Risk Tolerance', 
+					button: this.reviewButtonFilter(investObjBtn), 
+					displayComments: this.reviewButtonFilter(investObjBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
+					comments: this.filterArray(investObjComments)
+				},
+				{
+					display: this.reviewButtonFilter(timeHorzBtn) === "Not Applicable" ? 'hidden' : 'display', 
+					topic: 'Time Horizon and Liquidity Needs', 
+					button: this.reviewButtonFilter(timeHorzBtn), 
+					displayComments: this.reviewButtonFilter(timeHorzBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
+					comments: this.filterArray(timeHorzComments)
+				},
+				{
+					display: this.reviewButtonFilter(investPerfBtn) === "Not Applicable" ? 'hidden' : 'display', 
+					topic: 'Investment and Performance', 
+					button: this.reviewButtonFilter(investPerfBtn), 
+					displayComments: this.reviewButtonFilter(investPerfBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
+					comments: this.filterArray(investPerfComments)
+				},
+				{
+					display: this.reviewButtonFilter(conPositionsBtn) === "Not Applicable" ? 'hidden' : 'display', 
+					topic: 'Concentrated Positions', 
+					button: this.reviewButtonFilter(conPositionsBtn), 
+					displayComments: this.reviewButtonFilter(conPositionsBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
+					comments: this.filterArray(conPositionsComments)
+				},
+				{
+					display: this.reviewButtonFilter(highCashBtn) === "Not Applicable" ? 'hidden' : 'display', 
+					topic: 'High Cash Balance', 
+					button: this.reviewButtonFilter(highCashBtn), 
+					displayComments: this.reviewButtonFilter(highCashBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
+					comments: this.filterArray(highCashComments)
+				},
+				{
+					display: this.reviewButtonFilter(tradingBtn) === "Not Applicable" ? 'hidden' : 'display', 
+					topic: 'Trading/Low Trading', 
+					button: this.reviewButtonFilter(tradingBtn), 
+					displayComments: this.reviewButtonFilter(tradingBtn) === "Review Changes as Follows" ? 'slds-p-horizontal_small display slds-box' : 'slds-p-horizontal_small hidden', 
+					comments: this.filterArray(tradingComments)
+				},
+				{
+					display: addComments[0] === "-" ? 'hidden' : 'display', 
+					topic: 'Additional Comments',  
+					displayComments: addComments[0] === "-" ? 'slds-p-horizontal_small hidden' : 'slds-p-horizontal_small display slds-box', 
+					comments: this.filterArray(additionalComments)
+				},
 
-    ]
+			]
         
     
-        //Make array of topic, button and possible comments
-        let sObj ={
-            name: house.house,
-            forms: fObj
-        }
+			//Make array of topic, button and possible comments
+			let sObj ={
+				name: house.house,
+				forms: fObj
+			}
      
        
-        return sObj;
-    })
-        this.finalReviewFormatData = selectedDataArray   
-        this.forms = formsArray.toString()
+			return sObj;
+		})
+
+		this.finalReviewFormatData = selectedDataArray   
+		this.forms = formsArray.toString()
 
     }
 
