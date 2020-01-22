@@ -113,8 +113,10 @@ public with sharing class FMAReviewPDFController {
                 if (review.Account__r.Name == accName) {
 
 					String financialAccountNames = '';
-					for (FMA_Account_Review_Association__c assoc : review.FMA_Account_Review_Associations__r) {
-						financialAccountNames += (financialAccountNames.length() > 0 ? ', ' : '') + assoc.Financial_Account__r.Name + (String.isBlank(assoc.Financial_Account__r.Plan_ID__c) ? '' : '-' + assoc.Financial_Account__r.Plan_ID__c);
+					if (null != review.FMA_Account_Review_Associations__r) {
+						for (FMA_Account_Review_Association__c assoc : review.FMA_Account_Review_Associations__r) {
+							financialAccountNames += (financialAccountNames.length() > 0 ? ', ' : '') + assoc.Financial_Account__r.Name + (String.isBlank(assoc.Financial_Account__r.Plan_ID__c) ? '' : '-' + assoc.Financial_Account__r.Plan_ID__c);
+						}
 					}
 
 					String newline = '<br/>';

@@ -396,11 +396,13 @@ export default class FmaReviewComponent extends NavigationMixin(LightningElement
 			// eslint-disable-next-line no-unused-vars
 			let formArray = formsdata.map(form =>{
 				let financialAccountNames = [];
-				form.FMA_Account_Review_Associations__r.forEach(association =>
-					financialAccountNames.push(
-						association.Financial_Account__r.Name
-						+ ("undefined" === typeof(association.Financial_Account__r.Plan_ID__c) ? '' : '-' + association.Financial_Account__r.Plan_ID__c))
-				);
+				if ("undefined" !== typeof(form.FMA_Account_Review_Associations__r)) {
+					form.FMA_Account_Review_Associations__r.forEach(association =>
+						financialAccountNames.push(
+							association.Financial_Account__r.Name
+							+ ("undefined" === typeof(association.Financial_Account__r.Plan_ID__c) ? '' : '-' + association.Financial_Account__r.Plan_ID__c))
+					);
+				}
 				if ("undefined" !== typeof(form.High_Cash_Balance_Comments__c)) { highCashComments.push(financialAccountNames + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + form.High_Cash_Balance_Comments__c + '<br/>'); }
 				highCashBtn.push(form.High_Cash_Balance_pl__c);
 
