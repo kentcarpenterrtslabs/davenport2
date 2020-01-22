@@ -48,6 +48,18 @@
                     </div>
                     
                 </apex:repeat>
+
+                <div class="{! IF( null != review.additionalComments, 'topic', 'hide')}" style="margin-bottom:24px;">
+                    <div class="questions">
+                        <p>
+                            Additional Comments
+                        </p>
+                        <p class="comments">
+                            <apex:outputtext value="{!review.additionalComments}" escape="false" />
+                        </p>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
                 
                 
                 <div class="footer-left">Davenport &amp; Company LLC | Internal Use Only</div>
